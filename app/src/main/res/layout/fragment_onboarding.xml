@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_onboarding_scene"
+    tools:context=".ui.prelogin.OnboardingFragment">
+
+    <TextView
+        android:id="@+id/tv_onboarding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toTopOf="@id/illust_onboarding1"
+        app:layout_constraintEnd_toEndOf="@id/illust_onboarding1"
+        app:layout_constraintStart_toStartOf="@id/illust_onboarding1" />
+
+    <ImageView
+        android:id="@+id/illust_onboarding1"
+        android:layout_width="320dp"
+        android:layout_height="240dp"
+        android:layout_marginStart="56dp"
+        android:contentDescription="@string/search_for_tons_nof_movies_on_the_go"
+        android:src="@drawable/illust_onboarding1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:alpha="0.1"
+        android:focusable="false"
+        android:src="@drawable/ic_movie_outline_24"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorOnSurface"
+        tools:layout_editor_absoluteX="73dp" />
+
+    <ImageView
+        android:id="@+id/iv_background_payment"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:alpha="0.1"
+        android:focusable="false"
+        android:src="@drawable/ic_add_payment_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorOnSurface" />
+
+    <ImageView
+        android:id="@+id/iv_background_bookmark"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:alpha="0.1"
+        android:focusable="false"
+        android:src="@drawable/ic_bookmark_off_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorOnSurface"
+        tools:layout_editor_absoluteX="73dp" />
+
+    <ImageView
+        android:id="@+id/illust_onboarding2"
+        android:layout_width="320dp"
+        android:layout_height="240dp"
+        android:contentDescription="@string/mark_your_favorite_movie"
+        android:src="@drawable/illust_onboarding2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/illust_onboarding3"
+        android:layout_width="320dp"
+        android:layout_height="240dp"
+        android:contentDescription="@string/book_a_movie_in_a_few_clicks"
+        android:src="@drawable/illust_onboarding3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_onboarding1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="@string/search_for_tons_nof_movies_on_the_go"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/illust_onboarding1"
+        app:layout_constraintStart_toStartOf="@id/illust_onboarding1"
+        app:layout_constraintTop_toBottomOf="@id/illust_onboarding1" />
+
+    <TextView
+        android:id="@+id/tv_onboarding2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="@string/mark_your_favorite_movie"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/illust_onboarding2"
+        app:layout_constraintStart_toStartOf="@id/illust_onboarding2"
+        app:layout_constraintTop_toBottomOf="@id/illust_onboarding2" />
+
+    <TextView
+        android:id="@+id/tv_onboarding3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="@string/book_a_movie_in_a_few_clicks"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/illust_onboarding3"
+        app:layout_constraintStart_toStartOf="@id/illust_onboarding3"
+        app:layout_constraintTop_toBottomOf="@id/illust_onboarding3" />
+
+    <Button
+        android:id="@+id/btn_joinnow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="64dp"
+        android:text="@string/join_now"
+        android:textAppearance="@style/ButtonTextStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/circle2"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_circle_onboarding_off"
+        app:altSrc="@drawable/ic_circle_onboarding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/circle3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_circle_onboarding_off"
+        app:altSrc="@drawable/ic_circle_onboarding"
+        app:layout_constraintBottom_toBottomOf="@+id/circle2"
+        app:layout_constraintStart_toEndOf="@+id/circle2"
+        app:layout_constraintTop_toTopOf="@+id/circle2" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/circle1"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_circle_onboarding_off"
+        app:altSrc="@drawable/ic_circle_onboarding"
+        app:layout_constraintBottom_toBottomOf="@+id/circle2"
+        app:layout_constraintEnd_toStartOf="@+id/circle2"
+        app:layout_constraintTop_toTopOf="@+id/circle2" />
+
+    <TextView
+        android:id="@+id/tv_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/poppins"
+        android:padding="2dp"
+        android:text="@string/skip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/btn_joinnow" />
+
+    <TextView
+        android:id="@+id/tv_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/poppins"
+        android:padding="2dp"
+        android:text="@string/selanjutnya"
+        app:layout_constraintRight_toRightOf="@id/btn_joinnow"
+        app:layout_constraintTop_toBottomOf="@id/btn_joinnow" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize12" parent="">
+        <item name="cornerSize">12%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize8Percent" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="boxCornerRadiusBottomEnd">40dp</item>
+        <item name="boxCornerRadiusTopEnd">40dp</item>
+        <item name="boxCornerRadiusBottomStart">40dp</item>
+        <item name="boxCornerRadiusTopStart">40dp</item>
+    </style>
+
+    <style name="ButtonTextStyle" parent="Theme.Material3.Light">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ToolbarTitle">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="TvPaymentHint">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ToolbarTitleHomePage" parent="Theme.Material3.Light">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="ToolbarTitles" parent="Theme.Material3.Light">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextDetailTitle" parent="Theme.Material3.Light">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextDetailCommon" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextDetailSmall" parent="Theme.Material3.Light">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextDetailHead" parent="@style/TextAppearance.AppCompat.Headline">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="ToolbarSubtitle" parent="Theme.Material3.Light">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="chipTopUpStyle" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/chip_checkable_selector</item>
+    </style>
+    <style name="chipTopUpTextStyle" >
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="FixButtonStyle" parent="">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+</resources>

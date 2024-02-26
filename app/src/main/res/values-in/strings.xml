@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="selanjutnya">Selanjutnya</string>
+    <string name="skip">Lewati</string>
+    <string name="join_now">Gabung Sekarang</string>
+    <string name="search_for_tons_nof_movies_on_the_go">Jelajahi berbagai macam film</string>
+    <string name="mark_your_favorite_movie">Tandai Film Favoritmu</string>
+    <string name="book_a_movie_in_a_few_clicks">Sewa Film dalam beberapa klik</string>
+    <string name="minimal_8_karakter">Paling sedikit 8 karakter</string>
+    <string name="contoh_test_gmail_com">Contoh: example@mail.com</string>
+    <string name="login">Masuk</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="tnc_auth"><![CDATA[Dengan masuk disini, kamu menyetujui Syarat & Ketentuan serta Kebijakan Privasi ErdMovee.]]></string>
+    <string name="register">Daftar</string>
+    <string name="username">Nama Pengguna</string>
+    <string name="home">Utama</string>
+    <string name="favorite">Favorit</string>
+    <string name="search">Pencarian</string>
+    <string name="history">Riwayat</string>
+    <string name="notification">Notifikasi</string>
+    <string name="cart">Keranjang</string>
+    <string name="movie_poster">poster film</string>
+    <string name="hello_user">Hai, %1$s</string>
+    <string name="popular">Populer</string>
+    <string name="casts">Pemeran</string>
+    <string name="recommendation_s">Rekomendasi</string>
+    <string name="release_date">Tanggal Rilis:</string>
+    <string name="length">Durasi:</string>
+    <string name="pilih_metode_pembayaran">Payment Method</string>
+    <string name="select_all">Pilih Semua</string>
+    <string name="delete">Hapus</string>
+    <string name="total_bayar">Total Pembayaran</string>
+    <string name="rent">Sewa</string>
+    <string name="checkout">Pesanan</string>
+    <string name="pay">Bayar</string>
+    <string name="now_playing">Diputar Sekarang</string>
+    <string name="see_more"><![CDATA[Lihat Semua >]]></string>
+    <string name="rent_for">Lama Sewa?</string>
+    <string name="movies_to_rent">Daftar Film</string>
+    <string name="payment">Pembayaran</string>
+    <string name="coins_balance">Saldo Coins</string>
+    <string name="insufficient_funds_nclick_to_top_up">Saldo Tidak Cukup\\nTop up disini</string>
+    <string name="rent_now">Sewa Sekarang</string>
+    <string name="add_cart">+ Keranjang</string>
+    <string name="click_to_top_up">Top up disini</string>
+    <string name="done">Selesai</string>
+    <string name="pick_your_top_up">Pilih Nominal</string>
+    <string name="or_write_down_how_much_you_desire">atau tulis nominalnya</string>
+</resources>

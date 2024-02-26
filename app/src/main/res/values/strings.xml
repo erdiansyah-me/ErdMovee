@@ -1,3 +1,58 @@
 <resources>
-    <string name="app_name">ErdMovee</string>
+    <string name="app_name" translatable="false">ErdMovee</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="selanjutnya">Next</string>
+    <string name="skip">Skip</string>
+    <string name="join_now">Join Now</string>
+    <string name="search_for_tons_nof_movies_on_the_go">Search for tons of movies on the go</string>
+    <string name="mark_your_favorite_movie">Mark your favorite movie</string>
+    <string name="book_a_movie_in_a_few_clicks">Cheaper to rent selected movie\nin a few clicks</string>
+    <string name="minimal_8_karakter">At least 8 Characters</string>
+    <string name="contoh_test_gmail_com">Example: example@mail.com</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="tnc_auth"><![CDATA[By Entering you agree to the Terms & Conditions and Privacy Policy ErdMovee]]></string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="search">Search</string>
+    <string name="history">History</string>
+    <string name="notification">Notification</string>
+    <string name="cart">Cart</string>
+    <string name="movie_poster">movie poster</string>
+    <string name="hello_user">Hi, %1$s</string>
+    <string name="popular">Popular</string>
+    <string name="casts">Casts</string>
+    <string name="recommendation_s">Recommendation(s)</string>
+    <string name="release_date">Release Date:</string>
+    <string name="length">Length:</string>
+    <string name="pilih_metode_pembayaran">Pilih Metode Pembayaran</string>
+    <string name="select_all">Select All</string>
+    <string name="delete">Delete</string>
+    <string name="total_bayar">Total Price</string>
+    <string name="rent">Rent</string>
+    <string name="checkout">Checkout</string>
+    <string name="pay">Pay</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="see_more"><![CDATA[See More >]]></string>
+    <string name="rent_for">Rent For?</string>
+    <string name="movies_to_rent">Movie(s) to rent</string>
+    <string name="payment">Payment</string>
+    <string name="coins_balance">Coins Balance:</string>
+    <string name="insufficient_funds_nclick_to_top_up">Insufficient funds\nClick to Top up</string>
+    <string name="quote" translatable="false">\" %1$s \"</string>
+    <string name="rent_now">Rent Now</string>
+    <string name="add_cart">+ Cart</string>
+    <string name="click_to_top_up">Click to Top up</string>
+    <string name="done">Done</string>
+    <string name="pick_your_top_up">Pick Your Top Up</string>
+    <string name="_500_coins" translatable="false">500 Coins</string>
+    <string name="_1000_coins" translatable="false">1000 Coins</string>
+    <string name="_1500_coins" translatable="false">1500 Coins</string>
+    <string name="_2000_coins" translatable="false">2000 Coins</string>
+    <string name="_2500_coins" translatable="false">2500 Coins</string>
+    <string name="_3000_coins" translatable="false">3000 Coins</string>
+    <string name="or_write_down_how_much_you_desire">or write down how much you desire</string>
 </resources>
