@@ -65,7 +65,6 @@
                 android:fontFamily="@font/poppins_medium"
                 android:includeFontPadding="false"
                 tools:text="8.4/10"
-                android:textColor="@color/md_theme_light_surface"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -91,7 +91,7 @@
                     android:fontFamily="@font/poppins_medium"
                     android:includeFontPadding="false"
                     tools:maxLines="1"
-                    android:text="@string/quote"
+                    tools:text="@string/quote"
                     android:textAlignment="center"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
