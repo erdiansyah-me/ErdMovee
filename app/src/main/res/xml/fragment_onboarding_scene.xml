@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/illust_onboarding1"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+        <Constraint
+            android:id="@+id/illust_onboarding2"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="parent" />
+        <Constraint
+            android:id="@+id/illust_onboarding3"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="parent" />
+        <Constraint
+            android:id="@+id/circle1"
+            app:layout_constraintEnd_toStartOf="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/circle2"
+            app:layout_constraintTop_toTopOf="@+id/circle2" >
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="1" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" >
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="0" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/circle3"
+            app:layout_constraintStart_toEndOf="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/circle2"
+            app:layout_constraintTop_toTopOf="@+id/circle2">
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="0" />
+        </Constraint>
+        <Constraint
+            android:layout_height="320dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:alpha="0.1"
+            android:layout_width="320dp"
+            android:id="@+id/iv_background" />
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/middle" >
+        <Constraint
+            android:id="@+id/illust_onboarding1"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/illust_onboarding2"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/illust_onboarding3"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="parent" />
+        <Constraint
+            android:id="@+id/circle1"
+            app:layout_constraintEnd_toStartOf="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/circle2"
+            app:layout_constraintTop_toTopOf="@+id/circle2">
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="0" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="1" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/circle3"
+            app:layout_constraintStart_toEndOf="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/circle2"
+            app:layout_constraintTop_toTopOf="@+id/circle2">
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="0" />
+        </Constraint>
+        <Constraint
+            android:layout_height="320dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="320dp"
+            android:alpha="0.1"
+            app:layout_constraintEnd_toStartOf="parent"
+            android:id="@+id/iv_background" />
+        <Constraint
+            android:layout_height="320dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="320dp"
+            android:alpha="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/iv_background_bookmark" />
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/illust_onboarding1"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/illust_onboarding2"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/illust_onboarding3"
+            android:layout_width="320dp"
+            android:layout_height="240dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/circle1"
+            app:layout_constraintEnd_toStartOf="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/circle2"
+            app:layout_constraintTop_toTopOf="@+id/circle2">
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="0" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="0" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/circle3"
+            app:layout_constraintStart_toEndOf="@+id/circle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/circle2"
+            app:layout_constraintTop_toTopOf="@+id/circle2">
+            <CustomAttribute
+                app:attributeName="crossfade"
+                app:customFloatValue="1" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/tv_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="@id/btn_joinnow"
+            app:layout_constraintTop_toBottomOf="parent" />
+        <Constraint
+            android:layout_height="320dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="320dp"
+            app:layout_constraintEnd_toStartOf="parent"
+            android:alpha="0.1"
+            android:id="@+id/iv_background" />
+        <Constraint
+            android:layout_height="320dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="320dp"
+            android:alpha="0.1"
+            android:id="@+id/iv_background_bookmark" />
+        <Constraint
+            android:layout_height="320dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="320dp"
+            android:alpha="0.1"
+            android:id="@+id/iv_background_payment" />
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/middle"
+        app:constraintSetStart="@+id/start">
+        <OnSwipe app:dragDirection="dragLeft" />
+        <OnClick
+            app:clickAction="transitionToEnd"
+            app:targetId="@id/tv_next" />
+    </Transition>
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/middle">
+        <OnSwipe app:dragDirection="dragLeft" />
+        <OnClick
+            app:clickAction="transitionToEnd"
+            app:targetId="@id/tv_next" />
+    </Transition>
+
+</MotionScene>

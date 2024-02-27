@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:backgroundTint="?attr/colorSurface"
+    app:cardElevation="0dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_casts_image"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="@string/casts"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize12"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_casts_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            tools:ignore="SmallSp"
+            android:includeFontPadding="false"
+            android:textColor="?attr/colorOnSurface"
+            android:fontFamily="@font/poppins_medium"
+            tools:text="Tom Hollan" />
+
+        <TextView
+            android:id="@+id/tv_casts_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:textSize="8sp"
+            android:includeFontPadding="false"
+            tools:ignore="SmallSp"
+            tools:text="Peter Parker" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

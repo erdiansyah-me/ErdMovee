@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/cart"
+        android:icon="@drawable/ic_cart_24"
+        android:title="@string/cart"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/notification"
+        android:icon="@drawable/ic_notifications_24"
+        android:title="@string/notification"
+        app:showAsAction="ifRoom" />
+</menu>

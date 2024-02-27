@@ -7,6 +7,8 @@ plugins {
     id("androidx.navigation.safeargs")
     //parcelize
     id("org.jetbrains.kotlin.plugin.parcelize")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 
 }
 
@@ -54,6 +56,14 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
+
+    //Firebase
+    api(platform("com.google.firebase:firebase-bom:32.7.2"))
+    api("com.google.firebase:firebase-config")
+    api("com.google.firebase:firebase-crashlytics")
+    api("com.google.firebase:firebase-analytics")
+    api("com.google.firebase:firebase-config-ktx")
+    api("com.google.firebase:firebase-messaging-ktx")
 
     //testing
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
