@@ -17,18 +17,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_user_avatar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            tools:src="@tools:sample/avatars"
+            />
+
         <TextView
+            android:id="@+id/tv_username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
             android:includeFontPadding="false"
-            tools:text="Hi, Mary Jane"
             android:textAppearance="@style/ToolbarTitle"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="Hi, Mary Jane" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"

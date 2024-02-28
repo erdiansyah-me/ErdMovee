@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/homePageFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -82,6 +82,9 @@
             app:destination="@id/profileFragment"
             app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/homePageFragment"
@@ -97,6 +100,11 @@
         <action
             android:id="@+id/action_homePageFragment_to_movieListFragment"
             app:destination="@id/movieListFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/homePageFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/detailMovieFragment"

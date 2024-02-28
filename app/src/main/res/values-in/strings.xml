@@ -32,6 +32,8 @@
     <string name="select_all">Pilih Semua</string>
     <string name="delete">Hapus</string>
     <string name="total_bayar">Total Pembayaran</string>
+    <string name="password_tidak_valid">Kata Sandi Tidak Valid</string>
+    <string name="email_tidak_valid">Email Tidak Valid</string>
     <string name="rent">Sewa</string>
     <string name="checkout">Pesanan</string>
     <string name="pay">Bayar</string>
@@ -48,4 +50,21 @@
     <string name="done">Selesai</string>
     <string name="pick_your_top_up">Pilih Nominal</string>
     <string name="or_write_down_how_much_you_desire">atau tulis nominalnya</string>
+    <string name="tap_twice_to_exit">Tekan dua kali untuk keluar</string>
+    <string name="selamat_datang">Welcome! %1$s</string>
+    <string name="login_gagal">Login Gagal %1$s</string>
+    <string name="pilih_gambar">Pilih Gambar</string>
+    <string name="galeri">Galeri</string>
+    <string name="kamera">Kamera</string>
+    <string name="field_tidak_boleh_kosong">Tolong isi kolom</string>
+    <string name="profile_gagal_disimpan">Gagal, %1$s</string>
+    <string name="hello_home">Hai, %1$s</string>
+    <string name="failed_to_logout">Kesalahan Saat Logout</string>
+    <string name="success_to_logout">Pengguna telah keluar, Sampai Nanti Y^-^</string>
+    <string name="logout_title_dialog">Anda Yakin?</string>
+    <string name="logout_confirmation_message">Anda Yakin akan Keluar? We Will Miss U (T-T)</string>
+    <string name="ya">Ya</string>
+    <string name="no">Tidak</string>
+    <string name="profile_title_dialog">Yakin Tidak Upload Gambar Untuk Foto Profil?</string>
+    <string name="profile_confirmation_message">Tekan tombol lingkaran diatas untuk mengunggah foto profil</string>
 </resources>

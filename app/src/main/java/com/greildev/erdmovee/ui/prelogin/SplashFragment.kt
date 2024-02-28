@@ -2,14 +2,17 @@ package com.greildev.erdmovee.ui.prelogin
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.greildev.core.base.BaseFragment
 import com.greildev.erdmovee.databinding.FragmentSplashBinding
+import com.greildev.erdmovee.utils.SplashState
+import com.greildev.erdmovee.utils.launchAndCollectIn
+import com.greildev.erdmovee.utils.onCreated
+import com.greildev.erdmovee.utils.onValue
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class SplashFragment :
@@ -17,7 +20,7 @@ class SplashFragment :
     override val viewModel: PreloginViewModel by viewModels()
 
     override fun initView() {
-
+        viewModel.getUserSplash()
         val splashComponentStart =
             ObjectAnimator.ofFloat(binding.splash, View.ROTATION, ANIMATION_ROTATION_START)
                 .setDuration(ANIMATION_DURATION_START)
@@ -30,16 +33,32 @@ class SplashFragment :
         }
         binding.splashText.text = ""
         binding.splashText.setRunningText("ErdMovee")
-
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingFragment())
-            },
-            SPLASH_DURATION
-        )
     }
 
     override fun observeData() {
+        viewModel.userStateSplash.launchAndCollectIn(viewLifecycleOwner) { state ->
+            delay(SPLASH_DURATION)
+            state.onCreated { }
+                .onValue {
+                    when (it) {
+                        is SplashState.Main -> {
+                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomePageFragment())
+                        }
+
+                        is SplashState.Profile -> {
+                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToProfileFragment())
+                        }
+
+                        is SplashState.Login -> {
+                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                        }
+
+                        is SplashState.Onboarding -> {
+                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingFragment())
+                        }
+                    }
+                }
+        }
     }
 
     companion object {
