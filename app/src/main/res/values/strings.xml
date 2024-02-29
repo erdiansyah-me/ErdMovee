@@ -32,6 +32,8 @@
     <string name="select_all">Select All</string>
     <string name="delete">Delete</string>
     <string name="total_bayar">Total Price</string>
+    <string name="password_tidak_valid">Invalid Password</string>
+    <string name="email_tidak_valid">Invalid Email</string>
     <string name="rent">Rent</string>
     <string name="checkout">Checkout</string>
     <string name="pay">Pay</string>
@@ -45,6 +47,7 @@
     <string name="quote" translatable="false">\" %1$s \"</string>
     <string name="rent_now">Rent Now</string>
     <string name="add_cart">+ Cart</string>
+    <string name="tap_twice_to_exit">Tap Twice to Exit</string>
     <string name="click_to_top_up">Click to Top up</string>
     <string name="done">Done</string>
     <string name="pick_your_top_up">Pick Your Top Up</string>
@@ -55,4 +58,20 @@
     <string name="_2500_coins" translatable="false">2500 Coins</string>
     <string name="_3000_coins" translatable="false">3000 Coins</string>
     <string name="or_write_down_how_much_you_desire">or write down how much you desire</string>
+    <string name="selamat_datang">Selamat Datang! %1$s</string>
+    <string name="login_gagal">Login Failed %1$s</string>
+    <string name="pilih_gambar">Pick Image</string>
+    <string name="galeri">Gallery</string>
+    <string name="kamera">Camera</string>
+    <string name="field_tidak_boleh_kosong">Please fill the field</string>
+    <string name="profile_gagal_disimpan">"Failed, %1$s"</string>
+    <string name="hello_home">Hi, %1$s</string>
+    <string name="failed_to_logout">Kesalahan Saat Logout</string>
+    <string name="success_to_logout">User Logout, Will Miss U Y^-^</string>
+    <string name="logout_title_dialog">Are You Sure?</string>
+    <string name="logout_confirmation_message">You Sure Want to Logout? We Will Miss U (T-T)</string>
+    <string name="ya">Yes</string>
+    <string name="no">No</string>
+    <string name="profile_title_dialog">Yakin Tidak Upload Gambar Untuk Foto Profil?</string>
+    <string name="profile_confirmation_message">Tekan tombol lingkaran diatas untuk mengunggah foto profil</string>
 </resources>

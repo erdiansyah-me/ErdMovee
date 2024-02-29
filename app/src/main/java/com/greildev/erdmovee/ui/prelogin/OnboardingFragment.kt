@@ -10,11 +10,18 @@ import dagger.hilt.android.AndroidEntryPoint
 class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, PreloginViewModel>(FragmentOnboardingBinding::inflate) {
     override val viewModel: PreloginViewModel by viewModels()
     override fun initView() {
-        binding.tvSkip.setOnClickListener {
-            findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment())
-        }
     }
 
     override fun observeData() {
+    }
+
+    override fun initListener() {
+        binding.btnJoinnow.setOnClickListener {
+            findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToRegisterFragment())
+        }
+        binding.tvSkip.setOnClickListener {
+            viewModel.saveUserOnboardingPreferences(isShowOnboarding = false)
+            findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment())
+        }
     }
 }

@@ -7,8 +7,11 @@ plugins {
     id("androidx.navigation.safeargs")
     //parcelize
     id("org.jetbrains.kotlin.plugin.parcelize")
+    //google and firebase
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    //hilt
+    id("dagger.hilt.android.plugin")
 
 }
 
@@ -44,6 +47,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -64,6 +68,7 @@ dependencies {
     api("com.google.firebase:firebase-analytics")
     api("com.google.firebase:firebase-config-ktx")
     api("com.google.firebase:firebase-messaging-ktx")
+    api("com.google.firebase:firebase-storage-ktx")
 
     //testing
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -108,4 +113,5 @@ dependencies {
     ksp("androidx.hilt:hilt-compiler:1.2.0")
     api("androidx.hilt:hilt-navigation:1.2.0")
     api("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-compiler:2.50")
 }
