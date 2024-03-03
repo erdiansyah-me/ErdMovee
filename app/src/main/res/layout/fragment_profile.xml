@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:subtitle="Please complete your profile"
+        app:subtitle="@string/please_complete_your_profile"
         app:subtitleCentered="true"
         app:subtitleTextAppearance="@style/ToolbarSubtitle"
         app:subtitleTextColor="?attr/colorOutline"

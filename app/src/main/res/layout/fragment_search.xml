@@ -5,7 +5,7 @@
     android:id="@+id/searchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.homepage.SearchFragment">
+    tools:context=".ui.search.SearchFragment">
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_product_layout"
         android:layout_marginHorizontal="16dp"
@@ -43,5 +43,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_product_layout" />
+
+    <com.greildev.erdmovee.ui.component.StatedView
+        android:id="@+id/view_stated"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading"
+        android:layout_width="320dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/anim_loading" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,6 +23,7 @@
             android:layout_marginEnd="8dp" />
 
         <ImageView
+            android:id="@+id/iv_item_poster"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:contentDescription="@string/movie_poster"
@@ -36,6 +37,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:layout_marginHorizontal="8dp"
@@ -57,6 +59,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    app:tint="?attr/colorOnSurface"
                     android:src="@drawable/ic_add_payment_24" />
 
                 <TextView
@@ -68,7 +71,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_medium"
                     android:includeFontPadding="false"
-                    tools:text="500/Day"
+                    tools:text="@string/price_per_day"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +97,7 @@
                     android:includeFontPadding="false"
                     android:text="@string/rent_for"
                     android:textAlignment="viewEnd"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +117,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_increment"
+                            android:id="@+id/btn_decrement"
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -141,7 +144,7 @@
                             tools:text="1 Day" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_decrement"
+                            android:id="@+id/btn_increment"
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
