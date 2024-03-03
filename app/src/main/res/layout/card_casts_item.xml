@@ -26,7 +26,7 @@
             android:id="@+id/tv_casts_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:textSize="11sp"
             tools:ignore="SmallSp"
             android:includeFontPadding="false"
             android:textColor="?attr/colorOnSurface"
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
-            android:textSize="8sp"
+            android:textSize="10sp"
             android:includeFontPadding="false"
             tools:ignore="SmallSp"
             tools:text="Peter Parker" />

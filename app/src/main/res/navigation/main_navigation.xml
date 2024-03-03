@@ -105,12 +105,26 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/homePageFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homePageFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailMovieFragment"
         android:name="com.greildev.erdmovee.ui.detail.DetailMovieFragment"
         android:label="fragment_detail_movie"
-        tools:layout="@layout/fragment_detail_movie" />
+        tools:layout="@layout/fragment_detail_movie" >
+        <argument
+            android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_detailMovieFragment_self"
+            app:destination="@id/detailMovieFragment" />
+        <action
+            android:id="@+id/action_detailMovieFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/topupFragment"
         android:name="com.greildev.erdmovee.ui.payment.TopupFragment"
@@ -119,15 +133,70 @@
         <action
             android:id="@+id/action_topupFragment_to_paymentMethodFragment"
             app:destination="@id/paymentMethodFragment" />
+        <action
+            android:id="@+id/action_topupFragment_to_paymentStatusFragment"
+            app:destination="@id/paymentStatusFragment" />
+        <argument
+            android:name="paymentMethod"
+            app:argType="com.greildev.core.domain.model.PaymentListInfo"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/movieListFragment"
         android:name="com.greildev.erdmovee.ui.homepage.MovieListFragment"
         android:label="fragment_movie_list"
-        tools:layout="@layout/fragment_movie_list" />
+        tools:layout="@layout/fragment_movie_list" >
+        <argument
+            android:name="fetch"
+            app:argType="string"
+            android:defaultValue="f" />
+        <action
+            android:id="@+id/action_movieListFragment_to_detailMovieFragment"
+            app:destination="@id/detailMovieFragment" />
+    </fragment>
     <fragment
         android:id="@+id/paymentMethodFragment"
         android:name="com.greildev.erdmovee.ui.payment.PaymentMethodFragment"
         android:label="fragment_payment_method"
-        tools:layout="@layout/fragment_payment_method" />
+        tools:layout="@layout/fragment_payment_method" >
+        <action
+            android:id="@+id/action_paymentMethodFragment_to_topupFragment"
+            app:destination="@id/topupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.greildev.erdmovee.ui.payment.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.greildev.erdmovee.ui.payment.CheckoutFragment"
+        android:label="fragment_checkout"
+        tools:layout="@layout/fragment_checkout" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_paymentStatusFragment"
+            app:destination="@id/paymentStatusFragment" />
+        <action
+            android:id="@+id/action_checkoutFragment_to_topupFragment"
+            app:destination="@id/topupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentStatusFragment"
+        android:name="com.greildev.erdmovee.ui.payment.PaymentStatusFragment"
+        android:label="fragment_payment_status"
+        tools:layout="@layout/fragment_payment_status" >
+        <action
+            android:id="@+id/action_paymentStatusFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+        <argument
+            android:name="paymentStatusModel"
+            app:argType="com.greildev.core.domain.model.PaymentStatusModel"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+    <entry>
+        <key>payment_list</key>
+        <value>{
+            "code": 200,
+            "message": "OK",
+            "data": [
+            {
+            "title": "Transfer Virtual Account",
+            "item": [
+            {
+            "label": "BCA Virtual Account",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png",
+            "status": false
+            },
+            {
+            "label": "BNI Virtual Account",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png",
+            "status": true
+            },
+            {
+            "label": "BRI Virtual Account",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/1200px-BANK_BRI_logo.svg.png",
+            "status": true
+            },
+            {
+            "label": "Mandiri Virtual Account",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png",
+            "status": true
+            }
+            ]
+            },
+            {
+            "title": "Transfer Bank",
+            "item": [
+            {
+            "label": "Bank BCA",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png",
+            "status": true
+            },
+            {
+            "label": "Bank BNI",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/id/thumb/5/55/BNI_logo.svg/1200px-BNI_logo.svg.png",
+            "status": false
+            },
+            {
+            "label": "Bank BRI",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/BANK_BRI_logo.svg/1200px-BANK_BRI_logo.svg.png",
+            "status": true
+            },
+            {
+            "label": "Bank Mandiri",
+            "image":
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/2560px-Bank_Mandiri_logo_2016.svg.png",
+            "status": true
+            }
+            ]
+            },
+            {
+            "title": "Pembayaran Instan",
+            "item": [
+            {
+            "label": "GoPay",
+            "image": "https://gopay.co.id/icon.png",
+            "status": true
+            },
+            {
+            "label": "OVO",
+            "image":
+            "https://theme.zdassets.com/theme_assets/1379487/2cb35fe96fa1191f49c2b769b50cf8b546fff65e.png",
+            "status": true
+            }
+            ]
+            }
+            ]
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>genres_list</key>
+        <value>{
+            "genres": [
+            {
+            "id": 28,
+            "name": "Action"
+            },
+            {
+            "id": 12,
+            "name": "Adventures"
+            },
+            {
+            "id": 16,
+            "name": "Animation"
+            },
+            {
+            "id": 35,
+            "name": "Comedy"
+            },
+            {
+            "id": 80,
+            "name": "Crime"
+            },
+            {
+            "id": 99,
+            "name": "Documentary"
+            },
+            {
+            "id": 18,
+            "name": "Drama"
+            },
+            {
+            "id": 10751,
+            "name": "Family"
+            },
+            {
+            "id": 14,
+            "name": "Fantasy"
+            },
+            {
+            "id": 36,
+            "name": "History"
+            },
+            {
+            "id": 27,
+            "name": "Horror"
+            },
+            {
+            "id": 10402,
+            "name": "Music"
+            },
+            {
+            "id": 9648,
+            "name": "Mystery"
+            },
+            {
+            "id": 10749,
+            "name": "Romance"
+            },
+            {
+            "id": 878,
+            "name": "Science Fiction"
+            },
+            {
+            "id": 10770,
+            "name": "TV Movie"
+            },
+            {
+            "id": 53,
+            "name": "Thriller"
+            },
+            {
+            "id": 10752,
+            "name": "War"
+            },
+            {
+            "id": 37,
+            "name": "Western"
+            }
+            ]
+            }
+        </value>
+    </entry>
+    <entry>
+        <key>topup_list</key>
+        <value>
+            [
+            {
+            "token": 200,
+            "price": 30000
+            },
+            {
+            "token": 500,
+            "price": 75000
+            },
+            {
+            "token": 700,
+            "price": 100000
+            },
+            {
+            "token": 1000,
+            "price": 145000
+            },
+            {
+            "token": 1200,
+            "price": 175000
+            },
+            {
+            "token": 1500,
+            "price": 220000
+            }
+            ]
+        </value>
+    </entry>
+</defaults>

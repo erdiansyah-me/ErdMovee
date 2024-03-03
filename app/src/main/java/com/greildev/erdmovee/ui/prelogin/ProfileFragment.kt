@@ -159,9 +159,8 @@ class ProfileFragment :
                                     it1,
                                     binding.root,
                                     getString(R.string.field_tidak_boleh_kosong),
-                                    StateSnackbar.ERROR,
-                                    {}
-                                )
+                                    StateSnackbar.ERROR
+                                ) {}
                             }
                         } else {
                             setProfileData(username)

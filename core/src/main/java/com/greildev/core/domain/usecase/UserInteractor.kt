@@ -15,8 +15,8 @@ class UserInteractor(
     private val userRepository: UserRepository
 ) {
 
-    val userData: Flow<UserData?> = flow {
-        emit(userRepository.userData.first()?.toUIData())
+    suspend fun userData(): Flow<UserData?> = flow {
+        emit(userRepository.userData().first()?.toUIData())
     }
 
     suspend fun userLogin(authRequest: AuthRequest): Flow<UIState<Boolean>> = flow {

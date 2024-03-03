@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "474488492205",
+    "firebase_url": "https://erdmovee-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "erdmovee",
+    "storage_bucket": "erdmovee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474488492205:android:3ea8c0150baf50e0d33624",
+        "android_client_info": {
+          "package_name": "com.greildev.erdmovee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwE3Zm_x-uv71lJfRPy1Kj19_2O1W74E0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

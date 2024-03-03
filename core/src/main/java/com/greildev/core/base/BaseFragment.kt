@@ -6,22 +6,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseFragment<VB : ViewBinding?, VM : ViewModel>(
-    private val bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> VB,
+abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
+    val bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> VB,
 ) : Fragment() {
 
-    private var _binding: VB? = null
-    protected val binding: VB
-        get() = _binding!!
+    protected lateinit var binding: VB
     protected abstract val viewModel: VM
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: android.os.Bundle?
-    ): android.view.View? {
-        _binding = bindingFactory.invoke(inflater, container, false)
-        return binding?.root
+    ): android.view.View {
+        binding = bindingFactory.invoke(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
@@ -36,11 +34,5 @@ abstract class BaseFragment<VB : ViewBinding?, VM : ViewModel>(
     abstract fun observeData()
 
     open fun initListener() {
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

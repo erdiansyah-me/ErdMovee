@@ -33,8 +33,8 @@ class PreloginViewModel @Inject constructor(
         viewModelScope.launch {
             _userStateSplash.value = FlowState.FlowValue(
                 UserParams(
-                    user = useCase.userUsecase().userData.first(),
-                    isOnboarding = useCase.userUsecase().getUserOnboardingPreferences().first()
+                    user = useCase.userUseCase().userData().first(),
+                    isOnboarding = useCase.userUseCase().getUserOnboardingPreferences().first()
                 ).toSplashState()
             )
         }
@@ -42,7 +42,7 @@ class PreloginViewModel @Inject constructor(
 
     fun saveUserOnboardingPreferences(isShowOnboarding: Boolean) {
         viewModelScope.launch {
-            useCase.userUsecase().saveUserOnboardingPreferences(isShowOnboarding)
+            useCase.userUseCase().saveUserOnboardingPreferences(isShowOnboarding)
         }
     }
 
@@ -50,7 +50,7 @@ class PreloginViewModel @Inject constructor(
     val userLogin: StateFlow<UIState<Boolean>> = _userLogin
     fun loginUser(username: String, password: String) {
         viewModelScope.launch {
-            useCase.userUsecase().userLogin(AuthRequest(username, password)).collect {
+            useCase.userUseCase().userLogin(AuthRequest(username, password)).collect {
                 _userLogin.value = it
             }
         }
@@ -60,7 +60,7 @@ class PreloginViewModel @Inject constructor(
     val userRegister: StateFlow<UIState<Boolean>> = _userRegister
     fun registerUser(email: String, password: String) {
         viewModelScope.launch {
-            useCase.userUsecase().userRegister(AuthRequest(email, password)).collect {
+            useCase.userUseCase().userRegister(AuthRequest(email, password)).collect {
                 _userRegister.value = it
             }
         }
@@ -71,7 +71,7 @@ class PreloginViewModel @Inject constructor(
 
     fun updateProfile(username: String, photo: File?) {
         viewModelScope.launch {
-            useCase.userUsecase().updateProfile(ProfileRequest(username, photo)).collect {
+            useCase.userUseCase().updateProfile(ProfileRequest(username, photo)).collect {
                 _userProfile.value = it
             }
         }
@@ -103,7 +103,7 @@ class PreloginViewModel @Inject constructor(
         _validateRegisterEmail.update { FlowState.FlowValue(email.isEmailValid()) }
     }
 
-    val _validateProfileName = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
+    private val _validateProfileName = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
     val validateProfileName: StateFlow<FlowState<Boolean>> = _validateProfileName
     fun validateProfileName(name: String) {
         _validateProfileName.update { FlowState.FlowValue(name.validateRequired()) }

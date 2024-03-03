@@ -3,6 +3,7 @@ package com.greildev.erdmovee.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
@@ -17,6 +18,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.greildev.erdmovee.R
+import com.greildev.erdmovee.utils.Constant.IMAGE_BASE_URL
 import com.greildev.erdmovee.utils.Constant.LANGUAGE_IN
 import com.greildev.erdmovee.utils.Constant.POLICY_EN
 import com.greildev.erdmovee.utils.Constant.POLICY_IN
@@ -25,6 +27,11 @@ import com.greildev.erdmovee.utils.Constant.TNC_IN
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 inline fun <T> Flow<T>.launchAndCollectIn(
     owner: LifecycleOwner,
@@ -38,7 +45,11 @@ inline fun <T> Flow<T>.launchAndCollectIn(
     }
 }
 
-fun doubleBackToExit(context: Context, activity: FragmentActivity?, viewLifecycleOwner: LifecycleOwner) {
+fun doubleBackToExit(
+    context: Context,
+    activity: FragmentActivity?,
+    viewLifecycleOwner: LifecycleOwner
+) {
     var doubleBackPressed: Long = 0
     val toast = Toast.makeText(
         context,
@@ -61,7 +72,7 @@ fun String.tncText(context: Context, locale: String): SpannableString {
     val linkUrlTnc = "https://youtube.com"
     val linkUrlPolicy = "https://google.com"
 
-    val openUrl = { url: String->
+    val openUrl = { url: String ->
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
 
@@ -88,8 +99,50 @@ fun String.tncText(context: Context, locale: String): SpannableString {
     spannableString.setSpan(tncClickableSpan, startTnc, endTnc, 0)
     spannableString.setSpan(policyClickableSpan, startPolicy, endPolicy, 0)
 
-    spannableString.setSpan(ForegroundColorSpan(context.getColor(R.color.md_theme_light_primary)), startTnc, endTnc, 0)
-    spannableString.setSpan(ForegroundColorSpan(context.getColor(R.color.md_theme_light_primary)), startPolicy, endPolicy, 0)
+    spannableString.setSpan(
+        ForegroundColorSpan(context.getColor(R.color.md_theme_light_primary)),
+        startTnc,
+        endTnc,
+        0
+    )
+    spannableString.setSpan(
+        ForegroundColorSpan(context.getColor(R.color.md_theme_light_primary)),
+        startPolicy,
+        endPolicy,
+        0
+    )
 
     return SpannableString(spannableString)
+}
+
+fun Double.formatDecimal(): String {
+    val formatter = DecimalFormat("#.#")
+    return formatter.format(this)
+}
+
+fun String.imgUrlFormatter(): String {
+    return IMAGE_BASE_URL + this
+}
+
+enum class TransactionType {
+    TOPUP,
+    RENTAL
+}
+
+fun getCurrentDateTime(): String {
+    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        val currentDate = Calendar.getInstance()
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        formatter.format(currentDate.time)
+    } else {
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        currentDateTime.format(formatter)
+    }
+}
+
+enum class TransactionMethod {
+    BANK_TRANSFER,
+    INSTANT,
+    VIRTUAL_ACCOUNT,
 }

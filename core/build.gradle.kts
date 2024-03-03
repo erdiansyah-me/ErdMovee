@@ -4,7 +4,6 @@ plugins {
     //ksp
     id("com.google.devtools.ksp")
     //google and firebase
-    id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     //parcelize
     id("org.jetbrains.kotlin.plugin.parcelize")
@@ -39,6 +38,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -46,8 +49,13 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
-    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
-    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.3"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-config-ktx")
+    api("com.google.firebase:firebase-database-ktx")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -68,6 +76,10 @@ dependencies {
     api("com.google.dagger:hilt-android:2.50")
     ksp("androidx.hilt:hilt-compiler:1.2.0")
     ksp("com.google.dagger:hilt-compiler:2.50")
+
+    //paging
+    api("androidx.paging:paging-runtime-ktx:3.2.1")
+    api("androidx.paging:paging-common-ktx:3.2.1")
 
     //DataStore
     implementation("androidx.datastore:datastore-core:1.0.0")
