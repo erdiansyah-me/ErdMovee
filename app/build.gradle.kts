@@ -63,7 +63,6 @@ dependencies {
 
     //Firebase
     api(platform("com.google.firebase:firebase-bom:32.7.2"))
-    api("com.google.firebase:firebase-config")
     api("com.google.firebase:firebase-crashlytics")
     api("com.google.firebase:firebase-analytics")
     api("com.google.firebase:firebase-config-ktx")
@@ -75,10 +74,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     //recyclerview
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-
-    //viewpager2
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    api("androidx.recyclerview:recyclerview:1.3.2")
 
     //glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -98,9 +94,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    //shimmer
-    implementation("com.facebook.shimmer:shimmer:0.5.0")
-
     //coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
@@ -114,4 +107,7 @@ dependencies {
     api("androidx.hilt:hilt-navigation:1.2.0")
     api("com.google.dagger:hilt-android:2.50")
     ksp("com.google.dagger:hilt-compiler:2.50")
+
+    //leakCanary
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.10")
 }

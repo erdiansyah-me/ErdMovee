@@ -13,19 +13,19 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.greildev.erdmovee.ui.homepage.SearchFragment"
+        android:name="com.greildev.erdmovee.ui.search.SearchFragment"
         android:label="searchFragment"
         tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.greildev.erdmovee.ui.homepage.FavoriteFragment"
+        android:name="com.greildev.erdmovee.ui.favorite.FavoriteFragment"
         android:label="favoriteFragment"
         tools:layout="@layout/fragment_favorite" />
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.greildev.erdmovee.ui.homepage.HistoryFragment"
+        android:name="com.greildev.erdmovee.ui.history.HistoryFragment"
         android:label="historyFragment"
         tools:layout="@layout/fragment_history" />
 </navigation>

@@ -82,7 +82,10 @@ class LoginFragment :
                             MoveeSnackbar.showSnackbarCustom(
                                 it1,
                                 binding.root,
-                                getString(R.string.selamat_datang, binding.tifEmail.text.toString()),
+                                getString(
+                                    R.string.selamat_datang,
+                                    binding.tifEmail.text.toString()
+                                ),
                                 StateSnackbar.SUCCESS
                             ) {
                                 binding.loading.cancelAnimation()
@@ -148,21 +151,14 @@ class LoginFragment :
                                     it1,
                                     binding.root,
                                     getString(R.string.field_tidak_boleh_kosong),
-                                    StateSnackbar.ERROR,
-                                    {}
-                                )
+                                    StateSnackbar.ERROR
+                                ) {}
                             }
                         } else {
                             viewModel.loginUser(email, password)
                         }
                     }
             }
-//            viewModel.loginUser(email , password)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
     }
 }

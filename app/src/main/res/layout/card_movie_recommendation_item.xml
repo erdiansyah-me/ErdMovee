@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_movie_poster"
             android:layout_width="84dp"
             android:layout_height="120dp"
             android:contentDescription="@string/movie_poster"
@@ -27,6 +28,7 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
+            android:id="@+id/tv_movie_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

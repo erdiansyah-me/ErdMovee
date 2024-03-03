@@ -21,7 +21,7 @@ class UserService @Inject constructor(
     private val firebaseAuthService: FirebaseAuth,
     private val firebaseStorage: FirebaseStorage
 ) {
-    val userData: Flow<FirebaseUser?> = flow {
+    suspend fun userData(): Flow<FirebaseUser?> = flow {
         val user = firebaseAuthService.currentUser
         if (user != null) {
             emit(user)
@@ -30,8 +30,8 @@ class UserService @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> =
-        callbackFlow {
+    suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> {
+        return callbackFlow {
             firebaseAuthService.signInWithEmailAndPassword(
                 authRequest.email,
                 authRequest.password
@@ -42,6 +42,7 @@ class UserService @Inject constructor(
             }
             awaitClose()
         }
+    }
 
     suspend fun registerUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> =
         callbackFlow<SourceResult<Boolean>> {
@@ -74,8 +75,8 @@ class UserService @Inject constructor(
                 }
                 user.updateProfile(profileUpdates)
                     .addOnSuccessListener {
-                        if (user.displayName != null) {
-                            trySend(SourceResult.Success(user.displayName!!))
+                        user.displayName?.let { it1 ->
+                            trySend(SourceResult.Success(it1))
                         }
                     }.addOnFailureListener {
                         trySend(SourceResult.Error(123, it.message ?: "Something Went Wrong!"))
@@ -86,12 +87,13 @@ class UserService @Inject constructor(
             awaitClose()
         }.flowOn(Dispatchers.IO)
 
-    private fun uploadToFirebaseStorage(user: FirebaseUser, photo: File) : Uri {
+    private fun uploadToFirebaseStorage(user: FirebaseUser, photo: File): Uri {
         val photoName = photo.name
         val storageRef = firebaseStorage.getReference(user.uid + "/profilePictures/" + photoName)
         val task = storageRef.putFile(Uri.parse(photo.path))
         return task.result.storage.downloadUrl.result
     }
+
     fun logoutUser() {
         firebaseAuthService.signOut()
     }

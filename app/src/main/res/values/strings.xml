@@ -74,4 +74,35 @@
     <string name="no">No</string>
     <string name="profile_title_dialog">Yakin Tidak Upload Gambar Untuk Foto Profil?</string>
     <string name="profile_confirmation_message">Tekan tombol lingkaran diatas untuk mengunggah foto profil</string>
+    <string name="retry">Retry</string>
+    <string name="error">Error</string>
+    <string name="empty">Empty</string>
+    <string name="movie_not_found">Not Found</string>
+    <string name="refresh">Refresh</string>
+    <string name="search_first_state">Explore wonderful movies around</string>
+    <string name="search_first_state_title">Explore</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="detail_movie">Detail Movie</string>
+    <string name="minutes">%1$s Minutes</string>
+    <string name="_10" translatable="false">%1$s /10</string>
+    <string name="add_to_favorite">Bookmark</string>
+    <string name="remove_from_favorite">Bookmarked</string>
+    <string name="price_per_day">%1$s /Day</string>
+    <string name="cart_quantity_item">%1$s Day</string>
+    <string name="its_empty_lets_pick_some_movie_to_rent">Its Empty! Lets pick some Movie to rent</string>
+    <string name="transaction_movie_amount">%1$s Movie</string>
+    <string name="success">Success</string>
+    <string name="amount_coins" translatable="false">%1$s Coins</string>
+    <string name="pembayaran_gagal_silahkan_coba_kembali">Payment Failed, please try again later</string>
+    <string name="payment_failed">Payment Failed</string>
+    <string name="payment_success">Payment Success</string>
+    <string name="insufficient_balance">Insufficient Balance</string>
+    <string name="logout">Logout</string>
+    <string name="with_email">with Email</string>
+    <string name="please_complete_your_profile">Please complete your profile</string>
+    <string name="feature_soon">FEATURE SOON</string>
+    <string name="transaction_detail">Transaction Detail</string>
+    <string name="transaction_date">Transaction Date</string>
+    <string name="transaction_id">Transaction ID</string>
+    <string name="nominal">Nominal</string>
 </resources>

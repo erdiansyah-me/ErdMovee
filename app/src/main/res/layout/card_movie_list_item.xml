@@ -39,27 +39,6 @@
                 android:maxLines="1"
                 tools:text="@tools:sample/lorem/random" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                app:singleLine="true">
-
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:clickable="false"
-                    android:ellipsize="end"
-                    android:includeFontPadding="false"
-                    android:maxWidth="80dp"
-                    app:chipBackgroundColor="?attr/colorSecondaryContainer"
-                    app:chipMinTouchTargetSize="0dp"
-                    app:chipStartPadding="0dp"
-                    app:chipStrokeWidth="0dp"
-                    app:textEndPadding="0dp"
-                    tools:text="1,3 wwwwwdwwasdasdawww" />
-            </com.google.android.material.chip.ChipGroup>
-
             <LinearLayout
                 android:id="@+id/ll_date"
                 android:layout_width="match_parent"

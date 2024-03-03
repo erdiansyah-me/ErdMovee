@@ -11,4 +11,10 @@
         android:icon="@drawable/ic_notifications_24"
         android:title="@string/notification"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_logout_24"
+        android:iconTint="?attr/colorError"
+        android:title="@string/logout"
+        app:showAsAction="ifRoom" />
 </menu>

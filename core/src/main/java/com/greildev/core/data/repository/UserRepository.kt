@@ -12,7 +12,7 @@ import javax.inject.Inject
 interface UserRepository {
 
     //USER
-    val userData: Flow<FirebaseUser?>
+    suspend fun userData(): Flow<FirebaseUser?>
     suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>>
     suspend fun registerUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>>
     suspend fun updateProfile(profile: ProfileRequest): Flow<SourceResult<String>>
@@ -27,7 +27,7 @@ class UserRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource
 ) : UserRepository {
-    override val userData: Flow<FirebaseUser?> = remoteDataSource.userData
+    override suspend fun userData(): Flow<FirebaseUser?> = remoteDataSource.userData()
 
     override suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> =
         remoteDataSource.loginUser(authRequest = authRequest)
