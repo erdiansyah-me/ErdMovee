@@ -108,7 +108,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_increment"
+                            android:id="@+id/btn_decrement"
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -135,7 +135,7 @@
                             tools:text="1 Day" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_decrement"
+                            android:id="@+id/btn_increment"
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
