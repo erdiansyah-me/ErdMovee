@@ -38,7 +38,7 @@ class FavoriteListAdapter(
                 )
                 chip.setPadding(0,0,0,0)
                 chip.includeFontPadding = false
-                chip.textSize = 11.0F
+                chip.textSize = 11F
                 chip.isCheckable = false
                 chip.isClickable = false
                 chip.setChipBackgroundColorResource(R.color.md_theme_dark_primary)
@@ -52,5 +52,4 @@ class FavoriteListAdapter(
             }
         }
     }
-
 }

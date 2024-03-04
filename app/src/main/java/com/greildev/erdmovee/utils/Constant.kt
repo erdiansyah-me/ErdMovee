@@ -13,4 +13,6 @@ object Constant {
     const val TO_SCREEN_NAVIGATE_EVENT = "to_screen"
     const val USER_EVENT = "user_event"
     const val MOVIE_TITLE = "movie_title"
+    const val REGISTER_USER = "register"
+    const val UPDATE_PROFILE = "update_profile"
 }

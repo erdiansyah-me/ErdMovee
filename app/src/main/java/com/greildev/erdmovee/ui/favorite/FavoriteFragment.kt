@@ -26,7 +26,7 @@ class FavoriteFragment :
         FavoriteListAdapter(
             action = { movieId, title ->
                 val logBundle = Bundle()
-                logBundle.putString("movie title", title)
+                logBundle.putString(Constant.MOVIE_TITLE, title)
                 Analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, logBundle)
                 val toDetailMovieFragment =
                     HomePageFragmentDirections.actionHomePageFragmentToDetailMovieFragment()

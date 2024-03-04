@@ -1,15 +1,18 @@
 package com.greildev.erdmovee.ui.payment
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.greildev.core.base.BaseFragment
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.FragmentCartBinding
 import com.greildev.erdmovee.ui.adapter.CartListAdapter
 import com.greildev.erdmovee.ui.component.StatedViewState
+import com.greildev.erdmovee.utils.Analytics
 import com.greildev.erdmovee.utils.launchAndCollectIn
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,11 +51,7 @@ class CartFragment :
                 binding.svCartMovie.isVisible = false
                 binding.viewCartContent.isVisible = true
                 cartAdapter.submitList(it)
-                if (!it.all { cart -> cart.isChecked }) {
-                    binding.cbSelectAll.isChecked = false
-                } else {
-                    binding.cbSelectAll.isChecked = true
-                }
+                binding.cbSelectAll.isChecked = it.all { cart -> cart.isChecked }
             } else {
                 binding.svCartMovie.isVisible = true
                 binding.viewCartContent.isVisible = false
@@ -65,10 +64,9 @@ class CartFragment :
         }
         viewModel.getCheckedCartByUid(true).launchAndCollectIn(viewLifecycleOwner) { state ->
             binding.tvTotalPrice.text = state.sumOf { it.quantityPrice }.toString()
-            if (state.sortedBy { it.cartId } == cartAdapter.currentList.sortedBy { it.cartId }) {
+            if (state.size == cartAdapter.currentList.size) {
                 binding.cbSelectAll.isChecked = true
             }
-            cartAdapter.notifyDataSetChanged()
         }
     }
 
@@ -91,6 +89,9 @@ class CartFragment :
             }
         }
         binding.btnRent.setOnClickListener {
+            val logBundle = Bundle()
+            logBundle.putString("checkout","${cartAdapter.currentList.filter { it.isChecked }.size} item" )
+            Analytics.logEvent(FirebaseAnalytics.Event.BEGIN_CHECKOUT, logBundle)
             val toCheckoutFragment = CartFragmentDirections.actionCartFragmentToCheckoutFragment()
             findNavController().navigate(toCheckoutFragment)
         }

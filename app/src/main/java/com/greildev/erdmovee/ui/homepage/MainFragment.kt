@@ -28,7 +28,7 @@ class MainFragment :
     private val popularAdapter: MovieListAdapter by lazy {
         MovieListAdapter { id, title ->
             val logBundle = Bundle()
-            logBundle.putString("movie title", title)
+            logBundle.putString(Constant.MOVIE_TITLE, title)
             Analytics.logEvent(Constant.TO_DETAIL_SCREEN_EVENT, logBundle)
             val toDetailMovieFragment =
                 HomePageFragmentDirections.actionHomePageFragmentToDetailMovieFragment()
@@ -41,7 +41,7 @@ class MainFragment :
     private val nowPlayingAdapter: NowPlayingPagingAdapter by lazy {
         NowPlayingPagingAdapter { id, title ->
             val logBundle = Bundle()
-            logBundle.putString("movie title", title)
+            logBundle.putString(Constant.MOVIE_TITLE, title)
             Analytics.logEvent(Constant.TO_DETAIL_SCREEN_EVENT, logBundle)
             val toDetailMovieFragment =
                 HomePageFragmentDirections.actionHomePageFragmentToDetailMovieFragment()
@@ -75,7 +75,7 @@ class MainFragment :
             val headerTextPopular = binding.llPopular.top
             val scrollThreshold = 50
 
-            if (scrollVertical > headerTextPopular + scrollThreshold) {
+            if (scrollVertical > headerTextPopular - scrollThreshold) {
                 binding.svMain.smoothScrollTo(0, binding.llPopular.top)
             }
         }
@@ -111,7 +111,7 @@ class MainFragment :
             Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
             val toMovieListFragment =
                 HomePageFragmentDirections.actionHomePageFragmentToMovieListFragment()
-            toMovieListFragment.fetch = "popular"
+            toMovieListFragment.fetch = MovieListFragment.POPULAR_FETCHED
             activity?.supportFragmentManager?.findFragmentById(R.id.fragment_container)
                 ?.findNavController()?.navigate(toMovieListFragment)
         }
@@ -121,7 +121,7 @@ class MainFragment :
             Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
             val toMovieListFragment =
                 HomePageFragmentDirections.actionHomePageFragmentToMovieListFragment()
-            toMovieListFragment.fetch = "nowplaying"
+            toMovieListFragment.fetch = MovieListFragment.NOW_PLAYING_FETCHED
             activity?.supportFragmentManager?.findFragmentById(R.id.fragment_container)
                 ?.findNavController()?.navigate(toMovieListFragment)
         }
@@ -188,5 +188,4 @@ class MainFragment :
             }
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package com.greildev.erdmovee.ui.payment
 
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,6 @@ import com.greildev.erdmovee.utils.launchAndCollectIn
 import com.greildev.erdmovee.utils.onCreated
 import com.greildev.erdmovee.utils.onValue
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class CheckoutFragment :
@@ -37,6 +37,9 @@ class CheckoutFragment :
     override fun initView() {
         binding.rvCheckoutMovies.adapter = checkoutAdapter
         binding.rvCheckoutMovies.layoutManager = LinearLayoutManager(context)
+        binding.toolbarCheckout.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun observeData() {
@@ -51,19 +54,28 @@ class CheckoutFragment :
                 viewModel.getTokenUser(it.uid)
             }
         }
-        viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) {
-            binding.tvCoinsBalance.text = getString(R.string.amount_coins, it.toString())
-            delay(1500L)
-            if (it > binding.tvTotalPrice.text.toString().toInt()) {
-                binding.btnRent.isEnabled = true
-                binding.btnTopup.isVisible = false
-                binding.btnRent.text = getString(R.string.rent)
-            } else {
+        viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { token ->
+            binding.tvCoinsBalance.text = getString(R.string.amount_coins, token.toString())
+            if (binding.tvTotalPrice.text == 0.toString()) {
                 binding.btnRent.isEnabled = false
                 binding.btnRent.text = getString(R.string.insufficient_balance)
                 binding.btnTopup.isVisible = true
+            } else {
+                binding.btnRent.isEnabled = true
+                binding.btnTopup.isVisible = false
+                binding.btnRent.text = getString(R.string.rent)
             }
-
+            binding.tvTotalPrice.doAfterTextChanged {
+                if (token > it.toString().toInt()) {
+                    binding.btnRent.isEnabled = true
+                    binding.btnTopup.isVisible = false
+                    binding.btnRent.text = getString(R.string.rent)
+                } else {
+                    binding.btnRent.isEnabled = false
+                    binding.btnRent.text = getString(R.string.insufficient_balance)
+                    binding.btnTopup.isVisible = true
+                }
+            }
         }
     }
 

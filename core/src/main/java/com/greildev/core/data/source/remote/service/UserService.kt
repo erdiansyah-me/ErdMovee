@@ -7,6 +7,7 @@ import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.storage.FirebaseStorage
 import com.greildev.core.domain.model.AuthRequest
 import com.greildev.core.domain.model.ProfileRequest
+import com.greildev.core.utils.CoreConstant
 import com.greildev.core.utils.SourceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -62,36 +63,80 @@ class UserService @Inject constructor(
         callbackFlow<SourceResult<String>> {
             val user = firebaseAuthService.currentUser
             if (user != null) {
-                val profileUpdates = if (profile.photo != null) {
-                    val photoUriStorage = uploadToFirebaseStorage(user, profile.photo)
-                    userProfileChangeRequest {
-                        displayName = profile.username
-                        photoUri = photoUriStorage
-                    }
-                } else {
-                    userProfileChangeRequest {
-                        displayName = profile.username
-                    }
-                }
-                user.updateProfile(profileUpdates)
-                    .addOnSuccessListener {
-                        user.displayName?.let { it1 ->
-                            trySend(SourceResult.Success(it1))
+                if (profile.photo != null) {
+                    uploadToFirebaseStorage(user = user, photo = profile.photo,
+                        onSuccess = { uri ->
+                            val profileUpdates = userProfileChangeRequest {
+                                displayName = profile.username
+                                photoUri = uri
+                            }
+                            user.updateProfile(profileUpdates)
+                                .addOnSuccessListener {
+                                    user.displayName?.let { it1 ->
+                                        trySend(SourceResult.Success(it1))
+                                    }
+                                }.addOnFailureListener {
+                                    trySend(
+                                        SourceResult.Error(
+                                            CoreConstant.ERROR_CODE,
+                                            it.message ?: "Something Went Wrong!"
+                                        )
+                                    )
+                                }
+                        },
+                        onFailure = {
+                            trySend(
+                                SourceResult.Error(
+                                    CoreConstant.ERROR_CODE,
+                                    it.localizedMessage ?: "Something Went Wrong!"
+                                )
+                            )
                         }
-                    }.addOnFailureListener {
-                        trySend(SourceResult.Error(123, it.message ?: "Something Went Wrong!"))
+                    )
+                } else {
+                    val profileUpdates = userProfileChangeRequest {
+                        displayName = profile.username
                     }
+                    user.updateProfile(profileUpdates)
+                        .addOnSuccessListener {
+                            user.displayName?.let { it1 ->
+                                trySend(SourceResult.Success(it1))
+                            }
+                        }.addOnFailureListener {
+                            trySend(
+                                SourceResult.Error(
+                                    CoreConstant.ERROR_CODE,
+                                    it.localizedMessage ?: "Something Went Wrong!"
+                                )
+                            )
+                        }
+                }
             } else {
-                throw Exception("User not found")
+                trySend(SourceResult.Error(CoreConstant.ERROR_CODE, "User Not Found!"))
             }
             awaitClose()
         }.flowOn(Dispatchers.IO)
 
-    private fun uploadToFirebaseStorage(user: FirebaseUser, photo: File): Uri {
-        val photoName = photo.name
-        val storageRef = firebaseStorage.getReference(user.uid + "/profilePictures/" + photoName)
-        val task = storageRef.putFile(Uri.parse(photo.path))
-        return task.result.storage.downloadUrl.result
+    private fun uploadToFirebaseStorage(
+        user: FirebaseUser,
+        photo: File,
+        onSuccess: (Uri) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val storageRef =
+            firebaseStorage.reference.child(user.uid + "/profilePictures/" + Uri.fromFile(photo).lastPathSegment)
+
+        println("storageRef: $storageRef and photo: $photo also ${Uri.fromFile(photo)}")
+        val task = storageRef.putFile(Uri.fromFile(photo))
+        task.addOnSuccessListener {
+            storageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                onSuccess(downloadUri)
+            }.addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+        }.addOnFailureListener { exception ->
+            onFailure(exception)
+        }
     }
 
     fun logoutUser() {

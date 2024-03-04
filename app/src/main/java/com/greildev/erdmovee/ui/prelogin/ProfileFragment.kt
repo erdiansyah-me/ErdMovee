@@ -2,11 +2,13 @@ package com.greildev.erdmovee.ui.prelogin
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -26,6 +28,8 @@ import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.FragmentProfileBinding
 import com.greildev.erdmovee.ui.component.MoveeSnackbar
 import com.greildev.erdmovee.ui.component.StateSnackbar
+import com.greildev.erdmovee.utils.Analytics
+import com.greildev.erdmovee.utils.Constant
 import com.greildev.erdmovee.utils.ImageUtils.createTempFile
 import com.greildev.erdmovee.utils.ImageUtils.reduceFileImage
 import com.greildev.erdmovee.utils.ImageUtils.uriToFile
@@ -128,6 +132,9 @@ class ProfileFragment :
                                 state = StateSnackbar.SUCCESS
                             ) {
                                 binding.loading.cancelAnimation()
+                                val logBundle = Bundle()
+                                logBundle.putString("username", binding.tifUsername.text.toString())
+                                Analytics.logEvent(Constant.UPDATE_PROFILE, logBundle)
                                 findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToHomePageFragment())
                             }
                         }
@@ -142,7 +149,7 @@ class ProfileFragment :
     override fun initListener() {
         super.initListener()
         binding.ivProfile.setOnClickListener {
-            showDialog()
+            showPickImageDialog()
         }
 
         binding.btnDone.setOnClickListener {
@@ -174,13 +181,13 @@ class ProfileFragment :
     private fun setProfileData(username: String) {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
-            viewModel.updateProfile(photo = file, username = username)
+            viewModel.updateProfile(username = username, photo = file)
         } else {
-            viewModel.updateProfile(username = username, photo = null)
+            showConfirmationDialog(username)
         }
     }
 
-    private fun showDialog() {
+    private fun showPickImageDialog() {
 
         val dialog = context?.let { MaterialAlertDialogBuilder(it) }
 
@@ -199,6 +206,22 @@ class ProfileFragment :
         }
         dialog?.show()
     }
+
+    private fun showConfirmationDialog(username: String) {
+        AlertDialog.Builder(context)
+            .setTitle(getString(R.string.logout_title_dialog))
+            .setMessage(getString(R.string.profile_confirmation_message))
+            .setPositiveButton(getString(R.string.ya)) { _, _ ->
+                viewModel.updateProfile(photo = null, username = username)
+            }
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+
+
 
     private fun checkCameraPermission() {
         if (context?.let {

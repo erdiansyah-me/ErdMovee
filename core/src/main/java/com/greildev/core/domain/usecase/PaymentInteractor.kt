@@ -38,7 +38,7 @@ class PaymentInteractor(
             paymentRepository.getAllTransactionHistory(userId).collect { state ->
                 state.suspendSubscribe(
                     onSuccess = {
-                        if (it.data != null) {
+                        if (!it.data.isNullOrEmpty()) {
                             emit(UIState.Success(it.data))
                         } else {
                             emit(
