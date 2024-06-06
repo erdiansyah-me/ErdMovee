@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -10,6 +13,9 @@ plugins {
     //hilt
     id("dagger.hilt.android.plugin")
 }
+val apikeyPropertiesFile = rootProject.file("apikey.properties")
+val apikeyProperties = Properties()
+apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 
 android {
     namespace = "com.greildev.core"
@@ -20,6 +26,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        buildConfigField("String", "API_KEY", apikeyProperties.getProperty("API_KEY") ?: "null")
     }
 
     buildTypes {
