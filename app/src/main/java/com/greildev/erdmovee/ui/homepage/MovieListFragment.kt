@@ -21,7 +21,7 @@ class MovieListFragment :
     private val movieListAdapter: MovieListAdapter by lazy {
         MovieListAdapter { id, title ->
             val bundle = Bundle()
-            bundle.putString("movie_title", title)
+            bundle.putString(Constant.MOVIE_TITLE, title)
             Analytics.logEvent(Constant.TO_DETAIL_SCREEN_EVENT, bundle)
             val toDetailMovieFragment =
                 MovieListFragmentDirections.actionMovieListFragmentToDetailMovieFragment()
@@ -35,9 +35,9 @@ class MovieListFragment :
             findNavController().popBackStack()
         }
         fetchData = MovieListFragmentArgs.fromBundle(arguments as Bundle).fetch
-        if (fetchData == "popular") {
+        if (fetchData == POPULAR_FETCHED) {
             binding.tbMovieList.title = "Popular Movie"
-        } else if (fetchData == "nowplaying") {
+        } else if (fetchData == NOW_PLAYING_FETCHED) {
             binding.tbMovieList.title = "Now Playing Movie"
         }
         binding.rvMovieList.adapter = movieListAdapter.withLoadStateFooter(
@@ -49,15 +49,20 @@ class MovieListFragment :
     }
 
     override fun observeData() {
-        if (fetchData == "popular") {
+        if (fetchData == POPULAR_FETCHED) {
             viewModel.getPopularMovies().launchAndCollectIn(viewLifecycleOwner) {
                 movieListAdapter.submitData(viewLifecycleOwner.lifecycle, it)
             }
 
-        } else if (fetchData == "nowplaying") {
+        } else if (fetchData == NOW_PLAYING_FETCHED) {
             viewModel.getNowPlayingMovies().launchAndCollectIn(viewLifecycleOwner) {
                 movieListAdapter.submitData(viewLifecycleOwner.lifecycle, it)
             }
         }
+    }
+
+    companion object {
+        const val POPULAR_FETCHED = "popular"
+        const val NOW_PLAYING_FETCHED = "nowplaying"
     }
 }

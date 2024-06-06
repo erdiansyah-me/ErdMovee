@@ -27,7 +27,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
     private val searchAdapter: MovieListAdapter by lazy {
         MovieListAdapter { id, title ->
             val logBundle = Bundle()
-            logBundle.putString("movie title", title)
+            logBundle.putString("movie_title", title)
             Analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, logBundle)
             val toDetailMovieFragment =
                 HomePageFragmentDirections.actionHomePageFragmentToDetailMovieFragment()

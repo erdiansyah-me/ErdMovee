@@ -15,7 +15,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.greildev.core.BuildConfig
 import com.greildev.core.R
-import com.greildev.core.utils.CoreConstant
 import com.greildev.core.utils.CoreConstant.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -45,7 +44,7 @@ object NetworkModule {
         return Interceptor { chain ->
             val original = chain.request()
             val request = original.newBuilder()
-                .header("Authorization", "Bearer ${CoreConstant.ACCESS_KEY}")
+                .header("Authorization", "Bearer ${BuildConfig.API_KEY}")
                 .build()
             chain.proceed(request)
         }

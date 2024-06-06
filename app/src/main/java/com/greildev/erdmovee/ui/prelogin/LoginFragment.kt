@@ -1,16 +1,19 @@
 package com.greildev.erdmovee.ui.prelogin
 
+import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.greildev.core.base.BaseFragment
 import com.greildev.core.utils.streamData
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.FragmentLoginBinding
 import com.greildev.erdmovee.ui.component.MoveeSnackbar
 import com.greildev.erdmovee.ui.component.StateSnackbar
+import com.greildev.erdmovee.utils.Analytics
 import com.greildev.erdmovee.utils.doubleBackToExit
 import com.greildev.erdmovee.utils.launchAndCollectIn
 import com.greildev.erdmovee.utils.onCreated
@@ -88,6 +91,9 @@ class LoginFragment :
                                 ),
                                 StateSnackbar.SUCCESS
                             ) {
+                                val logBundle = Bundle()
+                                logBundle.putString("email", binding.tifEmail.text.toString())
+                                Analytics.logEvent(FirebaseAnalytics.Event.LOGIN, logBundle)
                                 binding.loading.cancelAnimation()
                                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomePageFragment())
                             }

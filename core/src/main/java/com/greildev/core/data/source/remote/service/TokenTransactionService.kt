@@ -75,8 +75,8 @@ class TokenTransactionService @Inject constructor(
             getTransactionHistoryRef.child(userId).get()
                 .addOnSuccessListener {
                     val transactionList = mutableListOf<TransactionDetail>()
-                    for (data in it.children) {
-                        val transaction = data.getValue<TransactionDetail>(TransactionDetail::class.java)
+                    for (snapshot in it.children) {
+                        val transaction = snapshot.getValue(TransactionDetail::class.java)
                         if (transaction != null) {
                             transactionList.add(transaction)
                         }

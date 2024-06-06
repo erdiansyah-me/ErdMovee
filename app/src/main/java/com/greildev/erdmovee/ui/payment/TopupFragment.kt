@@ -13,6 +13,7 @@ import com.greildev.erdmovee.databinding.FragmentTopupBinding
 import com.greildev.erdmovee.ui.component.MoveeSnackbar
 import com.greildev.erdmovee.ui.component.StateSnackbar
 import com.greildev.erdmovee.utils.TransactionType
+import com.greildev.erdmovee.utils.chipGroupSetSelectedChip
 import com.greildev.erdmovee.utils.getCurrentDateTime
 import com.greildev.erdmovee.utils.launchAndCollectIn
 import com.greildev.erdmovee.utils.onCreated
@@ -46,12 +47,23 @@ class TopupFragment :
     }
 
     override fun observeData() {
-
+        viewModel.userData.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                viewModel.getTokenUser(user.uid)
+            }
+        }
     }
 
     override fun initListener() {
-        binding.tilPayment.setOnFocusChangeListener { _, isFocused ->
-            binding.cgTopup.isSelected = !isFocused
+        binding.cgTopup.setOnCheckedStateChangeListener { chipGroup, ints ->
+            binding.tifPayment.clearFocus()
+            val selectedChip = chipGroup.chipGroupSetSelectedChip().filterCoins()
+            binding.tifPayment.setText(selectedChip)
+        }
+        binding.tifPayment.setOnFocusChangeListener { view, b ->
+            if (b) {
+                binding.cgTopup.clearCheck()
+            }
         }
         binding.cvPaymentItem.setOnClickListener {
             findNavController().navigate(TopupFragmentDirections.actionTopupFragmentToPaymentMethodFragment())
@@ -92,7 +104,8 @@ class TopupFragment :
                                 viewModel.userData.observe(viewLifecycleOwner) { user ->
                                     if (user != null) {
                                         viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { tokenUser ->
-                                            delay(1000)
+                                            val timeDelay: Long = 1000
+                                            delay(timeDelay)
                                             val totalToken = tokenUser.plus(
                                                 binding.tifPayment.text.toString().toInt()
                                             )
@@ -138,5 +151,11 @@ class TopupFragment :
                 }
             }
         }
+    }
+    private fun String.filterCoins() : String {
+        val regex = Regex("""(\d+)""")
+        val matchResult = regex.find(this)
+
+        return matchResult?.value ?: 0.toString()
     }
 }

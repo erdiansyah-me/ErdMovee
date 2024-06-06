@@ -19,7 +19,7 @@ class PaymentStatusFragment :
 
     override val viewModel: PaymentViewModel by viewModels()
 
-    private var paymentStatus : PaymentStatusModel? = null
+    private var paymentStatus: PaymentStatusModel? = null
 
     private val paymentStatusAdapter: PaymentStatusAdapter by lazy {
         PaymentStatusAdapter()

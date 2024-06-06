@@ -17,6 +17,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.utils.Constant.IMAGE_BASE_URL
 import com.greildev.erdmovee.utils.Constant.LANGUAGE_IN
@@ -43,6 +45,17 @@ inline fun <T> Flow<T>.launchAndCollectIn(
             action(it)
         }
     }
+}
+
+fun ChipGroup.chipGroupSetSelectedChip(): String {
+    val selectedChip = mutableListOf<String>()
+    for (i in 0 until this.childCount) {
+        val chip: Chip = this.getChildAt(i) as Chip
+        if (chip.isChecked) {
+            selectedChip.add(chip.text.toString())
+        }
+    }
+    return selectedChip.joinToString(", ")
 }
 
 fun doubleBackToExit(
