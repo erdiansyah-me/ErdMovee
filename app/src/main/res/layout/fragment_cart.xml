@@ -16,6 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_cart"
         android:layout_width="match_parent"
@@ -138,7 +139,7 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/poppins_semibold"
                         android:maxLines="1"
-                        android:textSize="16sp"
+                        android:textSize="26sp"
                         tools:text="Rp. 20.000.0000" />
 
                 </LinearLayout>
@@ -154,5 +155,13 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.greildev.erdmovee.ui.component.StatedView
+        android:id="@+id/sv_cart_movie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

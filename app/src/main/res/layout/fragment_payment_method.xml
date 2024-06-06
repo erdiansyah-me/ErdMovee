@@ -13,8 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back_24"
-        app:title="Top Up"
+        app:title="@string/pilih_metode_pembayaran"
         app:titleTextAppearance="@style/ToolbarTitles" />
 
     <androidx.recyclerview.widget.RecyclerView

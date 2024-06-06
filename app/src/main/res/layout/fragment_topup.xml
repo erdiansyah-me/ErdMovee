@@ -46,14 +46,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/pick_your_top_up"
                 android:textAppearance="@style/TextDetailHead"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/cv_payment_item" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
+                android:id="@+id/cg_topup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="12dp"
@@ -159,8 +160,8 @@
                 app:hintTextAppearance="@style/TvPaymentHint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chipGroup"
-                app:prefixText="Rp. ">
+                app:layout_constraintTop_toBottomOf="@id/cg_topup"
+                app:prefixText="Coins. ">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tif_payment"
@@ -176,12 +177,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="24dp"
                 android:text="Top up Payment Method"
                 android:textAppearance="@style/TextDetailHead"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_payment" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_payment_item"
@@ -234,7 +234,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_medium"
                         android:textSize="14sp"
-                        tools:text="@string/pilih_metode_pembayaran" />
+                        android:text="@string/pilih_metode_pembayaran" />
 
                     <ImageView
                         android:layout_width="16dp"
