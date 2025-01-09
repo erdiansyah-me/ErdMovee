@@ -52,9 +52,15 @@ class DetailViewModel @Inject constructor(
         useCase.cartUseCase().checkCartMovieByUidAndId(movieId)
     }
 
-    fun saveCartMovie(detailMovie: MovieDetailData) {
+    fun saveCartMovie(detailMovie: MovieDetailData, isRentNow: Boolean) {
         viewModelScope.launch {
-            useCase.cartUseCase().saveCartMovie(detailMovie)
+            useCase.cartUseCase().saveCartMovie(detailMovie, isRentNow)
+        }
+    }
+
+    fun deleteCartMovie(cartId: Int) {
+        viewModelScope.launch {
+            useCase.cartUseCase().deleteCartMovie(cartId)
         }
     }
 

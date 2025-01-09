@@ -32,4 +32,10 @@ interface CartMovieDao {
 
     @Query("SELECT * FROM cart_movie_entities WHERE cart_movie_entities.isChecked = :isChecked AND cart_movie_entities.uid = :uid")
     fun getCheckedCartByUid(isChecked: Boolean, uid: String): Flow<List<CartMovieListEntities>>
+
+    @Query("DELETE FROM cart_movie_entities")
+    fun deleteAllCart()
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAllCart(cart: List<CartMovieListEntities>)
 }

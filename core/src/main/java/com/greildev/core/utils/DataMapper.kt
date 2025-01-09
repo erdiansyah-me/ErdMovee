@@ -155,7 +155,7 @@ object DataMapper {
         )
     }
 
-    fun MovieDetailData.mapToCartEntities(uid: String): CartMovieListEntities {
+    fun MovieDetailData.mapToCartEntities(uid: String, isChecked: Boolean): CartMovieListEntities {
         val basePrice = this.price
         val quantityPrice = basePrice * 1
         return CartMovieListEntities(
@@ -177,7 +177,7 @@ object DataMapper {
             }.genresNameMapper(),
             basePrice = basePrice,
             uid = uid,
-            isChecked = true,
+            isChecked = isChecked,
             quantityItem = 1,
             quantityPrice = quantityPrice
         )

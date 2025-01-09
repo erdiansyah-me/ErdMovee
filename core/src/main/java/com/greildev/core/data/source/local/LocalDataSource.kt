@@ -1,5 +1,6 @@
 package com.greildev.core.data.source.local
 
+import androidx.room.withTransaction
 import com.greildev.core.data.source.local.database.ErdmoveeDatabase
 import com.greildev.core.data.source.local.entities.CartMovieListEntities
 import com.greildev.core.data.source.local.entities.FavoriteMovieListEntities
@@ -60,4 +61,13 @@ class LocalDataSource @Inject constructor(
         cartMovieDao.deleteCheckedByUid(isChecked, uid)
     }
     fun getCheckedCartByUid(isChecked: Boolean, uid: String) = cartMovieDao.getCheckedCartByUid(isChecked, uid)
+
+    fun deleteAllCart() = cartMovieDao.deleteAllCart()
+
+    suspend fun replaceAllCart(carts: List<CartMovieListEntities>) {
+        database.withTransaction {
+            cartMovieDao.deleteAllCart()
+            cartMovieDao.insertAllCart(carts)
+        }
+    }
 }

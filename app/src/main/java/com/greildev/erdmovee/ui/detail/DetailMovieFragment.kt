@@ -1,10 +1,12 @@
 package com.greildev.erdmovee.ui.detail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -28,7 +30,8 @@ class DetailMovieFragment :
     BaseFragment<FragmentDetailMovieBinding, DetailViewModel>(FragmentDetailMovieBinding::inflate) {
 
     override val viewModel: DetailViewModel by viewModels()
-    private var movieId: Int? = null
+    private val movieIdArgs: DetailMovieFragmentArgs by navArgs()
+    private val movieId: Int by lazy { movieIdArgs.movieId }
     private val recommendationAdapter by lazy {
         RecommendationMovieAdapter { id, title ->
             val logBundle = Bundle()
@@ -41,22 +44,24 @@ class DetailMovieFragment :
         }
     }
 
+
+
     private val castsAdapter by lazy {
         MovieCastsAdapter()
     }
 
     override fun initView() {
-        movieId = DetailMovieFragmentArgs.fromBundle(arguments as Bundle).movieId
-        viewModel.getMovieDetail(movieId ?: 0)
-        binding.chipBookmark.isChecked = viewModel.checkFavoriteMovieById(movieId ?: 0)
+        viewModel.getMovieDetail(movieId)
+        binding.chipBookmark.isChecked = viewModel.checkFavoriteMovieById(movieId)
         binding.chipBookmark.text = if (binding.chipBookmark.isChecked) {
             getString(R.string.remove_from_favorite)
         } else {
             getString(R.string.add_to_favorite)
         }
-        binding.btnAddCart.isEnabled = viewModel.checkCartMovieById(movieId ?: 0).not()
+        binding.btnAddCart.isEnabled = viewModel.checkCartMovieById(movieId).not()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun observeData() {
         viewModel.movieDetail.launchAndCollectIn(viewLifecycleOwner) { state ->
             when (state) {
@@ -119,7 +124,7 @@ class DetailMovieFragment :
                                     recommendationAdapter.retry()
                                 }
                             )
-                        viewModel.getRecommendation(movieId ?: 0)
+                        viewModel.getRecommendation(movieId)
                             .launchAndCollectIn(viewLifecycleOwner) {
                                 recommendationAdapter.submitData(it)
 
@@ -128,7 +133,7 @@ class DetailMovieFragment :
                             val logBundle = Bundle()
                             logBundle.putString(MOVIE_TITLE, detailMovie.title)
                             Analytics.logEvent(FirebaseAnalytics.Event.ADD_TO_CART, logBundle)
-                            viewModel.saveCartMovie(detailMovie)
+                            viewModel.saveCartMovie(detailMovie, isRentNow = false)
                             binding.btnAddCart.isEnabled = false
                         }
 
@@ -146,7 +151,7 @@ class DetailMovieFragment :
                                 logBundle.putString(MOVIE_TITLE, detailMovie.title)
                                 Analytics.logEvent("remove_from_wishlist", logBundle)
                                 binding.chipBookmark.text = getString(R.string.add_to_favorite)
-                                viewModel.deleteFavoriteMovieById(movieId ?: 0)
+                                viewModel.deleteFavoriteMovieById(movieId)
                             }
                         }
 
@@ -157,7 +162,10 @@ class DetailMovieFragment :
                                         viewModel.isCheckedByCartId(it.id, false)
                                     }
                                 }
-                            viewModel.saveCartMovie(detailMovie)
+                            if (viewModel.checkCartMovieById(movieId)) {
+                                viewModel.deleteCartMovie(movieId)
+                            }
+                            viewModel.saveCartMovie(detailMovie, isRentNow = true)
                             findNavController().navigate(DetailMovieFragmentDirections.actionDetailMovieFragmentToCheckoutFragment())
                         }
                     }
@@ -174,7 +182,7 @@ class DetailMovieFragment :
                             btnTitle = getString(R.string.retry),
                             state = StatedViewState.ERROR,
                             action = {
-                                viewModel.getMovieDetail(movieId ?: 0)
+                                viewModel.getMovieDetail(movieId)
                             }
                         )
                     }
@@ -184,7 +192,7 @@ class DetailMovieFragment :
             }
         }
 
-        viewModel.getRecommendation(movieId ?: 0).launchAndCollectIn(viewLifecycleOwner) {
+        viewModel.getRecommendation(movieId).launchAndCollectIn(viewLifecycleOwner) {
 
         }
     }

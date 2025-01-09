@@ -21,7 +21,7 @@ class RemoteDataSource @Inject constructor(
     private val remoteConfig: RemoteConfigService,
     private val transactionService: TokenTransactionService
 ) {
-    suspend fun userData(): Flow<FirebaseUser?> = userService.userData()
+    fun userData(): Flow<FirebaseUser?> = userService.userData()
     private val movieService: MovieService = retrofit.create(MovieService::class.java)
 
     //User

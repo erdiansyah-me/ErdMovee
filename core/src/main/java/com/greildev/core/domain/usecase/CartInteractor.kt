@@ -14,15 +14,12 @@ class CartInteractor(
     private val movieRepository: MovieRepository,
     private val userRepository: UserRepository
 ) {
-    suspend fun getCartMovies(): Flow<List<CartMovieListEntities>> = callbackFlow {
+
+    fun getCartMovies(): Flow<List<CartMovieListEntities>> = callbackFlow {
         val user = userRepository.userData().first()
         if (user != null) {
             movieRepository.getCartMoviesByUid(user.uid).collect {
-                if (it.isNotEmpty()) {
-                    trySend(it)
-                } else {
-                    trySend(it)
-                }
+                trySend(it)
             }
         } else {
             trySend(emptyList())
@@ -30,11 +27,15 @@ class CartInteractor(
         awaitClose()
     }
 
-    suspend fun saveCartMovie(detailMovie: MovieDetailData) {
+    suspend fun saveCartMovie(detailMovie: MovieDetailData, isChecked: Boolean) {
         val user = userRepository.userData().first()
         if (user != null) {
-            movieRepository.saveCartMovie(detailMovie.mapToCartEntities(uid = user.uid))
+            movieRepository.saveCartMovie(detailMovie.mapToCartEntities(uid = user.uid, isChecked))
         }
+    }
+
+    suspend fun saveCartMovie(cartMovie: CartMovieListEntities) {
+        movieRepository.saveCartMovie(cartMovie)
     }
 
     suspend fun deleteCartMovie(cartId: Int) {
@@ -84,4 +85,9 @@ class CartInteractor(
             awaitClose()
         }
 
+    fun deleteAllCart() = movieRepository.deleteAllCart()
+
+    suspend fun replaceAllCart(carts: List<CartMovieListEntities>) {
+        movieRepository.replaceAllCart(carts)
+    }
 }
