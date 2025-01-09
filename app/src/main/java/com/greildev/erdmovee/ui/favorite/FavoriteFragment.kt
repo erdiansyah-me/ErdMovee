@@ -14,6 +14,7 @@ import com.greildev.erdmovee.ui.component.StatedViewState
 import com.greildev.erdmovee.ui.homepage.HomePageFragmentDirections
 import com.greildev.erdmovee.utils.Analytics
 import com.greildev.erdmovee.utils.Constant
+import com.greildev.erdmovee.utils.launchAndCollectIn
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,38 +23,38 @@ class FavoriteFragment :
 
     override val viewModel: FavoriteViewModel by viewModels()
 
-    private val favoriteAdapter: FavoriteListAdapter by lazy {
-        FavoriteListAdapter(
-            action = { movieId, title ->
-                val logBundle = Bundle()
-                logBundle.putString(Constant.MOVIE_TITLE, title)
-                Analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, logBundle)
-                val toDetailMovieFragment =
-                    HomePageFragmentDirections.actionHomePageFragmentToDetailMovieFragment()
-                toDetailMovieFragment.movieId = movieId
-                activity?.supportFragmentManager?.findFragmentById(R.id.fragment_container)
-                    ?.findNavController()?.navigate(toDetailMovieFragment)
-            },
-            deleteAction = { favoriteId, title ->
-                val logBundle = Bundle()
-                logBundle.putString(Constant.MOVIE_TITLE, title)
-                Analytics.logEvent("remove_from_wishlist", logBundle)
-                viewModel.deleteFavoriteMovie(favoriteId)
-            }
-        )
-    }
-
     override fun initView() {
-        binding.svFavoriteMovie.isVisible = false
-        binding.rvFavoriteMovie.apply {
-            adapter = favoriteAdapter
-            layoutManager = LinearLayoutManager(context)
+        binding.apply {
+            svFavoriteMovie.isVisible = false
+
         }
     }
 
     override fun observeData() {
-        viewModel.getFavoriteMovieList.observe(viewLifecycleOwner) {
+        viewModel.getFavoriteMovieList.launchAndCollectIn(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
+                val favoriteAdapter = FavoriteListAdapter(
+                        action = { movieId, title ->
+                            val logBundle = Bundle()
+                            logBundle.putString(Constant.MOVIE_TITLE, title)
+                            Analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, logBundle)
+                            val toDetailMovieFragment =
+                                HomePageFragmentDirections.actionHomePageFragmentToDetailMovieFragment()
+                            toDetailMovieFragment.movieId = movieId
+                            activity?.supportFragmentManager?.findFragmentById(R.id.fragment_container)
+                                ?.findNavController()?.navigate(toDetailMovieFragment)
+                        },
+                        deleteAction = { favoriteId, title ->
+                            val logBundle = Bundle()
+                            logBundle.putString(Constant.MOVIE_TITLE, title)
+                            Analytics.logEvent("remove_from_wishlist", logBundle)
+                            viewModel.deleteFavoriteMovie(favoriteId)
+                        }
+                    )
+                binding.rvFavoriteMovie.apply {
+                    adapter = favoriteAdapter
+                    layoutManager = LinearLayoutManager(context)
+                }
                 binding.svFavoriteMovie.isVisible = false
                 binding.rvFavoriteMovie.isVisible = true
                 favoriteAdapter.submitList(it)

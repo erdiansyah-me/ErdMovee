@@ -14,7 +14,7 @@ class FavoriteInteractor(
     private val movieRepository: MovieRepository,
     private val userRepository: UserRepository
 ) {
-    suspend fun getFavoriteMovies(): Flow<List<FavoriteMovieListEntities>> = callbackFlow {
+    fun getFavoriteMovies(): Flow<List<FavoriteMovieListEntities>> = callbackFlow {
         val user = userRepository.userData().first()
         if (user != null) {
             movieRepository.getFavoriteMoviesByUid(user.uid).collect {
