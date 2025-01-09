@@ -10,16 +10,17 @@ import com.greildev.core.utils.suspendSubscribe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class UserInteractor(
+class UserInteractor @Inject constructor(
     private val userRepository: UserRepository
-) {
+) : UserUseCase {
 
-    suspend fun userData(): Flow<UserData?> = flow {
+    override suspend fun userData(): Flow<UserData?> = flow {
         emit(userRepository.userData().first()?.toUIData())
     }
 
-    suspend fun userLogin(authRequest: AuthRequest): Flow<UIState<Boolean>> = flow {
+    override suspend fun userLogin(authRequest: AuthRequest): Flow<UIState<Boolean>> = flow {
         emit(UIState.Loading())
         userRepository.loginUser(authRequest)
             .collect {
@@ -43,7 +44,7 @@ class UserInteractor(
             }
     }
 
-    suspend fun userRegister(authRequest: AuthRequest): Flow<UIState<Boolean>> = flow {
+    override suspend fun userRegister(authRequest: AuthRequest): Flow<UIState<Boolean>> = flow {
         emit(UIState.Loading())
         userRepository.registerUser(authRequest)
             .collect {
@@ -67,7 +68,7 @@ class UserInteractor(
             }
     }
 
-    suspend fun updateProfile(profile: ProfileRequest): Flow<UIState<String>> = flow {
+    override suspend fun updateProfile(profile: ProfileRequest): Flow<UIState<String>> = flow {
         emit(UIState.Loading())
         userRepository.updateProfile(profile).collect {
             it.suspendSubscribe(
@@ -90,11 +91,11 @@ class UserInteractor(
         }
     }
 
-    fun userLogout() = userRepository.logOutUser()
+    override fun userLogout() = userRepository.logOutUser()
 
-    fun getUserOnboardingPreferences(): Flow<Boolean> =
+    override fun getUserOnboardingPreferences(): Flow<Boolean> =
         userRepository.getUserOnboardingPreferences()
 
-    suspend fun saveUserOnboardingPreferences(isShowOnboarding: Boolean) =
+    override suspend fun saveUserOnboardingPreferences(isShowOnboarding: Boolean) =
         userRepository.saveUserOnboardingPreferences(isShowOnboarding)
 }

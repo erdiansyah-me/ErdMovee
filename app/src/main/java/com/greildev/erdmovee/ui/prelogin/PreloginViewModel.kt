@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.greildev.core.domain.model.AuthRequest
 import com.greildev.core.domain.model.ProfileRequest
 import com.greildev.core.domain.model.UserData
-import com.greildev.core.domain.usecase.UseCase
+import com.greildev.core.domain.usecase.UserUseCase
 import com.greildev.core.utils.UIState
 import com.greildev.erdmovee.utils.FlowState
 import com.greildev.erdmovee.utils.SplashState
@@ -22,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PreloginViewModel @Inject constructor(
-    private val useCase: UseCase
+//    private val useCase: UseCase,
+    private val userUseCase: UserUseCase
 ) : ViewModel() {
 
     private val _userStateSplash =
@@ -33,8 +34,8 @@ class PreloginViewModel @Inject constructor(
         viewModelScope.launch {
             _userStateSplash.value = FlowState.FlowValue(
                 UserParams(
-                    user = useCase.userUseCase().userData().first(),
-                    isOnboarding = useCase.userUseCase().getUserOnboardingPreferences().first()
+                    user = userUseCase.userData().first(),
+                    isOnboarding = userUseCase.getUserOnboardingPreferences().first()
                 ).toSplashState()
             )
         }
@@ -42,7 +43,7 @@ class PreloginViewModel @Inject constructor(
 
     fun saveUserOnboardingPreferences(isShowOnboarding: Boolean) {
         viewModelScope.launch {
-            useCase.userUseCase().saveUserOnboardingPreferences(isShowOnboarding)
+            userUseCase.saveUserOnboardingPreferences(isShowOnboarding)
         }
     }
 
@@ -50,7 +51,7 @@ class PreloginViewModel @Inject constructor(
     val userLogin: StateFlow<UIState<Boolean>> = _userLogin
     fun loginUser(username: String, password: String) {
         viewModelScope.launch {
-            useCase.userUseCase().userLogin(AuthRequest(username, password)).collect {
+            userUseCase.userLogin(AuthRequest(username, password)).collect {
                 _userLogin.value = it
             }
         }
@@ -60,7 +61,7 @@ class PreloginViewModel @Inject constructor(
     val userRegister: StateFlow<UIState<Boolean>> = _userRegister
     fun registerUser(email: String, password: String) {
         viewModelScope.launch {
-            useCase.userUseCase().userRegister(AuthRequest(email, password)).collect {
+            userUseCase.userRegister(AuthRequest(email, password)).collect {
                 _userRegister.value = it
             }
         }
@@ -71,7 +72,7 @@ class PreloginViewModel @Inject constructor(
 
     fun updateProfile(username: String, photo: File?) {
         viewModelScope.launch {
-            useCase.userUseCase().updateProfile(ProfileRequest(username, photo)).collect {
+            userUseCase.updateProfile(ProfileRequest(username, photo)).collect {
                 _userProfile.value = it
             }
         }

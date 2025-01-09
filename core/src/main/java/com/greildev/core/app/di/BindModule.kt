@@ -8,6 +8,8 @@ import com.greildev.core.data.repository.UserRepository
 import com.greildev.core.data.repository.UserRepositoryImpl
 import com.greildev.core.domain.usecase.Interactor
 import com.greildev.core.domain.usecase.UseCase
+import com.greildev.core.domain.usecase.UserInteractor
+import com.greildev.core.domain.usecase.UserUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -27,4 +29,7 @@ abstract class BindModule {
 
     @Binds
     abstract fun providePaymentRepository(paymentRepositoryImpl: PaymentRepositoryImpl): PaymentRepository
+
+    @Binds
+    abstract fun provideUserUseCase(userInteractor: UserInteractor): UserUseCase
 }
