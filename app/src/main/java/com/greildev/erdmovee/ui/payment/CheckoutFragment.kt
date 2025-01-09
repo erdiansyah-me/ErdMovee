@@ -23,29 +23,37 @@ class CheckoutFragment :
 
     override val viewModel: PaymentViewModel by activityViewModels()
 
-    private val checkoutAdapter by lazy {
-        CheckoutListAdapter(
-            onIncrement = { cartId, newQuantity, newQuantityPrice ->
-                viewModel.updateQuantity(cartId, newQuantity, newQuantityPrice)
-            },
-            onDecrement = { cartId, newQuantity, newQuantityPrice ->
-                viewModel.updateQuantity(cartId, newQuantity, newQuantityPrice)
-            }
-        )
-    }
-
     override fun initView() {
-        binding.rvCheckoutMovies.adapter = checkoutAdapter
         binding.rvCheckoutMovies.layoutManager = LinearLayoutManager(context)
         binding.toolbarCheckout.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
     }
 
+    override fun fetchData() {
+        viewModel.getCheckedCartByUid(true)
+    }
+
     override fun observeData() {
-        viewModel.getCheckedCartByUid(true).launchAndCollectIn(viewLifecycleOwner) { state ->
-            binding.tvTotalPrice.text = state.sumOf { it.quantityPrice }.toString()
+        viewModel.checkoutItemList.observe(viewLifecycleOwner) { state ->
+            val total = state.sumOf { it.quantityPrice }.toString()
+            binding.tvTotalPrice.text = total
             if (state.isNotEmpty()) {
+                val checkoutAdapter by lazy {
+                    CheckoutListAdapter(
+                        onIncrement = { position, newQuantity, newQuantityPrice, item ->
+                            item.quantityItem = newQuantity
+                            item.quantityPrice = newQuantityPrice
+                            viewModel.updateCheckoutItemAt(position, item)
+                        },
+                        onDecrement = { position, newQuantity, newQuantityPrice, item ->
+                            item.quantityItem = newQuantity
+                            item.quantityPrice = newQuantityPrice
+                            viewModel.updateCheckoutItemAt(position, item)
+                        }
+                    )
+                }
+                binding.rvCheckoutMovies.adapter = checkoutAdapter
                 checkoutAdapter.submitList(state)
             }
         }
@@ -91,7 +99,7 @@ class CheckoutFragment :
                         it.uid,
                         TransactionDetail(
                             transactionId = transactionId,
-                            cartMovieListEntities = checkoutAdapter.currentList,
+                            cartMovieListEntities = viewModel.checkoutItemList.value,
                             transactionDate = getCurrentDateTime(),
                             amountToken = binding.tvTotalPrice.text.toString().toInt(),
                         )
@@ -119,7 +127,7 @@ class CheckoutFragment :
                                     isSuccess = true,
                                     transactionDetail = TransactionDetail(
                                         transactionId = transactionId,
-                                        cartMovieListEntities = checkoutAdapter.currentList,
+                                        cartMovieListEntities = viewModel.checkoutItemList.value,
                                         transactionDate = getCurrentDateTime(),
                                         amountToken = binding.tvTotalPrice.text.toString().toInt(),
                                     )

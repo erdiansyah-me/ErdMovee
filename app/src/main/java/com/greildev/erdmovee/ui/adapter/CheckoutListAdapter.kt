@@ -9,8 +9,8 @@ import com.greildev.erdmovee.databinding.CheckoutListItemBinding
 import com.greildev.erdmovee.utils.imgUrlFormatter
 
 class CheckoutListAdapter(
-    private val onIncrement: (Int, Int, Int) -> Unit,
-    private val onDecrement: (Int, Int, Int) -> Unit
+    private val onIncrement: (Int, Int, Int, CartMovieListEntities) -> Unit,
+    private val onDecrement: (Int, Int, Int, CartMovieListEntities) -> Unit
 ): BaseListAdapter<CartMovieListEntities, CheckoutListItemBinding>(CheckoutListItemBinding::inflate) {
     override fun onItemBind(): (CartMovieListEntities, CheckoutListItemBinding, View, Int) -> Unit {
         return { item, binding, view, position ->
@@ -25,15 +25,17 @@ class CheckoutListAdapter(
             binding.btnIncrement.setOnClickListener {
                 val newQuantity = item.quantityItem + 1
                 val newQuantityPrice = item.basePrice * newQuantity
-                onIncrement.invoke(item.cartId, newQuantity, newQuantityPrice)
+                onIncrement.invoke(position, newQuantity, newQuantityPrice, item)
                 binding.tvQuantityItem.text = view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
+                notifyItemChanged(position)
             }
             binding.btnDecrement.setOnClickListener {
                 val newQuantity = item.quantityItem - 1
                 val newQuantityPrice = item.basePrice * newQuantity
                 binding.btnDecrement.isEnabled = newQuantity != 1
                 binding.tvQuantityItem.text = view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
-                onDecrement.invoke(item.cartId, newQuantity, newQuantityPrice)
+                onDecrement.invoke(position, newQuantity, newQuantityPrice, item)
+                notifyItemChanged(position)
             }
         }
     }

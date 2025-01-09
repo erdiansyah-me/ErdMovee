@@ -47,6 +47,8 @@ interface MovieRepository {
     suspend fun isCheckedByCartId(cartId: Int, newIsChecked: Boolean)
     suspend fun deleteCheckedByUid(isChecked: Boolean, uid: String)
     fun getCheckedCartByUid(isChecked: Boolean, uid: String): Flow<List<CartMovieListEntities>>
+    fun deleteAllCart()
+    suspend fun replaceAllCart(cart: List<CartMovieListEntities>)
 }
 
 class MovieRepositoryImpl @Inject constructor(
@@ -173,5 +175,13 @@ class MovieRepositoryImpl @Inject constructor(
         uid: String
     ): Flow<List<CartMovieListEntities>> {
         return localDataSource.getCheckedCartByUid(isChecked, uid)
+    }
+
+    override fun deleteAllCart() {
+        localDataSource.deleteAllCart()
+    }
+
+    override suspend fun replaceAllCart(cart: List<CartMovieListEntities>) {
+        localDataSource.replaceAllCart(cart)
     }
 }
