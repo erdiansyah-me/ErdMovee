@@ -24,9 +24,14 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
 
     override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fetchData()
         initView()
         initListener()
         observeData()
+    }
+
+    open fun fetchData() {
+
     }
 
     abstract fun initView()

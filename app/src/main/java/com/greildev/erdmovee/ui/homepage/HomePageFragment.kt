@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -66,6 +67,18 @@ class HomePageFragment :
     }
 
     override fun initListener() {
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.bottomNavbar.selectedItemId == R.id.mainFragment) {
+                        context?.let { doubleBackToExit(it, activity, viewLifecycleOwner) }
+                    } else {
+                        binding.bottomNavbar.selectedItemId = R.id.mainFragment
+                    }
+                }
+            }
+        )
         binding.chipBalance.setOnClickListener {
             context?.let { it1 ->
                 MoveeSnackbar.showSnackbarCustom(
