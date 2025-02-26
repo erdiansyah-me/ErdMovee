@@ -17,7 +17,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val useCase: UseCase
 ) : ViewModel() {
-    val userData = runBlocking { useCase.userUseCase().userData().asLiveData() }
+    val userData = viewModelScope.launch { useCase.userUseCase().userData().asLiveData() }
     fun logout(): Boolean = runBlocking {
         useCase.userUseCase().userLogout()
         val userdata = useCase.userUseCase().userData().first()

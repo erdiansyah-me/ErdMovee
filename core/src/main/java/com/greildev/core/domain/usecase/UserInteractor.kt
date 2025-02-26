@@ -1,14 +1,13 @@
 package com.greildev.core.domain.usecase
 
-import com.greildev.core.data.repository.UserRepository
 import com.greildev.core.domain.model.AuthRequest
 import com.greildev.core.domain.model.ProfileRequest
 import com.greildev.core.domain.model.UserData
+import com.greildev.core.domain.repository.UserRepository
 import com.greildev.core.utils.DataMapper.toUIData
 import com.greildev.core.utils.UIState
 import com.greildev.core.utils.suspendSubscribe
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -17,7 +16,7 @@ class UserInteractor @Inject constructor(
 ) : UserUseCase {
 
     override suspend fun userData(): Flow<UserData?> = flow {
-        emit(userRepository.userData().first()?.toUIData())
+        emit(userRepository.currentUser()?.toUIData())
     }
 
     override suspend fun userLogin(authRequest: AuthRequest): Flow<UIState<Boolean>> = flow {

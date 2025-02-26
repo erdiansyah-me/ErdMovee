@@ -4,8 +4,8 @@ import com.greildev.core.data.repository.MovieRepository
 import com.greildev.core.data.repository.MovieRepositoryImpl
 import com.greildev.core.data.repository.PaymentRepository
 import com.greildev.core.data.repository.PaymentRepositoryImpl
-import com.greildev.core.data.repository.UserRepository
 import com.greildev.core.data.repository.UserRepositoryImpl
+import com.greildev.core.domain.repository.UserRepository
 import com.greildev.core.domain.usecase.Interactor
 import com.greildev.core.domain.usecase.UseCase
 import com.greildev.core.domain.usecase.UserInteractor
@@ -17,7 +17,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class BindModule {
+internal abstract class BindModule {
     @Binds
     abstract fun provideUseCase(interactor: Interactor): UseCase
 

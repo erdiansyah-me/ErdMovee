@@ -12,7 +12,7 @@ import com.greildev.core.data.source.remote.RemoteDataSource
 import com.greildev.core.utils.DataMapper.toNowPlayingEntity
 
 @OptIn(ExperimentalPagingApi::class)
-class NowPlayingMovieRemoteMediator(
+internal class NowPlayingMovieRemoteMediator(
     private val database: ErdmoveeDatabase,
     private val remoteDataSource: RemoteDataSource,
 ) : RemoteMediator<Int, NowPlayingMovieListEntities>() {
@@ -49,16 +49,16 @@ class NowPlayingMovieRemoteMediator(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.nowPlayingMovieRemoteKeysDao().deleteRemoteKeys()
-                    database.nowPlayingMovieDao().deleteAll()
+                    database.nowPlayingMovieRemoteKeysDao.deleteRemoteKeys()
+                    database.nowPlayingMovieDao.deleteAll()
                 }
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = response.results.map {
                     NowPlayingRemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
-                database.nowPlayingMovieRemoteKeysDao().insertAll(keys)
-                database.nowPlayingMovieDao()
+                database.nowPlayingMovieRemoteKeysDao.insertAll(keys)
+                database.nowPlayingMovieDao
                     .insertAll(response.results.map { it.toNowPlayingEntity() })
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
@@ -69,20 +69,20 @@ class NowPlayingMovieRemoteMediator(
 
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, NowPlayingMovieListEntities>): NowPlayingRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
-            database.nowPlayingMovieRemoteKeysDao().getRemoteKeysId(data.movieId)
+            database.nowPlayingMovieRemoteKeysDao.getRemoteKeysId(data.movieId)
         }
     }
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, NowPlayingMovieListEntities>): NowPlayingRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
-            database.nowPlayingMovieRemoteKeysDao().getRemoteKeysId(data.movieId)
+            database.nowPlayingMovieRemoteKeysDao.getRemoteKeysId(data.movieId)
         }
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, NowPlayingMovieListEntities>): NowPlayingRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
-                database.nowPlayingMovieRemoteKeysDao().getRemoteKeysId(id)
+                database.nowPlayingMovieRemoteKeysDao.getRemoteKeysId(id)
             }
         }
     }

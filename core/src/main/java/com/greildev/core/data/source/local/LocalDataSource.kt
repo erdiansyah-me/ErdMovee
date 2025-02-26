@@ -9,13 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class LocalDataSource @Inject constructor(
+internal class LocalDataSource @Inject constructor(
     private val preferencesDataStore: PreferencesDataStore,
     private val database: ErdmoveeDatabase
 ) {
 
-    private val favoriteMovieDao = database.favoriteMovieDao()
-    private val cartMovieDao = database.cartMovieDao()
+    private val favoriteMovieDao = database.favoriteMovieDao
+    private val cartMovieDao = database.cartMovieDao
 
     //Onboarding
     fun userOnboardingPreferences() = preferencesDataStore.getUserOnboardingPreferences()

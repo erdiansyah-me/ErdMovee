@@ -5,6 +5,7 @@ import com.greildev.core.data.source.local.entities.CartMovieListEntities
 import com.greildev.core.data.source.local.entities.FavoriteMovieListEntities
 import com.greildev.core.data.source.local.entities.GenresName
 import com.greildev.core.data.source.local.entities.NowPlayingMovieListEntities
+import com.greildev.core.data.source.local.entities.UserDataEntity
 import com.greildev.core.data.source.remote.response.CastItem
 import com.greildev.core.data.source.remote.response.GenresItem
 import com.greildev.core.data.source.remote.response.MovieDetailResponse
@@ -24,10 +25,18 @@ object DataMapper {
         return UserData(
             username = this.displayName,
             email = this.email,
-            photoUri = this.photoUrl,
+            photoUri = this.photoUrl.orNullToString(),
             uid = this.uid
         )
     }
+
+    fun UserDataEntity.toUIData() : UserData =
+        UserData(
+            uid = uid,
+            username = displayName,
+            photoUri = photoUrl,
+            email = email
+        )
 
     fun ResultsItem.toNowPlayingEntity(): NowPlayingMovieListEntities {
         return NowPlayingMovieListEntities(

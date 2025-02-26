@@ -22,7 +22,7 @@ class UserService @Inject constructor(
     private val firebaseAuthService: FirebaseAuth,
     private val firebaseStorage: FirebaseStorage
 ) {
-    fun userData(): Flow<FirebaseUser?> = flow {
+    suspend fun userData(): Flow<FirebaseUser?> = flow {
         val user = firebaseAuthService.currentUser
         if (user != null) {
             emit(user)

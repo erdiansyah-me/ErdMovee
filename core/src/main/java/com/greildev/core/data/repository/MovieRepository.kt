@@ -51,7 +51,7 @@ interface MovieRepository {
     suspend fun replaceAllCart(cart: List<CartMovieListEntities>)
 }
 
-class MovieRepositoryImpl @Inject constructor(
+internal class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val database: ErdmoveeDatabase
@@ -79,7 +79,7 @@ class MovieRepositoryImpl @Inject constructor(
                 database = database,
                 remoteDataSource = remoteDataSource
             ),
-            pagingSourceFactory = { database.nowPlayingMovieDao().getAllNowPlayingMovie() }
+            pagingSourceFactory = { database.nowPlayingMovieDao.getAllNowPlayingMovie() }
         ).flow
     }
 

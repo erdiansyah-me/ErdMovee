@@ -69,7 +69,7 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
         }
     }
 
-    val userData = runBlocking { useCase.userUseCase().userData().asLiveData() }
+    val userData = viewModelScope.launch { useCase.userUseCase().userData().asLiveData() }
 
     fun getCartMovies() {
         viewModelScope.launch {

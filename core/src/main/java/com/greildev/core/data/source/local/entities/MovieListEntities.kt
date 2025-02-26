@@ -6,23 +6,6 @@ import androidx.room.PrimaryKey
 import com.greildev.core.utils.CoreConstant
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = CoreConstant.POPULAR_ENTITIES)
-data class PopularMovieListEntities(
-    @PrimaryKey
-    val id: Int,
-    val overview: String,
-    val originalLanguage: String,
-    val originalTitle: String,
-    val video: Boolean,
-    val title: String,
-    val posterPath: String,
-    val backdropPath: String,
-    val releaseDate: String,
-    val popularity: Double,
-    val voteAverage: Double,
-    val adult: Boolean,
-    val voteCount: Int
-)
 @Parcelize
 data class GenresName(
     val genreIds: List<String>
@@ -90,7 +73,7 @@ data class CartMovieListEntities(
     val adult: Boolean,
     val voteCount: Int,
     val basePrice: Int,
-    val quantityItem: Int,
-    val quantityPrice: Int,
-    val isChecked: Boolean,
+    var quantityItem: Int,
+    var quantityPrice: Int,
+    var isChecked: Boolean,
 ) : Parcelable

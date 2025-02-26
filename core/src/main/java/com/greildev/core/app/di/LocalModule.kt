@@ -16,7 +16,7 @@ import net.sqlcipher.database.SupportFactory
 
 @Module
 @InstallIn(SingletonComponent::class)
-class LocalModule {
+internal class LocalModule {
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): ErdmoveeDatabase {
         val passphrase: ByteArray = SQLiteDatabase.getBytes(BuildConfig.LIBRARY_PACKAGE_NAME.toCharArray())
