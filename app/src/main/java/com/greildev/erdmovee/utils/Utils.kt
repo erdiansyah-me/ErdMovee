@@ -69,7 +69,7 @@ fun doubleBackToExit(
         getString(context, R.string.tap_twice_to_exit), Toast.LENGTH_SHORT
     )
     activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
-        if (doubleBackPressed + 2000 > System.currentTimeMillis()) {
+        if (doubleBackPressed + Constant.DOUBLE_BACK_DELAY  > System.currentTimeMillis()) {
             activity.finish()
             toast.cancel()
         } else {

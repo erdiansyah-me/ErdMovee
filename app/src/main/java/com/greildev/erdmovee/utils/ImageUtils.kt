@@ -20,7 +20,10 @@ object ImageUtils {
         FILENAME_IMAGE_FORMAT,
         Locale.US
     ).format(System.currentTimeMillis())
-
+    private const val BYTE_SIZE = 1024
+    private const val MAX_SIZE = 1000000
+    private const val INITIAL_COMPRESS_QUALITY = 100
+    private const val COMPRESS_QUALITY_REDUCE = 5
 
     fun createTempFile(context: Context): File {
         val imageSuffix = ".jpg"
@@ -32,9 +35,10 @@ object ImageUtils {
         val contentResolver: ContentResolver = context.contentResolver
         val myFile = createTempFile(context)
 
+
         val inputStream = contentResolver.openInputStream(selectedImg) as InputStream
         val outputStream: OutputStream = FileOutputStream(myFile)
-        val buf = ByteArray(1024)
+        val buf = ByteArray(BYTE_SIZE)
         var len: Int
         while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
         outputStream.close()
@@ -45,16 +49,16 @@ object ImageUtils {
 
     fun reduceFileImage(file: File): File {
         val bitmap = BitmapFactory.decodeFile(file.path)
-        var compressQuality = 100
-        val maxSize = 1000000
+        var compressQuality: Int = INITIAL_COMPRESS_QUALITY
+
         var streamLength: Int
         do {
             val bmpStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
             val bmpPicByteArray = bmpStream.toByteArray()
             streamLength = bmpPicByteArray.size
-            compressQuality -= 5
-        } while (streamLength > maxSize)
+            compressQuality -= COMPRESS_QUALITY_REDUCE
+        } while (streamLength > MAX_SIZE)
         bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
         return file
     }

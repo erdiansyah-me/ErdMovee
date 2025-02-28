@@ -25,6 +25,7 @@ class PaymentStatusFragment :
         PaymentStatusAdapter()
     }
 
+    //TODO: Simplify nested conditioning
     override fun initView() {
         paymentStatus = PaymentStatusFragmentArgs.fromBundle(arguments as Bundle).paymentStatusModel
         if (paymentStatus != null) {
@@ -69,6 +70,7 @@ class PaymentStatusFragment :
     }
 
     override fun observeData() {
+        //
     }
 
     override fun initListener() {
@@ -76,7 +78,9 @@ class PaymentStatusFragment :
             if (paymentStatus?.transactionDetail != null) {
                 viewModel.deleteCheckedCartByUid(isChecked = true)
             }
-            findNavController().navigate(PaymentStatusFragmentDirections.actionPaymentStatusFragmentToHomePageFragment())
+            findNavController().navigate(
+                PaymentStatusFragmentDirections.actionPaymentStatusFragmentToHomePageFragment()
+            )
         }
     }
 

@@ -135,7 +135,9 @@ class ProfileFragment :
                                 val logBundle = Bundle()
                                 logBundle.putString("username", binding.tifUsername.text.toString())
                                 Analytics.logEvent(Constant.UPDATE_PROFILE, logBundle)
-                                findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToHomePageFragment())
+                                findNavController().navigate(
+                                    ProfileFragmentDirections.actionProfileFragmentToHomePageFragment()
+                                )
                             }
                         }
                     }

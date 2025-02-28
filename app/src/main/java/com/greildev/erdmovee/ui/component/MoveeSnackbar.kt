@@ -76,6 +76,7 @@ object MoveeSnackbar {
 
             slideDownAnim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation?) {
+                    //
                 }
 
                 override fun onAnimationEnd(animation: Animation?) {
@@ -83,11 +84,13 @@ object MoveeSnackbar {
                 }
 
                 override fun onAnimationRepeat(animation: Animation?) {
+                    //
                 }
             })
 
             slideUpAnim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation?) {
+                    //
                 }
 
                 override fun onAnimationEnd(animation: Animation?) {
@@ -96,6 +99,7 @@ object MoveeSnackbar {
                 }
 
                 override fun onAnimationRepeat(animation: Animation?) {
+                    //
                 }
             })
             show()

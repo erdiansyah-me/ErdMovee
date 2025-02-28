@@ -59,7 +59,11 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding, HistoryViewModel>(
                         binding.rvHistory.isVisible = false
                         binding.svFavoriteMovie.isVisible = true
                         binding.svFavoriteMovie.setMessage(
-                            title = if (state.code == EMPTY_CODE) getString(R.string.empty) else getString(R.string.error),
+                            title = if (state.code == EMPTY_CODE) {
+                                getString(R.string.empty)
+                            } else {
+                                getString(R.string.error)
+                            },
                             description = state.message
                                 ?: getString(R.string.something_went_wrong),
                             state = if (state.code == EMPTY_CODE) StatedViewState.EMPTY else StatedViewState.ERROR

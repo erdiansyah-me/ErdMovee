@@ -8,6 +8,7 @@ import com.greildev.core.base.BaseListAdapter
 import com.greildev.core.data.source.local.entities.FavoriteMovieListEntities
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.CardMovieFavoriteItemBinding
+import com.greildev.erdmovee.utils.Constant
 import com.greildev.erdmovee.utils.formatDecimal
 import com.greildev.erdmovee.utils.imgUrlFormatter
 
@@ -28,6 +29,7 @@ class FavoriteListAdapter(
             binding.chipPrice.text = item.price.toString()
             for (genre in item.genresName.genreIds) {
                 val chip = Chip(view.context)
+
                 chip.text = genre
                 chip.setEnsureMinTouchTargetSize(false)
                 chip.setTextColor(
@@ -38,7 +40,7 @@ class FavoriteListAdapter(
                 )
                 chip.setPadding(0,0,0,0)
                 chip.includeFontPadding = false
-                chip.textSize = 11F
+                chip.textSize = Constant.TEXT_SIZE_ADAPTER
                 chip.isCheckable = false
                 chip.isClickable = false
                 chip.setChipBackgroundColorResource(R.color.md_theme_dark_primary)

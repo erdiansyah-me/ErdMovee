@@ -43,8 +43,7 @@ class RegisterFragment :
 
     override fun observeData() {
         viewModel.validateRegisterEmail.launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onCreated { }
-                .onValue {
+            state.onValue {
                     binding.apply {
                         btnRegister.isEnabled = it
                         if (!it) {
@@ -91,7 +90,9 @@ class RegisterFragment :
                                 val logBundle = Bundle()
                                 logBundle.putString("email", binding.tifEmail.text.toString())
                                 Analytics.logEvent(Constant.REGISTER_USER, logBundle)
-                                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToProfileFragment())
+                                findNavController().navigate(
+                                    RegisterFragmentDirections.actionRegisterFragmentToProfileFragment()
+                                )
                             }
                         }
                     } else {

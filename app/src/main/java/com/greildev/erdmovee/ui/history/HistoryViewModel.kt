@@ -14,7 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoryViewModel @Inject constructor(private val useCase: UseCase, private val dispatcher: DispatcherProvider) : ViewModel() {
+class HistoryViewModel @Inject constructor(
+    private val useCase: UseCase,
+    private val dispatcher: DispatcherProvider
+) : ViewModel() {
 
     private val _transactionHistory = MutableStateFlow<UIState<List<TransactionDetail>>>(UIState.Loading())
     val transactionHistory: StateFlow<UIState<List<TransactionDetail>>> = _transactionHistory.asStateFlow()

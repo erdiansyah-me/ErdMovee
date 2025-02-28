@@ -13,7 +13,9 @@ class HistoryTransactionAdapter(private val itemClickListener:(TransactionDetail
             binding.apply {
                 tvTransactionDate.text = item.transactionDate
                 tvItemName.text = item.transactionId
-                tvTransactionType.text = "Sewa Film"
+                tvTransactionType.text = view.context.getString(
+                    R.string.rent_movie
+                )
                 tvItemTotalPrice.text = item.amountToken.toString()
                 tvItemBuy.text = view.context.getString(
                     R.string.transaction_movie_amount,

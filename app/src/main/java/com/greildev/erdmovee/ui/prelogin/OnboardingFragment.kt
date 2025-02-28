@@ -7,12 +7,16 @@ import com.greildev.erdmovee.databinding.FragmentOnboardingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, PreloginViewModel>(FragmentOnboardingBinding::inflate) {
+class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, PreloginViewModel>(
+    FragmentOnboardingBinding::inflate
+) {
     override val viewModel: PreloginViewModel by viewModels()
     override fun initView() {
+        //
     }
 
     override fun observeData() {
+        //
     }
 
     override fun initListener() {

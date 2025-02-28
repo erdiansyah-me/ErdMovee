@@ -73,9 +73,8 @@ class MainFragment :
         binding.svMain.viewTreeObserver.addOnScrollChangedListener {
             val scrollVertical = binding.svMain.scrollY
             val headerTextPopular = binding.llPopular.top
-            val scrollThreshold = 50
 
-            if (scrollVertical > headerTextPopular - scrollThreshold) {
+            if (scrollVertical > headerTextPopular - SCROLL_THRESHOLD) {
                 binding.svMain.smoothScrollTo(0, binding.llPopular.top)
             }
         }
@@ -186,5 +185,9 @@ class MainFragment :
                 }
             }
         }
+    }
+
+    companion object {
+        private const val SCROLL_THRESHOLD = 50
     }
 }

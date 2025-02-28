@@ -17,6 +17,7 @@ class NotificationFragment :
     }
 
     override fun observeData() {
+        //TODO: Later for implementation feature Notification
     }
 
 }

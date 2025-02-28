@@ -6,7 +6,9 @@ import com.greildev.core.data.source.local.entities.CartMovieListEntities
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.PaymentStatusItemBinding
 
-class PaymentStatusAdapter: BaseListAdapter<CartMovieListEntities, PaymentStatusItemBinding>(PaymentStatusItemBinding::inflate) {
+class PaymentStatusAdapter: BaseListAdapter<CartMovieListEntities, PaymentStatusItemBinding>(
+    PaymentStatusItemBinding::inflate
+) {
     override fun onItemBind(): (CartMovieListEntities, PaymentStatusItemBinding, View, Int) -> Unit {
         return { data, binding, view, _ ->
             binding.apply {

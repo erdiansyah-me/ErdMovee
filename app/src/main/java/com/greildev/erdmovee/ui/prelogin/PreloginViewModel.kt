@@ -7,6 +7,7 @@ import com.greildev.core.domain.model.ProfileRequest
 import com.greildev.core.domain.model.UserData
 import com.greildev.core.domain.usecase.UserUseCase
 import com.greildev.core.utils.UIState
+import com.greildev.erdmovee.utils.Constant
 import com.greildev.erdmovee.utils.FlowState
 import com.greildev.erdmovee.utils.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -124,7 +125,7 @@ class PreloginViewModel @Inject constructor(
 
     private fun String.isPasswordValid(): Boolean {
         return when {
-            this.length >= 8 -> true
+            this.length >= Constant.PASSWORD_LENGTH -> true
             else -> false
         }
     }

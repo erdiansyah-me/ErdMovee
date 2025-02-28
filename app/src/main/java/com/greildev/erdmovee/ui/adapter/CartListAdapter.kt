@@ -43,7 +43,8 @@ class CartListAdapter(
                 val newQuantity = item.quantityItem - 1
                 val newQuantityPrice = item.basePrice * newQuantity
                 binding.btnDecrement.isEnabled = newQuantity != 1
-                binding.tvQuantityItem.text = view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
+                binding.tvQuantityItem.text =
+                    view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
                 onDecrement.invoke(position, newQuantity, newQuantityPrice, item)
             }
         }

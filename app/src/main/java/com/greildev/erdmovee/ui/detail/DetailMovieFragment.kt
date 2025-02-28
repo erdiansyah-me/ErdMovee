@@ -162,7 +162,9 @@ class DetailMovieFragment :
                                 viewModel.deleteCartMovie(movieId)
                             }
                             viewModel.saveCartMovie(detailMovie, isRentNow = true)
-                            findNavController().navigate(DetailMovieFragmentDirections.actionDetailMovieFragmentToCheckoutFragment())
+                            findNavController().navigate(
+                                DetailMovieFragmentDirections.actionDetailMovieFragmentToCheckoutFragment()
+                            )
                         }
                     }
                 }

@@ -16,7 +16,8 @@ class CheckoutListAdapter(
         return { item, binding, view, position ->
             binding.tvTitle.text = item.title
             binding.tvPrice.text = view.context.getString(R.string.price_per_day, item.basePrice.toString())
-            binding.tvQuantityItem.text = view.context.getString(R.string.cart_quantity_item, item.quantityItem.toString())
+            binding.tvQuantityItem.text =
+                view.context.getString(R.string.cart_quantity_item, item.quantityItem.toString())
             Glide.with(view.context)
                 .load(item.posterPath.imgUrlFormatter())
                 .error(android.R.drawable.ic_menu_report_image)
@@ -26,14 +27,16 @@ class CheckoutListAdapter(
                 val newQuantity = item.quantityItem + 1
                 val newQuantityPrice = item.basePrice * newQuantity
                 onIncrement.invoke(position, newQuantity, newQuantityPrice, item)
-                binding.tvQuantityItem.text = view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
+                binding.tvQuantityItem.text =
+                    view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
                 notifyItemChanged(position)
             }
             binding.btnDecrement.setOnClickListener {
                 val newQuantity = item.quantityItem - 1
                 val newQuantityPrice = item.basePrice * newQuantity
                 binding.btnDecrement.isEnabled = newQuantity != 1
-                binding.tvQuantityItem.text = view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
+                binding.tvQuantityItem.text =
+                    view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
                 onDecrement.invoke(position, newQuantity, newQuantityPrice, item)
                 notifyItemChanged(position)
             }

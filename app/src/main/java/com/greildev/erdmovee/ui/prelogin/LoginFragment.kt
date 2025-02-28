@@ -44,7 +44,7 @@ class LoginFragment :
 
     override fun observeData() {
         viewModel.validateLoginEmail.launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onCreated { }
+            state
                 .onValue {
                     binding.apply {
                         btnLogin.isEnabled = it
@@ -95,7 +95,9 @@ class LoginFragment :
                                 logBundle.putString("email", binding.tifEmail.text.toString())
                                 Analytics.logEvent(FirebaseAnalytics.Event.LOGIN, logBundle)
                                 binding.loading.cancelAnimation()
-                                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomePageFragment())
+                                findNavController().navigate(
+                                    LoginFragmentDirections.actionLoginFragmentToHomePageFragment()
+                                )
                             }
                         }
                     } else {

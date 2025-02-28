@@ -42,19 +42,27 @@ class SplashFragment :
                 .onValue {
                     when (it) {
                         is SplashState.Main -> {
-                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomePageFragment())
+                            findNavController().navigate(
+                                SplashFragmentDirections.actionSplashFragmentToHomePageFragment()
+                            )
                         }
 
                         is SplashState.Profile -> {
-                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToProfileFragment())
+                            findNavController().navigate(
+                                SplashFragmentDirections.actionSplashFragmentToProfileFragment()
+                            )
                         }
 
                         is SplashState.Login -> {
-                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                            findNavController().navigate(
+                                SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+                            )
                         }
 
                         is SplashState.Onboarding -> {
-                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingFragment())
+                            findNavController().navigate(
+                                SplashFragmentDirections.actionSplashFragmentToOnboardingFragment()
+                            )
                         }
                     }
                 }

@@ -14,7 +14,7 @@ class RunningTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
     private lateinit var runningText: CharSequence
     private var index by Delegates.notNull<Int>()
-    private var delayInMillis = 150L
+    private var delayInMillis = 0L
 
     private val handler = Handler(Looper.getMainLooper())
 

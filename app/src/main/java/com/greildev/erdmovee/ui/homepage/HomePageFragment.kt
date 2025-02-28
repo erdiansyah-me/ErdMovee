@@ -164,7 +164,9 @@ class HomePageFragment :
                         )
                         Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
                         Toast.makeText(context, getString(R.string.feature_soon), Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(HomePageFragmentDirections.actionHomePageFragmentToNotificationFragment())
+                        findNavController().navigate(
+                            HomePageFragmentDirections.actionHomePageFragmentToNotificationFragment()
+                        )
                         true
                     }
 

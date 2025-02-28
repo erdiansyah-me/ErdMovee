@@ -52,6 +52,7 @@ class TopupFragment :
     }
 
     override fun observeData() {
+        //
     }
 
     override fun initListener() {
@@ -98,8 +99,7 @@ class TopupFragment :
                                     )
                                 )
                                 viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { tokenUser ->
-                                    val timeDelay: Long = 1000
-                                    delay(timeDelay)
+                                    delay(TIME_DELAY_TOKEN)
                                     val totalToken = tokenUser.plus(
                                         binding.tifPayment.text.toString().toInt()
                                     )
@@ -148,5 +148,9 @@ class TopupFragment :
         val matchResult = regex.find(this)
 
         return matchResult?.value ?: 0.toString()
+    }
+
+    companion object {
+        private const val TIME_DELAY_TOKEN = 1000L
     }
 }
