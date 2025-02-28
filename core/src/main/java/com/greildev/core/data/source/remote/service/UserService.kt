@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import java.io.File
 import javax.inject.Inject
@@ -22,22 +21,27 @@ class UserService @Inject constructor(
     private val firebaseAuthService: FirebaseAuth,
     private val firebaseStorage: FirebaseStorage
 ) {
-    suspend fun userData(): Flow<FirebaseUser?> = flow {
-        val user = firebaseAuthService.currentUser
-        if (user != null) {
-            emit(user)
-        } else {
-            emit(null)
-        }
-    }.flowOn(Dispatchers.IO)
 
-    suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> {
+    suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<FirebaseUser?>> {
         return callbackFlow {
             firebaseAuthService.signInWithEmailAndPassword(
                 authRequest.email,
                 authRequest.password
-            ).addOnCompleteListener {
-                trySend(SourceResult.Success(it.isSuccessful))
+            ).addOnCompleteListener {task ->
+                if (task.isSuccessful) {
+                    firebaseAuthService.addAuthStateListener {
+                        if (it.currentUser != null) {
+                            println("HAIYAAA: LOGIN SERVICE true")
+                            trySend(SourceResult.Success(it.currentUser))
+                        } else {
+                            println("HAIYAAA: LOGIN SERVICE error auth")
+                            trySend(SourceResult.Error(123, "Something Went Wrong!"))
+                        }
+                    }
+                } else {
+                    println("HAIYAAA: LOGIN SERVICE error unsuccess")
+                    trySend(SourceResult.Error(123, "Unknown Error!"))
+                }
             }.addOnFailureListener {
                 trySend(SourceResult.Error(123, it.message ?: "Something Went Wrong!"))
             }

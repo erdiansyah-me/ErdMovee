@@ -1,8 +1,8 @@
 package com.greildev.erdmovee.utils
 
 sealed class SplashState<T>{
-    class Onboarding : SplashState<Nothing>()
-    class Login : SplashState<Nothing>()
-    class Main : SplashState<Nothing>()
-    class Profile : SplashState<Nothing>()
+    data object Onboarding : SplashState<Nothing>()
+    data object Login : SplashState<Nothing>()
+    data object Main : SplashState<Nothing>()
+    data object Profile : SplashState<Nothing>()
 }

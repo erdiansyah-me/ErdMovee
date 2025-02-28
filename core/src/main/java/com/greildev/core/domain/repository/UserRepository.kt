@@ -10,7 +10,7 @@ interface UserRepository {
 
     //USER
     suspend fun currentUser(): UserDataEntity?
-    suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>>
+    suspend fun loginUser(authRequest: AuthRequest): Flow<Boolean>
     suspend fun registerUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>>
     suspend fun updateProfile(profile: ProfileRequest): Flow<SourceResult<String>>
     fun logOutUser()

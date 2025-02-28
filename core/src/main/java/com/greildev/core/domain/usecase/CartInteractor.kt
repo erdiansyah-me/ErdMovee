@@ -14,7 +14,7 @@ class CartInteractor(
     private val userRepository: UserRepository
 ) {
 
-    fun getCartMovies(): Flow<List<CartMovieListEntities>> = callbackFlow {
+    suspend fun getCartMovies(): Flow<List<CartMovieListEntities>> = callbackFlow {
         val user = userRepository.currentUser()
         if (user != null) {
             movieRepository.getCartMoviesByUid(user.uid).collect {

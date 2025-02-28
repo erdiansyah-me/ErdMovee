@@ -57,24 +57,24 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
     }
 
     override fun observeData() {
+        viewModel.searchMovie.launchAndCollectIn(viewLifecycleOwner) {
+            binding.rvSearch.isVisible = true
+            binding.loading.isVisible = false
+            binding.viewStated.isVisible = false
+            searchAdapter.submitData(it)
+        }
+    }
+
+    override fun initListener() {
         binding.searchProductField.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val logBundle = Bundle()
                 logBundle.putString("search_movie", textView.text.toString())
                 Analytics.logEvent(FirebaseAnalytics.Event.SEARCH, logBundle)
                 viewModel.searchMovie(textView.text.toString())
-                    .launchAndCollectIn(viewLifecycleOwner) {
-                        binding.rvSearch.isVisible = true
-                        binding.loading.isVisible = false
-                        binding.viewStated.isVisible = false
-                        searchAdapter.submitData(it)
-                    }
             }
             true
         }
-    }
-
-    override fun initListener() {
         searchAdapter.addLoadStateListener { state ->
             when (state.refresh) {
                 is LoadState.NotLoading -> {
@@ -120,12 +120,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
                             action = {
                                 viewModel.searchMovie(
                                     binding.searchProductField.text.toString(),
-                                ).launchAndCollectIn(viewLifecycleOwner) {
-                                    binding.rvSearch.isVisible = true
-                                    binding.loading.isVisible = false
-                                    binding.viewStated.isVisible = false
-                                    searchAdapter.submitData(it)
-                                }
+                                )
                             }
                         )
                     }

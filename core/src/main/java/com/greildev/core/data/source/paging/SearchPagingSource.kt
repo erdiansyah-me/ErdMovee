@@ -23,7 +23,7 @@ class SearchPagingSource(
             val responseData = remoteDataSource.searchMovies(page = page, query = query)
 
             LoadResult.Page(
-                data = responseData.results ?: emptyList(),
+                data = responseData.results,
                 prevKey = if (page == 1) null else page - 1,
                 nextKey = if ((responseData.totalPages ?: 0) <= page) null else page + 1
             )

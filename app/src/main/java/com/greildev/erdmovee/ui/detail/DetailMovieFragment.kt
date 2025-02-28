@@ -51,7 +51,7 @@ class DetailMovieFragment :
     }
 
     override fun initView() {
-        viewModel.getMovieDetail(movieId)
+        viewModel.getMovieDetailData(movieId)
         binding.chipBookmark.isChecked = viewModel.checkFavoriteMovieById(movieId)
         binding.chipBookmark.text = if (binding.chipBookmark.isChecked) {
             getString(R.string.remove_from_favorite)
@@ -64,7 +64,7 @@ class DetailMovieFragment :
     @SuppressLint("SetTextI18n")
     override fun observeData() {
         viewModel.movieDetail.launchAndCollectIn(viewLifecycleOwner) { state ->
-            when (state) {
+            when (state.movieDetailUI) {
                 is UIState.Loading -> {
                     binding.loading.isVisible = true
                     binding.llDetailMovieContent.isVisible = false
@@ -75,7 +75,7 @@ class DetailMovieFragment :
                     binding.loading.isVisible = false
                     binding.llDetailMovieContent.isVisible = true
                     binding.svDetailMovie.isVisible = false
-                    val detailMovie = state.data
+                    val detailMovie = state.movieDetailUI.data
                     if (detailMovie != null) {
                         context?.let {
                             Glide.with(it)
@@ -124,11 +124,7 @@ class DetailMovieFragment :
                                     recommendationAdapter.retry()
                                 }
                             )
-                        viewModel.getRecommendation(movieId)
-                            .launchAndCollectIn(viewLifecycleOwner) {
-                                recommendationAdapter.submitData(it)
-
-                            }
+                        recommendationAdapter.submitData(state.movieRecomPaging)
                         binding.btnAddCart.setOnClickListener {
                             val logBundle = Bundle()
                             logBundle.putString(MOVIE_TITLE, detailMovie.title)
@@ -175,14 +171,14 @@ class DetailMovieFragment :
                     binding.loading.isVisible = false
                     binding.llDetailMovieContent.isVisible = false
                     binding.svDetailMovie.isVisible = true
-                    state.message?.let {
+                    state.movieDetailUI.message?.let {
                         binding.svDetailMovie.setMessage(
-                            title = (state.code ?: getString(R.string.error)).toString(),
+                            title = (state.movieDetailUI.code ?: getString(R.string.error)).toString(),
                             description = it,
                             btnTitle = getString(R.string.retry),
                             state = StatedViewState.ERROR,
                             action = {
-                                viewModel.getMovieDetail(movieId)
+                                viewModel.getMovieDetailData(movieId)
                             }
                         )
                     }
@@ -190,10 +186,6 @@ class DetailMovieFragment :
 
                 is UIState.NoState -> {}
             }
-        }
-
-        viewModel.getRecommendation(movieId).launchAndCollectIn(viewLifecycleOwner) {
-
         }
     }
 

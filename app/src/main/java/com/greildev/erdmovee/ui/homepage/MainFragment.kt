@@ -81,18 +81,17 @@ class MainFragment :
         }
     }
 
+    override fun fetchData() {
+        super.fetchData()
+        viewModel.getTokenUser()
+    }
+
     override fun observeData() {
         viewModel.getNowPlayingMovies().launchAndCollectIn(viewLifecycleOwner) {
             nowPlayingAdapter.submitData(it)
         }
         viewModel.getPopularMovies().launchAndCollectIn(viewLifecycleOwner) {
             popularAdapter.submitData(it)
-        }
-
-        viewModel.userData.observe(viewLifecycleOwner) {
-            if (it != null) {
-                viewModel.getTokenUser(it.uid)
-            }
         }
         viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) {
             binding.tvCoinsBalance.text = it.toString()

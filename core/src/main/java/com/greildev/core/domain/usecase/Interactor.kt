@@ -3,12 +3,14 @@ package com.greildev.core.domain.usecase
 import com.greildev.core.data.repository.MovieRepository
 import com.greildev.core.data.repository.PaymentRepository
 import com.greildev.core.domain.repository.UserRepository
+import com.greildev.core.utils.DispatcherProvider
 import javax.inject.Inject
 
 class Interactor @Inject constructor(
     private val userRepository: UserRepository,
     private val movieRepository: MovieRepository,
-    private val paymentRepository: PaymentRepository
+    private val paymentRepository: PaymentRepository,
+    private val dispatcher: DispatcherProvider
 ) : UseCase{
     override fun userUseCase(): UserUseCase {
         return UserInteractor(userRepository)
@@ -27,6 +29,6 @@ class Interactor @Inject constructor(
     }
 
     override fun paymentUseCase(): PaymentInteractor {
-        return PaymentInteractor(paymentRepository)
+        return PaymentInteractor(paymentRepository, userRepository, dispatcher)
     }
 }

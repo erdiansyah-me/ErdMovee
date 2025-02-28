@@ -145,19 +145,19 @@ class PreloginViewModel @Inject constructor(
 
     private fun UserParams.toSplashState() = when {
         this.user != null && !this.user.username.isNullOrEmpty() -> {
-            SplashState.Main()
+            SplashState.Main
         }
 
         this.user?.username.isNullOrEmpty() && !this.user?.email.isNullOrEmpty() -> {
-            SplashState.Profile()
+            SplashState.Profile
         }
 
         this.user == null && !isOnboarding -> {
-            SplashState.Login()
+            SplashState.Login
         }
 
-        this.isOnboarding -> SplashState.Onboarding()
-        else -> SplashState.Onboarding()
+        this.isOnboarding -> SplashState.Onboarding
+        else -> SplashState.Onboarding
     }
 }
 
@@ -165,4 +165,3 @@ data class UserParams(
     val user: UserData?,
     val isOnboarding: Boolean
 )
-

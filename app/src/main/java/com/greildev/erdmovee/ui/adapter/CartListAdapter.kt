@@ -9,9 +9,9 @@ import com.greildev.erdmovee.databinding.CartListItemBinding
 import com.greildev.erdmovee.utils.imgUrlFormatter
 
 class CartListAdapter(
-    private val cbIsChecked: (Int, Int, Boolean, CartMovieListEntities) -> Unit,
-    private val onIncrement: (Int, Int, Int, Int, CartMovieListEntities) -> Unit,
-    private val onDecrement: (Int, Int, Int, Int, CartMovieListEntities) -> Unit
+    private val cbIsChecked: (Int, Boolean, CartMovieListEntities) -> Unit,
+    private val onIncrement: (Int, Int, Int, CartMovieListEntities) -> Unit,
+    private val onDecrement: (Int, Int, Int, CartMovieListEntities) -> Unit
 ) : BaseListAdapter<CartMovieListEntities, CartListItemBinding>(CartListItemBinding::inflate) {
     override fun onItemBind(): (CartMovieListEntities, CartListItemBinding, View, Int) -> Unit {
         return { item, binding, view, position ->
@@ -29,13 +29,13 @@ class CartListAdapter(
             binding.cbItem.setOnClickListener {
                 isItemChecked = !isItemChecked
                 item.isChecked = isItemChecked
-                cbIsChecked.invoke(position, item.cartId, isItemChecked, item)
+                cbIsChecked.invoke(position, isItemChecked, item)
             }
             binding.btnDecrement.isEnabled = item.quantityItem != 1
             binding.btnIncrement.setOnClickListener {
                 val newQuantity = item.quantityItem + 1
                 val newQuantityPrice = item.basePrice * newQuantity
-                onIncrement.invoke(position, item.cartId, newQuantity, newQuantityPrice, item)
+                onIncrement.invoke(position, newQuantity, newQuantityPrice, item)
                 binding.tvQuantityItem.text =
                     view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
             }
@@ -44,9 +44,8 @@ class CartListAdapter(
                 val newQuantityPrice = item.basePrice * newQuantity
                 binding.btnDecrement.isEnabled = newQuantity != 1
                 binding.tvQuantityItem.text = view.context.getString(R.string.cart_quantity_item, newQuantity.toString())
-                onDecrement.invoke(position, item.cartId, newQuantity, newQuantityPrice, item)
+                onDecrement.invoke(position, newQuantity, newQuantityPrice, item)
             }
         }
     }
-
 }

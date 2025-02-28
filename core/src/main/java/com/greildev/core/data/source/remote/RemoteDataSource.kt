@@ -1,41 +1,20 @@
 package com.greildev.core.data.source.remote
 
-import com.google.firebase.auth.FirebaseUser
 import com.greildev.core.data.model.TransactionDetail
 import com.greildev.core.data.model.TransactionToken
 import com.greildev.core.data.source.remote.service.MovieService
 import com.greildev.core.data.source.remote.service.RemoteConfigService
 import com.greildev.core.data.source.remote.service.TokenTransactionService
-import com.greildev.core.data.source.remote.service.UserService
-import com.greildev.core.domain.model.AuthRequest
-import com.greildev.core.domain.model.ProfileRequest
-import com.greildev.core.utils.SourceResult
 import com.greildev.core.utils.safeApiCall
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Retrofit
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(
-    private val userService: UserService,
     private val retrofit: Retrofit,
     private val remoteConfig: RemoteConfigService,
     private val transactionService: TokenTransactionService
 ) {
-    suspend fun userData(): Flow<FirebaseUser?> = userService.userData()
     private val movieService: MovieService = retrofit.create(MovieService::class.java)
-
-    //User
-    suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> =
-        userService.loginUser(authRequest)
-
-    suspend fun registerUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> {
-        return userService.registerUser(authRequest)
-    }
-
-    fun updateProfile(profile: ProfileRequest): Flow<SourceResult<String>> =
-        userService.updateProfile(profile)
-
-    fun logoutUser() = userService.logoutUser()
 
     //Movie
     suspend fun getPopularMovies(page: Int) = movieService.getPopularMovies(page)

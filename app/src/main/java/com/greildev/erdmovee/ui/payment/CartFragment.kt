@@ -33,16 +33,16 @@ class CartFragment :
         viewModel.cartEntitites.observe(viewLifecycleOwner) { listOfCartItem ->
             if (listOfCartItem.isNotEmpty()) {
                 val cartAdapter = CartListAdapter(
-                    cbIsChecked = { position, cartId, isChecked, cartItem ->
+                    cbIsChecked = { position, isChecked, cartItem ->
                         cartItem.isChecked = isChecked
                         viewModel.updateCartEntitiesAt(position, cartItem)
                     },
-                    onIncrement = { position, cartId, newQuantity, newQuantityPrice, cartItem ->
+                    onIncrement = { position, newQuantity, newQuantityPrice, cartItem ->
                         cartItem.quantityItem = newQuantity
                         cartItem.quantityPrice = newQuantityPrice
                         viewModel.updateCartEntitiesAt(position, cartItem)
                     },
-                    onDecrement = { position, cartId, newQuantity, newQuantityPrice, cartItem ->
+                    onDecrement = { position, newQuantity, newQuantityPrice, cartItem ->
                         cartItem.quantityItem = newQuantity
                         cartItem.quantityPrice = newQuantityPrice
                         viewModel.updateCartEntitiesAt(position, cartItem)

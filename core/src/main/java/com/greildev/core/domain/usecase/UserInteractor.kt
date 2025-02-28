@@ -23,23 +23,11 @@ class UserInteractor @Inject constructor(
         emit(UIState.Loading())
         userRepository.loginUser(authRequest)
             .collect {
-                it.suspendSubscribe(
-                    onSuccess = { result ->
-                        if (result.data != null) {
-                            emit(UIState.Success(result.data))
-                        } else {
-                            emit(UIState.Error(code = 0, errorMessage = "User not found"))
-                        }
-                    },
-                    onError = { result ->
-                        emit(
-                            UIState.Error(
-                                code = 600,
-                                errorMessage = result.message
-                            )
-                        )
-                    }
-                )
+                if(it) {
+                    emit(UIState.Success(it))
+                } else {
+                    emit(UIState.Error(code = 0, errorMessage = "Error"))
+                }
             }
     }
 

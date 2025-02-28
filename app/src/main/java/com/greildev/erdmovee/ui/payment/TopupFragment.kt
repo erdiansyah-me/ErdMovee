@@ -46,21 +46,21 @@ class TopupFragment :
         }
     }
 
+    override fun fetchData() {
+        super.fetchData()
+        viewModel.getTokenUser()
+    }
+
     override fun observeData() {
-        viewModel.userData.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                viewModel.getTokenUser(user.uid)
-            }
-        }
     }
 
     override fun initListener() {
-        binding.cgTopup.setOnCheckedStateChangeListener { chipGroup, ints ->
+        binding.cgTopup.setOnCheckedStateChangeListener { chipGroup, _ ->
             binding.tifPayment.clearFocus()
             val selectedChip = chipGroup.chipGroupSetSelectedChip().filterCoins()
             binding.tifPayment.setText(selectedChip)
         }
-        binding.tifPayment.setOnFocusChangeListener { view, b ->
+        binding.tifPayment.setOnFocusChangeListener { _, b ->
             if (b) {
                 binding.cgTopup.clearCheck()
             }
@@ -71,20 +71,16 @@ class TopupFragment :
         binding.btnPay.setOnClickListener {
             val paymentAmount = binding.tifPayment.text.toString()
             if (paymentMethod != null && paymentAmount.isNotEmpty()) {
-                viewModel.userData.observe(viewLifecycleOwner) {
-                    if (it != null) {
-                        val transactionId = UUID.randomUUID().toString()
-                        viewModel.writeTokenTransaction(
-                            it.uid, TransactionToken(
-                                transactionId = transactionId,
-                                transactionDate = getCurrentDateTime(),
-                                transactionType = TransactionType.TOPUP.name,
-                                amountToken = binding.tifPayment.text.toString().toInt(),
-                                transactionMethod = paymentMethod?.label ?: ""
-                            )
-                        )
-                    }
-                }
+                val transactionId = UUID.randomUUID().toString()
+                viewModel.writeTokenTransaction(
+                    TransactionToken(
+                        transactionId = transactionId,
+                        transactionDate = getCurrentDateTime(),
+                        transactionType = TransactionType.TOPUP.name,
+                        amountToken = binding.tifPayment.text.toString().toInt(),
+                        transactionMethod = paymentMethod?.label ?: ""
+                    )
+                )
                 viewModel.isWriteTokenTransaction.launchAndCollectIn(viewLifecycleOwner) { stateWriteToken ->
                     stateWriteToken.onCreated { }
                         .onValue { writeTokenTransaction ->
@@ -101,20 +97,15 @@ class TopupFragment :
                                         transactionMethod = paymentMethod?.label ?: ""
                                     )
                                 )
-                                viewModel.userData.observe(viewLifecycleOwner) { user ->
-                                    if (user != null) {
-                                        viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { tokenUser ->
-                                            val timeDelay: Long = 1000
-                                            delay(timeDelay)
-                                            val totalToken = tokenUser.plus(
-                                                binding.tifPayment.text.toString().toInt()
-                                            )
-                                            viewModel.updateTokenUser(
-                                                user.uid,
-                                                token = totalToken
-                                            )
-                                        }
-                                    }
+                                viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { tokenUser ->
+                                    val timeDelay: Long = 1000
+                                    delay(timeDelay)
+                                    val totalToken = tokenUser.plus(
+                                        binding.tifPayment.text.toString().toInt()
+                                    )
+                                    viewModel.updateTokenUser(
+                                        token = totalToken
+                                    )
                                 }
                                 viewModel.isUpdateSuccess.launchAndCollectIn(viewLifecycleOwner) { state ->
                                     state.onCreated { }
@@ -122,11 +113,11 @@ class TopupFragment :
                                             if (it) {
                                                 findNavController().navigate(toPaymentStatus)
                                             } else {
-                                                val toPaymentStatus =
+                                                val paymentStatusNav =
                                                     TopupFragmentDirections.actionTopupFragmentToPaymentStatusFragment()
-                                                toPaymentStatus.paymentStatusModel =
+                                                paymentStatusNav.paymentStatusModel =
                                                     PaymentStatusModel(isSuccess = false)
-                                                findNavController().navigate(toPaymentStatus)
+                                                findNavController().navigate(paymentStatusNav)
                                             }
                                         }
                                 }

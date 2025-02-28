@@ -1,6 +1,6 @@
 package com.greildev.core.data.repository
 
-import com.google.firebase.auth.FirebaseUser
+import androidx.room.withTransaction
 import com.greildev.core.data.source.local.database.ErdmoveeDatabase
 import com.greildev.core.data.source.local.entities.UserDataEntity
 import com.greildev.core.data.source.local.preferences.PreferencesDataStore
@@ -11,8 +11,10 @@ import com.greildev.core.domain.repository.UserRepository
 import com.greildev.core.utils.DispatcherProvider
 import com.greildev.core.utils.SourceResult
 import com.greildev.core.utils.orNullToString
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -22,31 +24,40 @@ internal class UserRepositoryImpl @Inject constructor(
     private val prefs: PreferencesDataStore,
     private val dispatcher: DispatcherProvider
 ) : UserRepository {
-    private suspend fun userData(): Flow<FirebaseUser?> = withContext(dispatcher.io) {
-        val userDao = database.userDataDao
-        val firebaseUser = userService.userData().last()
-        firebaseUser?.let {
-            val userData = UserDataEntity(
-                uid = it.uid,
-                displayName = it.displayName.orEmpty(),
-                photoUrl = it.photoUrl.orNullToString(),
-                email = it.email.orEmpty(),
-                phoneNumber = it.phoneNumber.orEmpty()
-            )
-
-            userDao.insertUserData(userData)
-        }
-        return@withContext userService.userData()
-    }
 
     override suspend fun currentUser(): UserDataEntity? = withContext(dispatcher.io) {
         database.userDataDao.getUserData()
     }
 
-    override suspend fun loginUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> = withContext(dispatcher.io){
-        val login = userService.loginUser(authRequest)
-        userData()
-        return@withContext login
+    override suspend fun loginUser(authRequest: AuthRequest): Flow<Boolean> = withContext(dispatcher.io){
+        return@withContext callbackFlow {
+            val login = userService.loginUser(authRequest)
+            login.collectLatest {
+                when (it) {
+                    is SourceResult.Success -> {
+                        val userDao = database.userDataDao
+                        it.data?.let {user ->
+                            val userData = UserDataEntity(
+                                uid = user.uid,
+                                displayName = user.displayName.orEmpty(),
+                                photoUrl = user.photoUrl.orNullToString(),
+                                email = user.email.orEmpty(),
+                                phoneNumber = user.phoneNumber.orEmpty()
+                            )
+                            database.withTransaction {
+                                userDao.deleteAllUserData()
+                                userDao.insertUserData(userData)
+                            }
+                        }
+                        trySend(true)
+                    }
+                    is SourceResult.Error -> {
+                        trySend(false)
+                    }
+                }
+            }
+            awaitClose()
+        }
     }
 
 

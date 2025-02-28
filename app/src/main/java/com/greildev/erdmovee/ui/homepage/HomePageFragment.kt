@@ -43,10 +43,15 @@ class HomePageFragment :
         context?.let { doubleBackToExit(it, activity, viewLifecycleOwner) }
     }
 
+    override fun fetchData() {
+        super.fetchData()
+        viewModel.fetchUserData()
+        viewModel.getTokenUser()
+    }
+
     override fun observeData() {
-        viewModel.userData.observe(viewLifecycleOwner) {
+        viewModel.userData.launchAndCollectIn(viewLifecycleOwner) {
             if (it != null) {
-                viewModel.getTokenUser(it.uid)
                 val photoUri = it.photoUri
                 binding.tvUsername.text = getString(R.string.hello_home, it.username ?: it.email)
                 if (photoUri != null && photoUri.toString().isNotEmpty()) {
@@ -58,6 +63,17 @@ class HomePageFragment :
                     }
                 }
             } else {
+                context?.let { it1 ->
+                    MoveeSnackbar.showSnackbarCustom(
+                        it1,
+                        binding.root,
+                        getString(R.string.success_to_logout),
+                        StateSnackbar.COMMON
+                    ) {}
+                }
+                val logBundle = Bundle()
+                logBundle.putString("Logout", "Logout")
+                Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
                 findNavController().navigate(HomePageFragmentDirections.actionHomePageFragmentToLoginFragment())
             }
         }
@@ -177,36 +193,11 @@ class HomePageFragment :
             .setTitle(getString(R.string.logout_title_dialog))
             .setMessage(getString(R.string.logout_confirmation_message))
             .setPositiveButton(getString(R.string.ya)) { _, _ ->
-                val userLogout = viewModel.logout()
-                if (userLogout) {
-                    context?.let { it1 ->
-                        MoveeSnackbar.showSnackbarCustom(
-                            it1,
-                            binding.root,
-                            getString(R.string.success_to_logout),
-                            StateSnackbar.COMMON
-                        ) {}
-                    }
-                    val logBundle = Bundle()
-                    logBundle.putString("Logout", "Logout")
-                    Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
-
-                } else {
-                    context?.let { it1 ->
-                        MoveeSnackbar.showSnackbarCustom(
-                            it1,
-                            binding.root,
-                            getString(R.string.failed_to_logout),
-                            StateSnackbar.ERROR
-                        ) {}
-                    }
-                }
-                findNavController().navigate(HomePageFragmentDirections.actionHomePageFragmentToLoginFragment())
+                viewModel.logout()
             }
             .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
     }
-
 }

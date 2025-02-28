@@ -46,7 +46,7 @@ object ImageUtils {
     fun reduceFileImage(file: File): File {
         val bitmap = BitmapFactory.decodeFile(file.path)
         var compressQuality = 100
-        val MAX_SIZE = 1000000
+        val maxSize = 1000000
         var streamLength: Int
         do {
             val bmpStream = ByteArrayOutputStream()
@@ -54,7 +54,7 @@ object ImageUtils {
             val bmpPicByteArray = bmpStream.toByteArray()
             streamLength = bmpPicByteArray.size
             compressQuality -= 5
-        } while (streamLength > MAX_SIZE)
+        } while (streamLength > maxSize)
         bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
         return file
     }

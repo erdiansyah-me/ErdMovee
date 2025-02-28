@@ -139,8 +139,7 @@ class RegisterFragment :
             val password = tifPassword.text.toString().trim()
             viewModel.validateRegisterField(email, password)
             viewModel.validateRegisterField.launchAndCollectIn(viewLifecycleOwner) { state ->
-                state.onCreated { }
-                    .onValue {
+                state.onValue {
                         if (!it) {
                             context?.let { it1 ->
                                 MoveeSnackbar.showSnackbarCustom(
@@ -158,10 +157,6 @@ class RegisterFragment :
                         }
                     }
             }
-//            viewModel.registerUser(
-//                email = email,
-//                password = password
-//            )
         }
 
         btnLogin.setOnClickListener {

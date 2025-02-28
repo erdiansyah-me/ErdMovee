@@ -32,6 +32,7 @@ class CheckoutFragment :
 
     override fun fetchData() {
         viewModel.getCheckedCartByUid(true)
+        viewModel.getTokenUser()
     }
 
     override fun observeData() {
@@ -55,11 +56,6 @@ class CheckoutFragment :
                 }
                 binding.rvCheckoutMovies.adapter = checkoutAdapter
                 checkoutAdapter.submitList(state)
-            }
-        }
-        viewModel.userData.observe(viewLifecycleOwner) {
-            if (it != null) {
-                viewModel.getTokenUser(it.uid)
             }
         }
         viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { token ->
@@ -93,47 +89,36 @@ class CheckoutFragment :
         }
         binding.btnRent.setOnClickListener {
             val transactionId = viewModel.generateTransactionId()
-            viewModel.userData.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    viewModel.writeTransactionHistory(
-                        it.uid,
-                        TransactionDetail(
-                            transactionId = transactionId,
-                            cartMovieListEntities = viewModel.checkoutItemList.value,
-                            transactionDate = getCurrentDateTime(),
-                            amountToken = binding.tvTotalPrice.text.toString().toInt(),
-                        )
-                    )
-                }
-            }
+            viewModel.writeTransactionHistory(
+                TransactionDetail(
+                    transactionId = transactionId,
+                    cartMovieListEntities = viewModel.checkoutItemList.value,
+                    transactionDate = getCurrentDateTime(),
+                    amountToken = binding.tvTotalPrice.text.toString().toInt(),
+                )
+            )
             viewModel.isWriteTransactionHistory.launchAndCollectIn(viewLifecycleOwner) { state ->
                 state.onCreated { }
                     .onValue {
                         val toPaymentStatus =
                             CheckoutFragmentDirections.actionCheckoutFragmentToPaymentStatusFragment()
                         if (it) {
-                            viewModel.userData.observe(viewLifecycleOwner) { user ->
-
-                                if (user != null) {
-                                    viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { token ->
-                                        viewModel.updateTokenUser(
-                                            user.uid,
-                                            token = token - binding.tvTotalPrice.text.toString()
-                                                .toInt()
-                                        )
-                                    }
-                                }
-                                toPaymentStatus.paymentStatusModel = PaymentStatusModel(
-                                    isSuccess = true,
-                                    transactionDetail = TransactionDetail(
-                                        transactionId = transactionId,
-                                        cartMovieListEntities = viewModel.checkoutItemList.value,
-                                        transactionDate = getCurrentDateTime(),
-                                        amountToken = binding.tvTotalPrice.text.toString().toInt(),
-                                    )
+                            viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { token ->
+                                viewModel.updateTokenUser(
+                                    token = token - binding.tvTotalPrice.text.toString()
+                                        .toInt()
                                 )
-                                findNavController().navigate(toPaymentStatus)
                             }
+                            toPaymentStatus.paymentStatusModel = PaymentStatusModel(
+                                isSuccess = true,
+                                transactionDetail = TransactionDetail(
+                                    transactionId = transactionId,
+                                    cartMovieListEntities = viewModel.checkoutItemList.value,
+                                    transactionDate = getCurrentDateTime(),
+                                    amountToken = binding.tvTotalPrice.text.toString().toInt(),
+                                )
+                            )
+                            findNavController().navigate(toPaymentStatus)
                         } else {
                             toPaymentStatus.paymentStatusModel =
                                 PaymentStatusModel(isSuccess = false)

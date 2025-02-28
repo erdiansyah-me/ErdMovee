@@ -23,9 +23,9 @@ class RecommendationPagingSource(
             val responseData = remoteDataSource.getMovieRecommendations(movieId, page)
 
             LoadResult.Page(
-                data = responseData.results ?: emptyList(),
+                data = responseData.results,
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = if (responseData.results.isNullOrEmpty()) null else page + 1
+                nextKey = if (responseData.results.isEmpty()) null else page + 1
             )
         } catch (exception: Exception) {
             return LoadResult.Error(exception)

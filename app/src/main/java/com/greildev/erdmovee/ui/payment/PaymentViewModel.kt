@@ -69,8 +69,6 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
         }
     }
 
-    val userData = viewModelScope.launch { useCase.userUseCase().userData().asLiveData() }
-
     fun getCartMovies() {
         viewModelScope.launch {
             useCase.cartUseCase().getCartMovies().collect {
@@ -97,6 +95,7 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
             useCase.cartUseCase().updateQuantity(cartId, newQuantity, newQuantityPrice)
         }
     }
+
     fun deleteCheckedCartByUid(isChecked: Boolean) {
         viewModelScope.launch {
             useCase.cartUseCase().deleteCheckedByUid(isChecked)
@@ -121,19 +120,19 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
 
     private val _tokenUser = MutableStateFlow(0)
     val tokenUser: StateFlow<Int> = _tokenUser
-    fun getTokenUser(userId: String) {
+    fun getTokenUser() {
         viewModelScope.launch {
-            _tokenUser.value = useCase.paymentUseCase().getTokenUser(userId).first()
+            _tokenUser.value = useCase.paymentUseCase().getTokenUser().first()
         }
     }
 
     private val _isUpdateSuccess = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
     val isUpdateSuccess: StateFlow<FlowState<Boolean>> = _isUpdateSuccess
 
-    fun updateTokenUser(userId: String, token: Int) {
+    fun updateTokenUser(token: Int) {
         viewModelScope.launch {
             _isUpdateSuccess.value =
-                FlowState.FlowValue(useCase.paymentUseCase().updateTokenUser(userId, token).first())
+                FlowState.FlowValue(useCase.paymentUseCase().updateTokenUser(token).first())
         }
     }
 
@@ -141,10 +140,10 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
         MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
     val isWriteTransactionHistory: StateFlow<FlowState<Boolean>> = _isWriteTransactionHistory
 
-    fun writeTransactionHistory(userId: String, transactionDetail: TransactionDetail) {
+    fun writeTransactionHistory(transactionDetail: TransactionDetail) {
         viewModelScope.launch {
             _isWriteTransactionHistory.value = FlowState.FlowValue(
-                useCase.paymentUseCase().writeTransactionHistory(userId, transactionDetail).first()
+                useCase.paymentUseCase().writeTransactionHistory(transactionDetail).first()
             )
         }
     }
@@ -152,10 +151,10 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
     private val _isWriteTokenTransaction =
         MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
     val isWriteTokenTransaction: StateFlow<FlowState<Boolean>> = _isWriteTokenTransaction
-    fun writeTokenTransaction(userId: String, transactionToken: TransactionToken) {
+    fun writeTokenTransaction(transactionToken: TransactionToken) {
         viewModelScope.launch {
             _isWriteTokenTransaction.value = FlowState.FlowValue(
-                useCase.paymentUseCase().writeTokenTransaction(userId, transactionToken).first()
+                useCase.paymentUseCase().writeTokenTransaction(transactionToken).first()
             )
         }
     }
