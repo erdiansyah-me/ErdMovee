@@ -116,8 +116,7 @@ class ProfileFragment :
                                 context = it1,
                                 root = root,
                                 text = it.message.toString(),
-                                state = StateSnackbar.ERROR,
-                                action = {}
+                                state = StateSnackbar.ERROR
                             )
                         }
                     }
@@ -169,7 +168,7 @@ class ProfileFragment :
                                     binding.root,
                                     getString(R.string.field_tidak_boleh_kosong),
                                     StateSnackbar.ERROR
-                                ) {}
+                                )
                             }
                         } else {
                             setProfileData(username)

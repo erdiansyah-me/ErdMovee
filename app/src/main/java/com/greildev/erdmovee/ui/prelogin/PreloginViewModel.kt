@@ -6,14 +6,20 @@ import com.greildev.core.domain.model.AuthRequest
 import com.greildev.core.domain.model.ProfileRequest
 import com.greildev.core.domain.model.UserData
 import com.greildev.core.domain.usecase.UserUseCase
+import com.greildev.core.utils.DispatcherProvider
 import com.greildev.core.utils.UIState
 import com.greildev.erdmovee.utils.Constant
 import com.greildev.erdmovee.utils.FlowState
 import com.greildev.erdmovee.utils.SplashState
+import com.greildev.erdmovee.utils.Validate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
@@ -23,7 +29,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PreloginViewModel @Inject constructor(
-//    private val useCase: UseCase,
     private val userUseCase: UserUseCase
 ) : ViewModel() {
 
@@ -80,29 +85,52 @@ class PreloginViewModel @Inject constructor(
     }
 
     //validate email and password
-    private val _validateLoginPassword = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
-    val validateLoginPassword: StateFlow<FlowState<Boolean>> = _validateLoginPassword
+    private val _validateLoginPassword = MutableStateFlow<Validate>(Validate.INITIAL)
+    val validateLoginPassword: StateFlow<Validate> = _validateLoginPassword
     fun validateLoginPassword(password: String) {
-        _validateLoginPassword.update { FlowState.FlowValue(password.isPasswordValid()) }
+        _validateLoginPassword.update {
+            if (password.isPasswordValid()) {
+                Validate.VALID
+            } else {
+                Validate.INVALID
+            }
+        }
     }
 
-    private val _validateLoginEmail = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
-    val validateLoginEmail: StateFlow<FlowState<Boolean>> = _validateLoginEmail
+    private val _validateLoginEmail = MutableStateFlow<Validate>(Validate.INITIAL)
+    val validateLoginEmail: StateFlow<Validate> = _validateLoginEmail
     fun validateLoginEmail(email: String) {
-        _validateLoginEmail.update { FlowState.FlowValue(email.isEmailValid()) }
+        _validateLoginEmail.update {
+            if (email.isEmailValid()) {
+                Validate.VALID
+            } else {
+                Validate.INVALID
+            }
+        }
     }
 
-    private val _validateRegisterPassword =
-        MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
-    val validateRegisterPassword: StateFlow<FlowState<Boolean>> = _validateRegisterPassword
+    private val _validateRegisterPassword = MutableStateFlow(Validate.INITIAL)
+    val validateRegisterPassword: StateFlow<Validate> = _validateRegisterPassword
     fun validateRegisterPassword(password: String) {
-        _validateRegisterPassword.update { FlowState.FlowValue(password.isPasswordValid()) }
+        _validateRegisterPassword.update {
+            if (password.isPasswordValid()) {
+                Validate.VALID
+            } else {
+                Validate.INVALID
+            }
+        }
     }
 
-    private val _validateRegisterEmail = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
-    val validateRegisterEmail: StateFlow<FlowState<Boolean>> = _validateRegisterEmail
+    private val _validateRegisterEmail = MutableStateFlow(Validate.INITIAL)
+    val validateRegisterEmail: StateFlow<Validate> = _validateRegisterEmail
     fun validateRegisterEmail(email: String) {
-        _validateRegisterEmail.update { FlowState.FlowValue(email.isEmailValid()) }
+        _validateRegisterEmail.update {
+            if (email.isEmailValid()) {
+                Validate.VALID
+            } else {
+                Validate.INVALID
+            }
+        }
     }
 
     private val _validateProfileName = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
@@ -111,17 +139,33 @@ class PreloginViewModel @Inject constructor(
         _validateProfileName.update { FlowState.FlowValue(name.validateRequired()) }
     }
 
-    private val _validateLoginField = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
-    val validateLoginField: StateFlow<FlowState<Boolean>> = _validateLoginField
-    fun validateLoginField(email: String, password: String) {
-        _validateLoginField.update { FlowState.FlowValue(email.isEmailValid() && password.isPasswordValid()) }
-    }
+    val validateLoginField: StateFlow<FlowState<Boolean>> = combine(
+        validateLoginEmail, validateLoginPassword
+    ) { email, password ->
+        if (email == Validate.VALID && password == Validate.VALID) {
+            FlowState.FlowValue(true)
+        } else {
+            FlowState.FlowValue(false)
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = FlowState.FlowCreated
+    )
 
-    private val _validateRegisterField = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
-    val validateRegisterField: StateFlow<FlowState<Boolean>> = _validateRegisterField
-    fun validateRegisterField(email: String, password: String) {
-        _validateRegisterField.update { FlowState.FlowValue(email.isEmailValid() && password.isPasswordValid()) }
-    }
+    val validateRegisterField: StateFlow<FlowState<Boolean>> = combine(
+        validateRegisterEmail, validateRegisterPassword
+    ) { email, password ->
+        if (email == Validate.VALID && password == Validate.VALID) {
+            FlowState.FlowValue(true)
+        } else {
+            FlowState.FlowValue(false)
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = FlowState.FlowCreated
+    )
 
     private fun String.isPasswordValid(): Boolean {
         return when {

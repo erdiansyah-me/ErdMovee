@@ -159,3 +159,7 @@ enum class TransactionMethod {
     INSTANT,
     VIRTUAL_ACCOUNT,
 }
+
+enum class Validate {
+    INITIAL, VALID, INVALID
+}

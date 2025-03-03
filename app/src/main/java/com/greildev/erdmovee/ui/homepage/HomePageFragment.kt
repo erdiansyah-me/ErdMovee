@@ -69,7 +69,7 @@ class HomePageFragment :
                         binding.root,
                         getString(R.string.success_to_logout),
                         StateSnackbar.COMMON
-                    ) {}
+                    )
                 }
                 val logBundle = Bundle()
                 logBundle.putString("Logout", "Logout")

@@ -8,15 +8,16 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.greildev.core.base.BaseFragment
+import com.greildev.core.utils.UIState
 import com.greildev.core.utils.streamData
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.FragmentLoginBinding
 import com.greildev.erdmovee.ui.component.MoveeSnackbar
 import com.greildev.erdmovee.ui.component.StateSnackbar
 import com.greildev.erdmovee.utils.Analytics
+import com.greildev.erdmovee.utils.Validate
 import com.greildev.erdmovee.utils.doubleBackToExit
 import com.greildev.erdmovee.utils.launchAndCollectIn
-import com.greildev.erdmovee.utils.onCreated
 import com.greildev.erdmovee.utils.onValue
 import com.greildev.erdmovee.utils.tncText
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,92 +44,59 @@ class LoginFragment :
     }
 
     override fun observeData() {
-        viewModel.validateLoginEmail.launchAndCollectIn(viewLifecycleOwner) { state ->
-            state
-                .onValue {
-                    binding.apply {
-                        btnLogin.isEnabled = it
-                        if (!it) {
-                            btnLogin.text = getString(R.string.email_tidak_valid)
-                        } else {
-                            btnLogin.text = getString(R.string.login)
-                        }
-                        tilEmail.isErrorEnabled = it.not()
-                        tilEmail.error =
-                            if (it.not()) getString(R.string.email_tidak_valid) else null
-                    }
-                }
+        viewModel.validateLoginField.launchAndCollectIn(viewLifecycleOwner) { state ->
+            state.onValue { binding.btnLogin.isEnabled = it }
         }
-
-        viewModel.validateLoginPassword.launchAndCollectIn(viewLifecycleOwner) { state ->
-            state.onCreated { }
-                .onValue {
-                    binding.apply {
-                        btnLogin.isEnabled = it
-                        if (!it) {
-                            btnLogin.text = getString(R.string.password_tidak_valid)
-                        } else {
-                            btnLogin.text = getString(R.string.login)
-                        }
-                        tilPassword.isErrorEnabled = it.not()
-                        tilPassword.error =
-                            if (it.not()) getString(R.string.password_tidak_valid) else null
-                    }
-                }
+        viewModel.validateLoginEmail.launchAndCollectIn(viewLifecycleOwner) {
+            binding.apply {
+                tilEmail.isErrorEnabled = it == Validate.INVALID
+                tilEmail.error =
+                    if (it == Validate.INVALID) getString(R.string.email_tidak_valid) else null
+            }
+        }
+        viewModel.validateLoginPassword.launchAndCollectIn(viewLifecycleOwner) {
+            binding.apply {
+                tilPassword.isErrorEnabled = it == Validate.INVALID
+                tilPassword.error =
+                    if (it == Validate.INVALID) getString(R.string.password_tidak_valid) else null
+            }
         }
         viewModel.userLogin.launchAndCollectIn(viewLifecycleOwner) { state ->
+            binding.loading.isVisible = state is UIState.Loading
             state.streamData(
                 onSuccess = {
-                    binding.loading.isVisible = false
                     if (it.data == true) {
-                        context?.let { it1 ->
-                            MoveeSnackbar.showSnackbarCustom(
-                                it1,
-                                binding.root,
-                                getString(
-                                    R.string.selamat_datang,
-                                    binding.tifEmail.text.toString()
-                                ),
-                                StateSnackbar.SUCCESS
-                            ) {
-                                val logBundle = Bundle()
-                                logBundle.putString("email", binding.tifEmail.text.toString())
-                                Analytics.logEvent(FirebaseAnalytics.Event.LOGIN, logBundle)
-                                binding.loading.cancelAnimation()
-                                findNavController().navigate(
-                                    LoginFragmentDirections.actionLoginFragmentToHomePageFragment()
-                                )
-                            }
+                        MoveeSnackbar.showSnackbarCustom(
+                            context,
+                            binding.root,
+                            getString(R.string.selamat_datang, binding.tifEmail.text.toString()),
+                            StateSnackbar.SUCCESS
+                        ) {
+                            val logBundle = Bundle()
+                            logBundle.putString("email", binding.tifEmail.text.toString())
+                            Analytics.logEvent(FirebaseAnalytics.Event.LOGIN, logBundle)
+                            binding.loading.cancelAnimation()
+                            findNavController().navigate(
+                                LoginFragmentDirections.actionLoginFragmentToHomePageFragment()
+                            )
                         }
                     } else {
-                        context?.let { it1 ->
-                            MoveeSnackbar.showSnackbarCustom(
-                                it1,
-                                binding.root,
-                                getString(R.string.login_gagal, it.message),
-                                StateSnackbar.ERROR
-                            ) {
-                            }
-                        }
-                    }
-
-                },
-                onError = {
-                    binding.loading.isVisible = false
-                    context?.let { it1 ->
                         MoveeSnackbar.showSnackbarCustom(
-                            it1,
+                            context,
                             binding.root,
                             getString(R.string.login_gagal, it.message),
                             StateSnackbar.ERROR
-                        ) {
-                        }
+                        )
                     }
                 },
-                onLoading = {
-                    binding.loading.isVisible = true
-                },
-                onNoState = {}
+                onError = {
+                    MoveeSnackbar.showSnackbarCustom(
+                        context,
+                        binding.root,
+                        getString(R.string.login_gagal, it.message),
+                        StateSnackbar.ERROR
+                    )
+                }
             )
         }
     }
@@ -149,24 +117,7 @@ class LoginFragment :
         btnLogin.setOnClickListener {
             val email = tifEmail.text.toString().trim()
             val password = tifPassword.text.toString().trim()
-            viewModel.validateLoginField(email, password)
-            viewModel.validateLoginField.launchAndCollectIn(viewLifecycleOwner) { state ->
-                state.onCreated { }
-                    .onValue {
-                        if (!it) {
-                            context?.let { it1 ->
-                                MoveeSnackbar.showSnackbarCustom(
-                                    it1,
-                                    binding.root,
-                                    getString(R.string.field_tidak_boleh_kosong),
-                                    StateSnackbar.ERROR
-                                ) {}
-                            }
-                        } else {
-                            viewModel.loginUser(email, password)
-                        }
-                    }
-            }
+            viewModel.loginUser(email, password)
         }
     }
 }

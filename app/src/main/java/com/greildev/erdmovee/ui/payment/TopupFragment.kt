@@ -136,8 +136,7 @@ class TopupFragment :
                         context = it1,
                         root = binding.root,
                         text = "Please Pick Payment Method and Fill the token amount",
-                        state = StateSnackbar.INFO,
-                        action = {}
+                        state = StateSnackbar.INFO
                     )
                 }
             }

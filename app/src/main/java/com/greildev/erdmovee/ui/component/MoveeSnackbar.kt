@@ -18,14 +18,14 @@ import com.greildev.erdmovee.databinding.SnackbarMoveeBinding
 object MoveeSnackbar {
     @SuppressLint("RestrictedApi")
     fun showSnackbarCustom(
-        context: Context,
+        context: Context?,
         root: View,
         text: String,
         state: StateSnackbar,
-        action: () -> Unit
+        action: (() -> Unit) = {}
     ) {
         val typedValueBackground = TypedValue()
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val binding = SnackbarMoveeBinding.inflate(inflater)
         val snackbar = Snackbar.make(root, "", Snackbar.LENGTH_INDEFINITE)
 

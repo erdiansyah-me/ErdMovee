@@ -14,8 +14,8 @@ sealed class UIState<R> (
 suspend fun <R> UIState<R>.streamData(
     onSuccess: suspend (result: UIState<R>) -> Unit,
     onError: suspend (result: UIState<R>) -> Unit,
-    onLoading: suspend (result: UIState<R>) -> Unit,
-    onNoState: suspend (result: UIState<R>) -> Unit
+    onLoading: suspend (result: UIState<R>) -> Unit = {},
+    onNoState: suspend (result: UIState<R>) -> Unit = {}
 ){
     when(this){
         is UIState.Success -> onSuccess.invoke(this)
