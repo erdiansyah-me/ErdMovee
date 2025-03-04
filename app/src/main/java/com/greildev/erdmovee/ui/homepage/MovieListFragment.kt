@@ -48,14 +48,19 @@ class MovieListFragment :
         binding.rvMovieList.layoutManager = LinearLayoutManager(context)
     }
 
+    override fun fetchData() {
+        super.fetchData()
+        if (fetchData == POPULAR_FETCHED) viewModel.getPopularMovies() else viewModel.getNowPlayingMovies()
+    }
+
     override fun observeData() {
         if (fetchData == POPULAR_FETCHED) {
-            viewModel.getPopularMovies().launchAndCollectIn(viewLifecycleOwner) {
+            viewModel.popularMovies.launchAndCollectIn(viewLifecycleOwner) {
                 movieListAdapter.submitData(viewLifecycleOwner.lifecycle, it)
             }
 
         } else if (fetchData == NOW_PLAYING_FETCHED) {
-            viewModel.getNowPlayingMovies().launchAndCollectIn(viewLifecycleOwner) {
+            viewModel.nowPlayingMovies.launchAndCollectIn(viewLifecycleOwner) {
                 movieListAdapter.submitData(viewLifecycleOwner.lifecycle, it)
             }
         }

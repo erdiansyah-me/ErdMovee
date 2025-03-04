@@ -24,12 +24,14 @@ class DetailViewModel @Inject constructor(
 
     fun getMovieDetailData(movieId: Int) {
         viewModelScope.launch {
-            val movieDetail = async {  useCase.movieUseCase().getMovieDetail(movieId) }
+            val movieDetail = async { useCase.movieUseCase().getMovieDetail(movieId) }
             val movieRecommend = async { useCase.movieUseCase().getRecommendationMovies(movieId) }
+            val checkFavMovie = useCase.favoriteUseCase().checkFavoriteMovie(movieId)
+            val checkCartMovie = useCase.cartUseCase().checkCartMovieByUidAndId(movieId)
             combine(
                 movieDetail.await(), movieRecommend.await()
-            ) { detail, recom ->
-                MovieDetailUIData(detail, recom)
+            ) { detail, recom->
+                MovieDetailUIData(detail, recom, checkCartMovie , checkFavMovie)
             }.collect {
                 _movieDetail.value = it
             }
@@ -46,14 +48,6 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             useCase.favoriteUseCase().saveFavoriteMovie(detailMovie)
         }
-    }
-
-    fun checkFavoriteMovieById(movieId: Int) = runBlocking {
-        useCase.favoriteUseCase().checkFavoriteMovie(movieId)
-    }
-
-    fun checkCartMovieById(movieId: Int) = runBlocking {
-        useCase.cartUseCase().checkCartMovieByUidAndId(movieId)
     }
 
     fun saveCartMovie(detailMovie: MovieDetailData, isRentNow: Boolean) {

@@ -4,8 +4,15 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
+import android.widget.ImageView
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.greildev.erdmovee.utils.Constant.FILENAME_IMAGE_FORMAT
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -61,5 +68,51 @@ object ImageUtils {
         } while (streamLength > MAX_SIZE)
         bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
         return file
+    }
+
+    fun ImageView?.load(url: String?, @DrawableRes placeholder: Int? = null) {
+        if (this == null) return
+        val drawablePlaceholder = placeholder?.let { ContextCompat.getDrawable(this.context, it) }
+        if (url.isNullOrBlank()) {
+            setImageDrawable(drawablePlaceholder)
+        } else {
+            loadFromUrl(url = url, placeholder = drawablePlaceholder)
+        }
+    }
+
+    fun ImageView?.load(@DrawableRes placeholder: Int) {
+        if (this == null) return
+        setImageDrawable(ContextCompat.getDrawable(this.context, placeholder))
+    }
+
+    fun ImageView?.loadFromUrl(
+        url: String,
+        placeholder: Drawable? = null,
+        centerCrop: Boolean = false,
+        requestOption: RequestOptions = RequestOptions(),
+        diskCacheStrategy: DiskCacheStrategy = DiskCacheStrategy.AUTOMATIC,
+        skipMemory: Boolean = false
+    ) {
+        if (this == null) return
+        if (centerCrop) {
+            Glide.with(this)
+                .load(url)
+                .placeholder(placeholder)
+                .diskCacheStrategy(diskCacheStrategy)
+                .error(placeholder)
+                .centerCrop()
+                .skipMemoryCache(skipMemory)
+                .apply(requestOption)
+                .into(this)
+        } else {
+            Glide.with(this)
+                .load(url)
+                .placeholder(placeholder)
+                .diskCacheStrategy(diskCacheStrategy)
+                .error(placeholder)
+                .skipMemoryCache(skipMemory)
+                .apply(requestOption)
+                .into(this)
+        }
     }
 }

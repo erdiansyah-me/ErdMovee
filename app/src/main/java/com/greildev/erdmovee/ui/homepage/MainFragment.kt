@@ -83,13 +83,15 @@ class MainFragment :
     override fun fetchData() {
         super.fetchData()
         viewModel.getTokenUser()
+        viewModel.getPopularMovies()
+        viewModel.getNowPlayingMovies()
     }
 
     override fun observeData() {
-        viewModel.getNowPlayingMovies().launchAndCollectIn(viewLifecycleOwner) {
+        viewModel.nowPlayingMovies.launchAndCollectIn(viewLifecycleOwner) {
             nowPlayingAdapter.submitData(it)
         }
-        viewModel.getPopularMovies().launchAndCollectIn(viewLifecycleOwner) {
+        viewModel.popularMovies.launchAndCollectIn(viewLifecycleOwner) {
             popularAdapter.submitData(it)
         }
         viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) {

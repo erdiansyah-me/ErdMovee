@@ -7,11 +7,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.greildev.core.base.BaseFragment
+import com.greildev.core.domain.model.MovieDetailData
 import com.greildev.core.utils.UIState
+import com.greildev.core.utils.streamData
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.FragmentDetailMovieBinding
 import com.greildev.erdmovee.ui.adapter.MovieCastsAdapter
@@ -20,6 +21,7 @@ import com.greildev.erdmovee.ui.adapter.RecommendationMovieAdapter
 import com.greildev.erdmovee.ui.component.StatedViewState
 import com.greildev.erdmovee.utils.Analytics
 import com.greildev.erdmovee.utils.Constant.MOVIE_TITLE
+import com.greildev.erdmovee.utils.ImageUtils.load
 import com.greildev.erdmovee.utils.formatDecimal
 import com.greildev.erdmovee.utils.imgUrlFormatter
 import com.greildev.erdmovee.utils.launchAndCollectIn
@@ -45,47 +47,31 @@ class DetailMovieFragment :
     }
 
 
-
     private val castsAdapter by lazy {
         MovieCastsAdapter()
     }
 
     override fun initView() {
         viewModel.getMovieDetailData(movieId)
-        binding.chipBookmark.isChecked = viewModel.checkFavoriteMovieById(movieId)
-        binding.chipBookmark.text = if (binding.chipBookmark.isChecked) {
-            getString(R.string.remove_from_favorite)
-        } else {
-            getString(R.string.add_to_favorite)
-        }
-        binding.btnAddCart.isEnabled = viewModel.checkCartMovieById(movieId).not()
     }
 
     @SuppressLint("SetTextI18n")
     override fun observeData() {
         viewModel.movieDetail.launchAndCollectIn(viewLifecycleOwner) { state ->
-            when (state.movieDetailUI) {
-                is UIState.Loading -> {
-                    binding.loading.isVisible = true
-                    binding.llDetailMovieContent.isVisible = false
-                    binding.svDetailMovie.isVisible = false
-                }
-
-                is UIState.Success -> {
-                    binding.loading.isVisible = false
-                    binding.llDetailMovieContent.isVisible = true
-                    binding.svDetailMovie.isVisible = false
+            visibilityContent(state.movieDetailUI)
+            state.movieDetailUI.streamData(
+                onSuccess = {
                     val detailMovie = state.movieDetailUI.data
                     if (detailMovie != null) {
                         context?.let {
-                            Glide.with(it)
-                                .load(detailMovie.posterPath.imgUrlFormatter())
-                                .error(R.drawable.ic_image_error_24)
-                                .into(binding.ivMoviePoster)
-                            Glide.with(it)
-                                .load(detailMovie.backdropPath.imgUrlFormatter())
-                                .error(R.drawable.ic_image_error_24)
-                                .into(binding.ivMovieBackdrop)
+                            binding.ivMoviePoster.load(
+                                detailMovie.posterPath.imgUrlFormatter(),
+                                R.drawable.ic_image_error_24
+                            )
+                            binding.ivMovieBackdrop.load(
+                                detailMovie.backdropPath.imgUrlFormatter(),
+                                R.drawable.ic_image_error_24
+                            )
                         }
                         binding.chipPrice.text = detailMovie.price.toString()
                         binding.tvMovieTitle.text = detailMovie.title
@@ -150,7 +136,13 @@ class DetailMovieFragment :
                                 viewModel.deleteFavoriteMovieById(movieId)
                             }
                         }
-
+                        binding.chipBookmark.isChecked = state.isMovieInFav
+                        binding.chipBookmark.text = if (binding.chipBookmark.isChecked) {
+                            getString(R.string.remove_from_favorite)
+                        } else {
+                            getString(R.string.add_to_favorite)
+                        }
+                        binding.btnAddCart.isEnabled = state.isMovieInCart
                         binding.btnBuyNow.setOnClickListener {
                             viewModel.getCartMovies()
                                 .launchAndCollectIn(viewLifecycleOwner) { cart ->
@@ -158,7 +150,7 @@ class DetailMovieFragment :
                                         viewModel.isCheckedByCartId(it.id, false)
                                     }
                                 }
-                            if (viewModel.checkCartMovieById(movieId)) {
+                            if (state.isMovieInCart) {
                                 viewModel.deleteCartMovie(movieId)
                             }
                             viewModel.saveCartMovie(detailMovie, isRentNow = true)
@@ -167,15 +159,12 @@ class DetailMovieFragment :
                             )
                         }
                     }
-                }
-
-                is UIState.Error -> {
-                    binding.loading.isVisible = false
-                    binding.llDetailMovieContent.isVisible = false
-                    binding.svDetailMovie.isVisible = true
+                },
+                onError = {
                     state.movieDetailUI.message?.let {
                         binding.svDetailMovie.setMessage(
-                            title = (state.movieDetailUI.code ?: getString(R.string.error)).toString(),
+                            title = (state.movieDetailUI.code
+                                ?: getString(R.string.error)).toString(),
                             description = it,
                             btnTitle = getString(R.string.retry),
                             state = StatedViewState.ERROR,
@@ -185,9 +174,31 @@ class DetailMovieFragment :
                         )
                     }
                 }
+            )
+        }
+    }
 
-                is UIState.NoState -> {}
+    private fun visibilityContent(uiState: UIState<MovieDetailData>) {
+        when (uiState) {
+            is UIState.Loading -> {
+                binding.loading.isVisible = true
+                binding.llDetailMovieContent.isVisible = false
+                binding.svDetailMovie.isVisible = false
             }
+
+            is UIState.Success -> {
+                binding.loading.isVisible = false
+                binding.llDetailMovieContent.isVisible = true
+                binding.svDetailMovie.isVisible = false
+            }
+
+            is UIState.Error -> {
+                binding.loading.isVisible = false
+                binding.llDetailMovieContent.isVisible = false
+                binding.svDetailMovie.isVisible = true
+            }
+
+            else -> {}
         }
     }
 

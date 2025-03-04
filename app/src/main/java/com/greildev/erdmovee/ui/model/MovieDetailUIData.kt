@@ -7,5 +7,7 @@ import com.greildev.core.utils.UIState
 
 data class MovieDetailUIData(
     val movieDetailUI : UIState<MovieDetailData> = UIState.NoState(),
-    val movieRecomPaging : PagingData<MovieListData> = PagingData.empty()
+    val movieRecomPaging : PagingData<MovieListData> = PagingData.empty(),
+    val isMovieInCart : Boolean = false,
+    val isMovieInFav : Boolean = false
 )
