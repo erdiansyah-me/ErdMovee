@@ -2,9 +2,9 @@ package com.greildev.core.domain.usecase
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.greildev.core.data.repository.MovieRepository
 import com.greildev.core.domain.model.MovieDetailData
 import com.greildev.core.domain.model.MovieListData
+import com.greildev.core.domain.repository.MovieRepository
 import com.greildev.core.utils.DataMapper.mapToModel
 import com.greildev.core.utils.UIState
 import com.greildev.core.utils.suspendSubscribe

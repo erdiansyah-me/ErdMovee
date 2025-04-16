@@ -23,7 +23,7 @@ import com.greildev.core.data.source.local.entities.UserDataEntity
         CartMovieListEntities::class,
         UserDataEntity::class
     ],
-    version = 9,
+    version = 11,
     exportSchema = false
 )
 internal abstract class ErdmoveeDatabase : RoomDatabase() {

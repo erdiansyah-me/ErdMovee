@@ -66,7 +66,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
     }
 
     override fun initListener() {
-        binding.searchProductField.setOnEditorActionListener { textView, actionId, keyEvent ->
+        binding.searchProductField.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val logBundle = Bundle()
                 logBundle.putString("search_movie", textView.text.toString())

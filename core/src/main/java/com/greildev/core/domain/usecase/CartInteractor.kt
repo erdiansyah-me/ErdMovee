@@ -1,8 +1,8 @@
 package com.greildev.core.domain.usecase
 
-import com.greildev.core.data.repository.MovieRepository
 import com.greildev.core.data.source.local.entities.CartMovieListEntities
 import com.greildev.core.domain.model.MovieDetailData
+import com.greildev.core.domain.repository.MovieRepository
 import com.greildev.core.domain.repository.UserRepository
 import com.greildev.core.utils.DataMapper.mapToCartEntities
 import kotlinx.coroutines.channels.awaitClose
@@ -50,10 +50,6 @@ class CartInteractor(
         }
     }
 
-    suspend fun updateQuantity(cartId: Int, newQuantity: Int, newQuantityPrice: Int) {
-        movieRepository.updateQuantity(cartId, newQuantity, newQuantityPrice)
-    }
-
     suspend fun isCheckedByCartId(cartId: Int, newIsChecked: Boolean) {
         movieRepository.isCheckedByCartId(cartId, newIsChecked)
     }
@@ -83,8 +79,6 @@ class CartInteractor(
             }
             awaitClose()
         }
-
-    fun deleteAllCart() = movieRepository.deleteAllCart()
 
     suspend fun replaceAllCart(carts: List<CartMovieListEntities>) {
         movieRepository.replaceAllCart(carts)

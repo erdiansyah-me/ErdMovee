@@ -1,21 +1,23 @@
+import dagger.hilt.android.plugin.util.capitalize
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import java.util.Locale
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    //ksp
+    // ksp
     id("com.google.devtools.ksp")
     // Safe Args
     id("androidx.navigation.safeargs")
-    //parcelize
+    // parcelize
     id("org.jetbrains.kotlin.plugin.parcelize")
-    //google and firebase
+    // google and firebase
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    //hilt
+    // hilt
     id("dagger.hilt.android.plugin")
-    //detekt
+    // detekt
     id("io.gitlab.arturbosch.detekt")
     id("jacoco")
 }
@@ -69,10 +71,10 @@ android {
     val jacocoTestReport = tasks.create("jacocoTestReport")
 
     androidComponents.onVariants { variant ->
-        val testTaskName = "test${variant.name.capitalize()}UnitTest"
+        val testTaskName = "test${variant.name.capitalize(Locale.getDefault())}UnitTest"
 
         val reportTask =
-            tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport::class) {
+            tasks.register("jacoco${testTaskName.capitalize(Locale.getDefault())}Report", JacocoReport::class) {
                 dependsOn(testTaskName)
 
                 reports {
@@ -106,17 +108,24 @@ android {
         toolVersion = "1.23.3"
         buildUponDefaultConfig = true // preconfigure defaults
         allRules = false // activate all available (even unstable) rules.
-        config.setFrom(file("$projectDir/config/detekt.yml"))// point to your custom config defining rules to run, overwriting default behavior
+        config.setFrom(
+            file("$projectDir/config/detekt.yml")
+        ) // point to your custom config defining rules to run, overwriting default behavior
         baseline =
             file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
     }
     tasks.withType<Detekt>().configureEach {
         reports {
             html.required.set(true) // observe findings in your browser with structure and code snippets
-            xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
-            txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
-            sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
-            md.required.set(true) // simple Markdown format
+//            xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+//            txt.required.set(
+//                true
+//            ) // similar to the console output, contains issue signature to manually edit baseline files
+//            sarif.required.set(
+//                true
+//            ) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
+//            md.required.set(true) // simple Markdown format
+            html.outputLocation.set(file("$buildDir/reports/detekt/detekt-report.html"))
         }
     }
     // Kotlin DSL
@@ -139,7 +148,7 @@ dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     testImplementation("junit:junit:4.13.2")
 
-    //Firebase
+    // Firebase
     api(platform("com.google.firebase:firebase-bom:32.7.2"))
     api("com.google.firebase:firebase-crashlytics")
     api("com.google.firebase:firebase-analytics")
@@ -147,58 +156,58 @@ dependencies {
     api("com.google.firebase:firebase-messaging-ktx")
     api("com.google.firebase:firebase-storage-ktx")
 
-    //testing
+    // testing
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    //mockito
+    // mockito
     testImplementation("org.mockito:mockito-core:5.4.0")
     testImplementation("org.mockito:mockito-inline:4.4.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
     androidTestImplementation("org.mockito:mockito-core:5.4.0")
 
-    //recyclerview
+    // recyclerview
     api("androidx.recyclerview:recyclerview:1.3.2")
 
-    //glide
+    // glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
-    //lottie
+    // lottie
     implementation("com.airbnb.android:lottie:6.3.0")
 
-    //fragment
+    // fragment
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
-    //lifecycle
+    // lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 
-    //fragment navigation
+    // fragment navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-    //coroutines
+    // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    //test
+    // test
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
-    //paging
+    // paging
     api("androidx.paging:paging-runtime-ktx:3.2.1")
     api("androidx.paging:paging-common-ktx:3.2.1")
 
-    //Hilt
+    // Hilt
     implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
     ksp("androidx.hilt:hilt-compiler:1.2.0")
     api("androidx.hilt:hilt-navigation:1.2.0")
     api("com.google.dagger:hilt-android:2.50")
     ksp("com.google.dagger:hilt-compiler:2.50")
 
-    //leakCanary
+    // leakCanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.10")
 
-    //detekt
+    // detekt
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.5")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:1.23.5")
 }

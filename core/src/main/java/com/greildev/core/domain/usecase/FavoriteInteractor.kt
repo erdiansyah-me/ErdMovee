@@ -1,8 +1,8 @@
 package com.greildev.core.domain.usecase
 
-import com.greildev.core.data.repository.MovieRepository
 import com.greildev.core.data.source.local.entities.FavoriteMovieListEntities
 import com.greildev.core.domain.model.MovieDetailData
+import com.greildev.core.domain.repository.MovieRepository
 import com.greildev.core.domain.repository.UserRepository
 import com.greildev.core.utils.DataMapper.mapToFavoriteEntities
 import kotlinx.coroutines.channels.awaitClose

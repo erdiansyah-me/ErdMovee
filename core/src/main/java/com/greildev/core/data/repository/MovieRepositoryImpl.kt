@@ -16,40 +16,13 @@ import com.greildev.core.data.source.paging.SearchPagingSource
 import com.greildev.core.data.source.remote.RemoteDataSource
 import com.greildev.core.data.source.remote.response.MovieDetailResponse
 import com.greildev.core.data.source.remote.response.ResultsItem
+import com.greildev.core.domain.repository.MovieRepository
 import com.greildev.core.utils.SourceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
-
-interface MovieRepository {
-    //Remote Movies
-    suspend fun getPopularMovies(): Flow<PagingData<ResultsItem>>
-    suspend fun getNowPlayingMovies(): Flow<PagingData<NowPlayingMovieListEntities>>
-    suspend fun searchMovies(query: String): Flow<PagingData<ResultsItem>>
-    suspend fun getMovieDetail(id: Int): Flow<SourceResult<MovieDetailResponse>>
-    suspend fun getRecommendationMovies(movieId: Int): Flow<PagingData<ResultsItem>>
-
-    //Favorite
-    fun getFavoriteMoviesByUid(uid: String): Flow<List<FavoriteMovieListEntities>>
-    suspend fun saveFavoriteMovie(favoriteMovieListEntities: FavoriteMovieListEntities)
-    suspend fun deleteFavoriteMovie(favoriteId: Int)
-    suspend fun deleteFavoriteMovieByIdAndUid(uid: String, id: Int)
-    suspend fun checkFavoriteMovie(id: Int, uid: String): Int
-
-    //Cart
-    fun getCartMoviesByUid(uid: String): Flow<List<CartMovieListEntities>>
-    suspend fun saveCartMovie(cartMovieListEntities: CartMovieListEntities)
-    suspend fun deleteCartMovie(cartId: Int)
-    suspend fun checkCartMovieByUidAndId(uid: String, id: Int): Int
-    suspend fun updateQuantity(cartId: Int, newQuantity: Int, newQuantityPrice: Int)
-    suspend fun isCheckedByCartId(cartId: Int, newIsChecked: Boolean)
-    suspend fun deleteCheckedByUid(isChecked: Boolean, uid: String)
-    fun getCheckedCartByUid(isChecked: Boolean, uid: String): Flow<List<CartMovieListEntities>>
-    fun deleteAllCart()
-    suspend fun replaceAllCart(cart: List<CartMovieListEntities>)
-}
 
 internal class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -158,10 +131,6 @@ internal class MovieRepositoryImpl @Inject constructor(
         return localDataSource.checkCartMovieByUidAndId(uid, id)
     }
 
-    override suspend fun updateQuantity(cartId: Int, newQuantity: Int, newQuantityPrice: Int) {
-        localDataSource.updateQuantity(cartId, newQuantity, newQuantityPrice)
-    }
-
     override suspend fun isCheckedByCartId(cartId: Int, newIsChecked: Boolean) {
         localDataSource.isCheckedByCartId(cartId, newIsChecked)
     }
@@ -175,10 +144,6 @@ internal class MovieRepositoryImpl @Inject constructor(
         uid: String
     ): Flow<List<CartMovieListEntities>> {
         return localDataSource.getCheckedCartByUid(isChecked, uid)
-    }
-
-    override fun deleteAllCart() {
-        localDataSource.deleteAllCart()
     }
 
     override suspend fun replaceAllCart(cart: List<CartMovieListEntities>) {
