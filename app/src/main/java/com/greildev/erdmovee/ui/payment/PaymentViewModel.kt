@@ -3,7 +3,6 @@ package com.greildev.erdmovee.ui.payment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.greildev.core.data.model.TransactionDetail
 import com.greildev.core.data.model.TransactionToken
@@ -38,12 +37,6 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
     fun updateCartEntitiesAt(index: Int, item: CartMovieListEntities) {
         val list = _cartEntitites.value.orEmpty().toMutableList()
         list[index] = item
-        _cartEntitites.value = list
-    }
-
-    fun deleteCartEntitiesAt(index: Int) {
-        val list = _cartEntitites.value.orEmpty().toMutableList()
-        list.removeAt(index)
         _cartEntitites.value = list
     }
 
@@ -87,12 +80,6 @@ class PaymentViewModel @Inject constructor(private val useCase: UseCase) : ViewM
         viewModelScope.launch(Dispatchers.IO) {
             val cartMovies = _cartEntitites.value
             useCase.cartUseCase().replaceAllCart(cartMovies.orEmpty())
-        }
-    }
-
-    fun updateQuantity(cartId: Int, newQuantity: Int, newQuantityPrice: Int) {
-        viewModelScope.launch {
-            useCase.cartUseCase().updateQuantity(cartId, newQuantity, newQuantityPrice)
         }
     }
 

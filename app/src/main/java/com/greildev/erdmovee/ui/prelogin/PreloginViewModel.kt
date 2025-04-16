@@ -1,22 +1,21 @@
 package com.greildev.erdmovee.ui.prelogin
 
+import UserParams
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.greildev.core.domain.model.AuthRequest
 import com.greildev.core.domain.model.ProfileRequest
-import com.greildev.core.domain.model.UserData
 import com.greildev.core.domain.usecase.UserUseCase
-import com.greildev.core.utils.DispatcherProvider
 import com.greildev.core.utils.UIState
 import com.greildev.erdmovee.utils.Constant
 import com.greildev.erdmovee.utils.FlowState
 import com.greildev.erdmovee.utils.SplashState
 import com.greildev.erdmovee.utils.Validate
+import com.greildev.erdmovee.utils.toSplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
@@ -85,7 +84,7 @@ class PreloginViewModel @Inject constructor(
     }
 
     //validate email and password
-    private val _validateLoginPassword = MutableStateFlow<Validate>(Validate.INITIAL)
+    private val _validateLoginPassword = MutableStateFlow(Validate.INITIAL)
     val validateLoginPassword: StateFlow<Validate> = _validateLoginPassword
     fun validateLoginPassword(password: String) {
         _validateLoginPassword.update {
@@ -97,7 +96,7 @@ class PreloginViewModel @Inject constructor(
         }
     }
 
-    private val _validateLoginEmail = MutableStateFlow<Validate>(Validate.INITIAL)
+    private val _validateLoginEmail = MutableStateFlow(Validate.INITIAL)
     val validateLoginEmail: StateFlow<Validate> = _validateLoginEmail
     fun validateLoginEmail(email: String) {
         _validateLoginEmail.update {
@@ -187,26 +186,4 @@ class PreloginViewModel @Inject constructor(
         val matcher: Matcher = pattern.matcher(this)
         return matcher.matches()
     }
-
-    private fun UserParams.toSplashState() = when {
-        this.user != null && !this.user.username.isNullOrEmpty() -> {
-            SplashState.Main
-        }
-
-        this.user?.username.isNullOrEmpty() && !this.user?.email.isNullOrEmpty() -> {
-            SplashState.Profile
-        }
-
-        this.user == null && !isOnboarding -> {
-            SplashState.Login
-        }
-
-        this.isOnboarding -> SplashState.Onboarding
-        else -> SplashState.Onboarding
-    }
 }
-
-data class UserParams(
-    val user: UserData?,
-    val isOnboarding: Boolean
-)

@@ -24,7 +24,7 @@ class UserInteractor @Inject constructor(
         userRepository.loginUser(authRequest)
             .collect {
                 if(it) {
-                    emit(UIState.Success(it))
+                    emit(UIState.Success(true))
                 } else {
                     emit(UIState.Error(code = 0, errorMessage = "Error"))
                 }
