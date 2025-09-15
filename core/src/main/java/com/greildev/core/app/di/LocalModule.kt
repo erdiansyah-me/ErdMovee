@@ -16,12 +16,13 @@ import dagger.hilt.components.SingletonComponent
 internal class LocalModule {
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): ErdmoveeDatabase {
-//        val passphrase: ByteArray = SQLiteDatabase.getBytes(BuildConfig.LIBRARY_PACKAGE_NAME.toCharArray())
-//        val factory = SupportFactory(passphrase)
+//        val password = BuildConfig.LIBRARY_PACKAGE_NAME.toByteArray()
+//        val factory = SupportOpenHelperFactory(password)
         return Room.databaseBuilder(
             context.applicationContext,
             ErdmoveeDatabase::class.java, CoreConstant.DB_NAME)
             .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigrationOnDowngrade()
 //            .openHelperFactory(factory)
             .build()
     }

@@ -19,7 +19,7 @@ class HistoryTransactionAdapter(private val itemClickListener:(TransactionDetail
                 tvItemTotalPrice.text = item.amountToken.toString()
                 tvItemBuy.text = view.context.getString(
                     R.string.transaction_movie_amount,
-                    item.cartMovieListEntities?.size.toString()
+                    item.itemList?.size.toString()
                 )
                 chipTransactionStatus.text = view.context.getString(R.string.success)
                 view.setOnClickListener {

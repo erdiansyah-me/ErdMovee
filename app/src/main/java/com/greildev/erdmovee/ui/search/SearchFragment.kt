@@ -58,10 +58,21 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
 
     override fun observeData() {
         viewModel.searchMovie.launchAndCollectIn(viewLifecycleOwner) {
-            binding.rvSearch.isVisible = true
-            binding.loading.isVisible = false
-            binding.viewStated.isVisible = false
             searchAdapter.submitData(it)
+            if (searchAdapter.itemCount == 0) {
+                binding.rvSearch.isVisible = false
+                binding.loading.isVisible = false
+                binding.viewStated.isVisible = true
+                binding.viewStated.setMessage(
+                    title = getString(R.string.search_first_state_title),
+                    description = getString(R.string.search_first_state),
+                    state = StatedViewState.EMPTY,
+                )
+            } else {
+                binding.rvSearch.isVisible = true
+                binding.loading.isVisible = false
+                binding.viewStated.isVisible = false
+            }
         }
     }
 
@@ -71,7 +82,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
                 val logBundle = Bundle()
                 logBundle.putString("search_movie", textView.text.toString())
                 Analytics.logEvent(FirebaseAnalytics.Event.SEARCH, logBundle)
-                viewModel.searchMovie(textView.text.toString())
+                viewModel.setQuerySearch(textView.text.toString())
             }
             true
         }
@@ -118,7 +129,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(
                             btnTitle = getString(R.string.refresh),
                             state = StatedViewState.ERROR,
                             action = {
-                                viewModel.searchMovie(
+                                viewModel.setQuerySearch(
                                     binding.searchProductField.text.toString(),
                                 )
                             }

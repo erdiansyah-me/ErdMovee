@@ -77,3 +77,20 @@ data class CartMovieListEntities(
     var quantityPrice: Int,
     var isChecked: Boolean,
 ) : Parcelable
+
+@Parcelize
+@Entity(tableName = CoreConstant.CHECKOUT_MOVIE_ENTITIES)
+data class CheckoutMovieListEntities(
+    @PrimaryKey(autoGenerate = true)
+    val checkoutId: Int = 0,
+    val uid: String = "",
+    val id: Int,
+    val originalTitle: String,
+    val title: String,
+    val posterPath: String,
+    val backdropPath: String,
+    val releaseDate: String,
+    val basePrice: Int,
+    val quantityItem: Int,
+    val quantityPrice: Int,
+) : Parcelable

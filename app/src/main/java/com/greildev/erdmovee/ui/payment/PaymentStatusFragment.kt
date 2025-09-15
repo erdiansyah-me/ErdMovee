@@ -11,6 +11,7 @@ import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.FragmentPaymentStatusBinding
 import com.greildev.erdmovee.ui.adapter.PaymentStatusAdapter
 import com.greildev.erdmovee.utils.doubleBackToExit
+import com.greildev.erdmovee.utils.toPaymentStatusUIModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +42,7 @@ class PaymentStatusFragment :
                             tvPaymentStatusDescNominalValue.text = it.amountToken.toString()
                             rvPaymentStatusItem.adapter = paymentStatusAdapter
                             rvPaymentStatusItem.layoutManager = LinearLayoutManager(context)
-                            paymentStatusAdapter.submitList(it.cartMovieListEntities)
+                            paymentStatusAdapter.submitList(it.itemList?.map { it.toPaymentStatusUIModel() })
                         }
                     }
                 } else if (paymentStatus?.transactionToken != null) {

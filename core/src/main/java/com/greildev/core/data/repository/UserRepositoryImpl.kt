@@ -15,6 +15,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -25,50 +27,58 @@ internal class UserRepositoryImpl @Inject constructor(
     private val dispatcher: DispatcherProvider
 ) : UserRepository {
 
-    override suspend fun currentUser(): UserDataEntity? = withContext(dispatcher.io) {
-        database.userDataDao.getUserData()
-    }
+    private val accessMutex = Mutex()
 
-    override suspend fun loginUser(authRequest: AuthRequest): Flow<Boolean> = withContext(dispatcher.io){
-        return@withContext callbackFlow {
-            val login = userService.loginUser(authRequest)
-            login.collectLatest {
-                when (it) {
-                    is SourceResult.Success -> {
-                        val userDao = database.userDataDao
-                        it.data?.let {user ->
-                            val userData = UserDataEntity(
-                                uid = user.uid,
-                                displayName = user.displayName.orEmpty(),
-                                photoUrl = user.photoUrl.orNullToString(),
-                                email = user.email.orEmpty(),
-                                phoneNumber = user.phoneNumber.orEmpty()
-                            )
-                            database.withTransaction {
-                                userDao.deleteAllUserData()
-                                userDao.insertUserData(userData)
-                            }
-                        }
-                        trySend(true)
-                    }
-                    is SourceResult.Error -> {
-                        trySend(false)
-                    }
-                }
-            }
-            awaitClose()
+    override suspend fun currentUser(): UserDataEntity? = withContext(dispatcher.io) {
+        accessMutex.withLock {
+            database.userDataDao.getUserData()
         }
     }
 
+    override suspend fun loginUser(authRequest: AuthRequest): Flow<Boolean> =
+        withContext(dispatcher.io) {
+            return@withContext callbackFlow {
+                val login = userService.loginUser(authRequest)
+                login.collectLatest {
+                    when (it) {
+                        is SourceResult.Success -> {
+                            val userDao = database.userDataDao
+                            it.data?.let { user ->
+                                val userData = UserDataEntity(
+                                    uid = user.uid,
+                                    displayName = user.displayName.orEmpty(),
+                                    photoUrl = user.photoUrl.orNullToString(),
+                                    email = user.email.orEmpty(),
+                                    phoneNumber = user.phoneNumber.orEmpty()
+                                )
+                                database.withTransaction {
+                                    userDao.deleteAllUserData()
+                                    userDao.insertUserData(userData)
+                                }
+                            }
+                            trySend(true)
+                        }
 
-    override suspend fun registerUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> = withContext(dispatcher.io) {
-        userService.registerUser(authRequest = authRequest)
-    }
+                        is SourceResult.Error -> {
+                            trySend(false)
+                        }
+                    }
+                }
+                awaitClose()
+            }
+        }
 
 
-    override suspend fun updateProfile(profile: ProfileRequest): Flow<SourceResult<String>> = withContext(dispatcher.io) {
-        userService.updateProfile(profile = profile)
-    }
+    override suspend fun registerUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> =
+        withContext(dispatcher.io) {
+            userService.registerUser(authRequest = authRequest)
+        }
+
+
+    override suspend fun updateProfile(profile: ProfileRequest): Flow<SourceResult<String>> =
+        withContext(dispatcher.io) {
+            userService.updateProfile(profile = profile)
+        }
 
     override fun logOutUser() {
         database.userDataDao.deleteAllUserData()

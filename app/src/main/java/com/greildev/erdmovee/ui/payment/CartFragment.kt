@@ -90,6 +90,7 @@ class CartFragment :
         }
         binding.btnRent.setOnClickListener {
             viewModel.replaceCartMovies()
+            viewModel.addItemsToCheckout()
             val logBundle = Bundle()
             logBundle.putString(
                 "checkout",

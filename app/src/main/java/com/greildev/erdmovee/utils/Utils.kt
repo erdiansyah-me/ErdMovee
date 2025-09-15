@@ -58,6 +58,14 @@ fun ChipGroup.chipGroupSetSelectedChip(): String {
     return selectedChip.joinToString(", ")
 }
 
+fun View.isVisible(isViewVisible: Boolean) {
+    return if (isViewVisible) {
+        this.visibility = View.VISIBLE
+    } else {
+        this.visibility = View.GONE
+    }
+}
+
 fun doubleBackToExit(
     context: Context,
     activity: FragmentActivity?,

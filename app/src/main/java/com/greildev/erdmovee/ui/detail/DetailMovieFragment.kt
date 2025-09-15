@@ -2,6 +2,7 @@ package com.greildev.erdmovee.ui.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -24,6 +25,7 @@ import com.greildev.erdmovee.utils.Constant.MOVIE_TITLE
 import com.greildev.erdmovee.utils.ImageUtils.load
 import com.greildev.erdmovee.utils.formatDecimal
 import com.greildev.erdmovee.utils.imgUrlFormatter
+import com.greildev.erdmovee.utils.isVisible
 import com.greildev.erdmovee.utils.launchAndCollectIn
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,12 +54,19 @@ class DetailMovieFragment :
     }
 
     override fun initView() {
-        viewModel.getMovieDetailData(movieId)
+        loadData()
+    }
+
+    private fun loadData() {
+        viewModel.getMovieDetail(movieId)
+        viewModel.getMovieRecommend(movieId)
+        viewModel.checkFMovie(movieId)
+        viewModel.checkCartMovie(movieId)
     }
 
     @SuppressLint("SetTextI18n")
     override fun observeData() {
-        viewModel.movieDetail.launchAndCollectIn(viewLifecycleOwner) { state ->
+        viewModel.getMovieDetailData.launchAndCollectIn(viewLifecycleOwner) { state ->
             visibilityContent(state.movieDetailUI)
             state.movieDetailUI.streamData(
                 onSuccess = {
@@ -104,14 +113,8 @@ class DetailMovieFragment :
                         }
                         castsAdapter.submitList(detailMovie.credits)
                         binding.rvCasts.adapter = castsAdapter
-                        binding.rvRecommendation.adapter =
-                            recommendationAdapter.withLoadStateFooter(
-                                footer = PagingLoadStateHorizontalAdapter {
-                                    recommendationAdapter.retry()
-                                }
-                            )
-                        recommendationAdapter.submitData(state.movieRecomPaging)
                         binding.btnAddCart.setOnClickListener {
+                            Toast.makeText(context, "ADD TO CART", Toast.LENGTH_SHORT).show()
                             val logBundle = Bundle()
                             logBundle.putString(MOVIE_TITLE, detailMovie.title)
                             Analytics.logEvent(FirebaseAnalytics.Event.ADD_TO_CART, logBundle)
@@ -119,9 +122,9 @@ class DetailMovieFragment :
                             binding.btnAddCart.isEnabled = false
                         }
 
-                        binding.chipBookmark.setOnCheckedChangeListener { _, isChecked ->
+                        binding.chipBookmark.setOnClickListener {
                             val logBundle = Bundle()
-                            if (isChecked) {
+                            if (binding.chipBookmark.isChecked) {
                                 logBundle.putString(MOVIE_TITLE, detailMovie.title)
                                 Analytics.logEvent(
                                     FirebaseAnalytics.Event.ADD_TO_WISHLIST,
@@ -129,12 +132,15 @@ class DetailMovieFragment :
                                 )
                                 binding.chipBookmark.text = getString(R.string.remove_from_favorite)
                                 viewModel.saveFavoriteMovie(detailMovie)
+                                binding.chipBookmark.isChecked = true
                             } else {
+                                binding.chipBookmark.isChecked = false
                                 logBundle.putString(MOVIE_TITLE, detailMovie.title)
                                 Analytics.logEvent("remove_from_wishlist", logBundle)
                                 binding.chipBookmark.text = getString(R.string.add_to_favorite)
                                 viewModel.deleteFavoriteMovieById(movieId)
                             }
+
                         }
                         binding.chipBookmark.isChecked = state.isMovieInFav
                         binding.chipBookmark.text = if (binding.chipBookmark.isChecked) {
@@ -142,18 +148,9 @@ class DetailMovieFragment :
                         } else {
                             getString(R.string.add_to_favorite)
                         }
-                        binding.btnAddCart.isEnabled = state.isMovieInCart
+                        binding.btnAddCart.isEnabled = !state.isMovieInCart
                         binding.btnBuyNow.setOnClickListener {
-                            viewModel.getCartMovies()
-                                .launchAndCollectIn(viewLifecycleOwner) { cart ->
-                                    cart.forEach {
-                                        viewModel.isCheckedByCartId(it.id, false)
-                                    }
-                                }
-                            if (state.isMovieInCart) {
-                                viewModel.deleteCartMovie(movieId)
-                            }
-                            viewModel.saveCartMovie(detailMovie, isRentNow = true)
+                            viewModel.addItemToCheckout(detailMovie)
                             findNavController().navigate(
                                 DetailMovieFragmentDirections.actionDetailMovieFragmentToCheckoutFragment()
                             )
@@ -169,12 +166,23 @@ class DetailMovieFragment :
                             btnTitle = getString(R.string.retry),
                             state = StatedViewState.ERROR,
                             action = {
-                                viewModel.getMovieDetailData(movieId)
+                                loadData()
                             }
                         )
                     }
                 }
             )
+        }
+
+        viewModel.getMovieRecommend(movieId).launchAndCollectIn(viewLifecycleOwner) {
+            binding.rvRecommendation.adapter =
+                recommendationAdapter.withLoadStateFooter(
+                    footer = PagingLoadStateHorizontalAdapter {
+                        recommendationAdapter.retry()
+                    }
+                )
+            recommendationAdapter.submitData(it)
+            binding.groupRecommendation.isVisible(recommendationAdapter.itemCount == 0)
         }
     }
 
@@ -197,8 +205,7 @@ class DetailMovieFragment :
                 binding.llDetailMovieContent.isVisible = false
                 binding.svDetailMovie.isVisible = true
             }
-
-            else -> {}
+            is UIState.NoState -> {}
         }
     }
 

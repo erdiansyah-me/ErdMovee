@@ -61,6 +61,10 @@ interface CartMovieDao {
     @Query("DELETE FROM cart_movie_entities")
     fun deleteAllCart()
 
+    @Query("DELETE FROM cart_movie_entities " +
+            "WHERE cart_movie_entities.id = :id")
+    fun deleteCartByItemId(id: Int)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAllCart(cart: List<CartMovieListEntities>)
 }

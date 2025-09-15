@@ -74,7 +74,10 @@ android {
         val testTaskName = "test${variant.name.capitalize(Locale.getDefault())}UnitTest"
 
         val reportTask =
-            tasks.register("jacoco${testTaskName.capitalize(Locale.getDefault())}Report", JacocoReport::class) {
+            tasks.register(
+                "jacoco${testTaskName.capitalize(Locale.getDefault())}Report",
+                JacocoReport::class
+            ) {
                 dependsOn(testTaskName)
 
                 reports {
@@ -210,4 +213,7 @@ dependencies {
     // detekt
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.5")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:1.23.5")
+
+    //Trusted Time
+    implementation("com.google.android.gms:play-services-time:16.0.1")
 }

@@ -38,10 +38,10 @@ class RemoteDataSource @Inject constructor(
     suspend fun updateTokenUser(userId: String, token: Int) =
         transactionService.updateTokenUser(userId, token)
 
-    suspend fun writeTransactionHistory(userId: String, transactionDetail: TransactionDetail) =
+    fun writeTransactionHistory(userId: String, transactionDetail: TransactionDetail) =
         transactionService.writeTransactionHistory(userId, transactionDetail)
 
     suspend fun getTokenUser(userId: String) = transactionService.getTokenUser(userId)
-    suspend fun getAllTransactionHistory(userId: String) =
+    fun getAllTransactionHistory(userId: String) =
         transactionService.getAllTransactionHistory(userId)
 }

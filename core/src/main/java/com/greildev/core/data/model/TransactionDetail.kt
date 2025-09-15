@@ -2,14 +2,15 @@ package com.greildev.core.data.model
 
 import android.os.Parcelable
 import com.google.firebase.database.IgnoreExtraProperties
-import com.greildev.core.data.source.local.entities.CartMovieListEntities
+import com.greildev.core.data.source.local.entities.CheckoutMovieListEntities
 import kotlinx.parcelize.Parcelize
 
 @IgnoreExtraProperties
 @Parcelize
 data class TransactionDetail(
-    val cartMovieListEntities: List<CartMovieListEntities>? = null,
-    val transactionDate: String? = null,
-    val transactionId: String? = null,
-    val amountToken: Int? = null,
+
+    val itemList: List<CheckoutMovieListEntities> = emptyList(),
+    val transactionDate: String = "",
+    val transactionId: String = "",
+    val amountToken: Int = 0,
 ) : Parcelable

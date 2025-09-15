@@ -90,6 +90,7 @@ class TopupFragment :
                                     TopupFragmentDirections.actionTopupFragmentToPaymentStatusFragment()
                                 toPaymentStatus.paymentStatusModel = PaymentStatusModel(
                                     isSuccess = true,
+                                    isLoading = false,
                                     transactionToken = TransactionToken(
                                         transactionId = viewModel.generateTransactionId(),
                                         transactionDate = getCurrentDateTime(),
@@ -116,7 +117,7 @@ class TopupFragment :
                                                 val paymentStatusNav =
                                                     TopupFragmentDirections.actionTopupFragmentToPaymentStatusFragment()
                                                 paymentStatusNav.paymentStatusModel =
-                                                    PaymentStatusModel(isSuccess = false)
+                                                    PaymentStatusModel(isSuccess = false, isLoading = false,)
                                                 findNavController().navigate(paymentStatusNav)
                                             }
                                         }
@@ -125,7 +126,7 @@ class TopupFragment :
                                 val toPaymentStatus =
                                     TopupFragmentDirections.actionTopupFragmentToPaymentStatusFragment()
                                 toPaymentStatus.paymentStatusModel =
-                                    PaymentStatusModel(isSuccess = false)
+                                    PaymentStatusModel(isSuccess = false, isLoading = false,)
                                 findNavController().navigate(toPaymentStatus)
                             }
                         }

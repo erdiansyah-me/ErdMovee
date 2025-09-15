@@ -8,19 +8,21 @@ import com.greildev.core.domain.repository.MovieRepository
 import com.greildev.core.utils.DataMapper.mapToModel
 import com.greildev.core.utils.UIState
 import com.greildev.core.utils.suspendSubscribe
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 
 class MovieInteractor(
     private val movieRepository: MovieRepository
 ) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun getPopularMovies(): Flow<PagingData<MovieListData>> {
-        return movieRepository.getPopularMovies().mapLatest { paging ->
+    suspend fun getPopularMovies(): Flow<PagingData<MovieListData>> = withContext(Dispatchers.Default) {
+        movieRepository.getPopularMovies().mapLatest { paging ->
             paging.map {
                 it.mapToModel()
             }
@@ -36,7 +38,7 @@ class MovieInteractor(
         }
     }
 
-    suspend fun searchMovies(
+    fun searchMovies(
         query: String,
     ): Flow<PagingData<MovieListData>> {
         return movieRepository.searchMovies(query).map { pagingData ->
@@ -46,7 +48,7 @@ class MovieInteractor(
         }
     }
 
-    suspend fun getRecommendationMovies(movieId: Int): Flow<PagingData<MovieListData>> {
+    fun getRecommendationMovies(movieId: Int): Flow<PagingData<MovieListData>> {
         return movieRepository.getRecommendationMovies(movieId).map { pagingData ->
             pagingData.map {
                 it.mapToModel()
@@ -54,7 +56,7 @@ class MovieInteractor(
         }
     }
 
-    suspend fun getMovieDetail(id: Int): Flow<UIState<MovieDetailData>> = flow {
+    fun getMovieDetail(id: Int): Flow<UIState<MovieDetailData>> = flow {
         emit(UIState.Loading())
         movieRepository.getMovieDetail(id).collect {
             it.suspendSubscribe(

@@ -52,40 +52,53 @@ class TokenTransactionService @Inject constructor(
         awaitClose()
     }.flowOn(Dispatchers.IO)
 
-    suspend fun writeTransactionHistory(
+    fun writeTransactionHistory(
         userId: String,
         transactionDetail: TransactionDetail
     ): Flow<Boolean> = callbackFlow {
         val transactionId = transactionDetail.transactionId
-        if (transactionId != null) {
-            getTransactionHistoryRef.child(userId).child(transactionId).push()
-                .setValue(transactionDetail)
-                .addOnSuccessListener {
-                    trySend(true)
-                }
-                .addOnFailureListener {
-                    trySend(false)
-                }
-        }
+        getTransactionHistoryRef.child(userId).child(transactionId)
+            .setValue(transactionDetail)
+            .addOnSuccessListener {
+                trySend(true)
+            }
+            .addOnFailureListener {
+                trySend(false)
+            }
         awaitClose()
     }.flowOn(Dispatchers.IO)
 
-    suspend fun getAllTransactionHistory(userId: String): Flow<SourceResult<List<TransactionDetail>>> =
+    fun getAllTransactionHistory(userId: String): Flow<SourceResult<List<TransactionDetail>>> =
         callbackFlow<SourceResult<List<TransactionDetail>>> {
-            getTransactionHistoryRef.child(userId).get()
-                .addOnSuccessListener {
-                    val transactionList = mutableListOf<TransactionDetail>()
-                    for (snapshot in it.children) {
-                        val transaction = snapshot.getValue(TransactionDetail::class.java)
-                        if (transaction != null) {
-                            transactionList.add(transaction)
-                        }
+            val snapshot = getTransactionHistoryRef.child(userId).get()
+            snapshot.addOnCompleteListener {
+                if (snapshot.isSuccessful) {
+                    val list = snapshot.result.children.mapNotNull {
+                        println("HAIYAAA: it ${it}")
+                        val items = it.getValue(TransactionDetail::class.java)
+                        println("HAIYAAA: items ${items}")
+                        return@mapNotNull items
                     }
-                    trySend(SourceResult.Success(transactionList))
+                    trySend(SourceResult.Success(list))
+                } else {
+                    trySend(
+                        SourceResult.Error(
+                            555,
+                            snapshot.exception?.message ?: "Something Went Wrong!"
+                        )
+                    )
                 }
-                .addOnFailureListener {
-                    trySend(SourceResult.Error(555, it.message ?: "Something Went Wrong!"))
-                }
+            }
+
+//                .addOnSuccessListener {
+//                    val transactionList = it.children.mapNotNull { snapshot ->
+//                        snapshot.getValue(TransactionDetail::class.java)
+//                    }
+//                    trySend(SourceResult.Success(transactionList))
+//                }
+//                .addOnFailureListener {
+//                    trySend(SourceResult.Error(555, it.message ?: "Something Went Wrong!"))
+//                }
             awaitClose()
         }.flowOn(Dispatchers.IO)
 

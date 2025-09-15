@@ -1,19 +1,17 @@
 package com.greildev.erdmovee.ui.payment
 
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.greildev.core.base.BaseFragment
-import com.greildev.core.data.model.TransactionDetail
-import com.greildev.core.domain.model.PaymentStatusModel
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.FragmentCheckoutBinding
 import com.greildev.erdmovee.ui.adapter.CheckoutListAdapter
-import com.greildev.erdmovee.utils.getCurrentDateTime
+import com.greildev.erdmovee.utils.isVisible
 import com.greildev.erdmovee.utils.launchAndCollectIn
-import com.greildev.erdmovee.utils.onCreated
 import com.greildev.erdmovee.utils.onValue
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,11 +25,18 @@ class CheckoutFragment :
         binding.rvCheckoutMovies.layoutManager = LinearLayoutManager(context)
         binding.toolbarCheckout.setNavigationOnClickListener {
             findNavController().popBackStack()
+            viewModel.deleteCheckoutItems()
         }
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+                viewModel.deleteCheckoutItems()
+            }
+        })
     }
 
     override fun fetchData() {
-        viewModel.getCheckedCartByUid(true)
+        viewModel.getAllCheckoutItems()
         viewModel.getTokenUser()
     }
 
@@ -81,6 +86,20 @@ class CheckoutFragment :
                 }
             }
         }
+
+        viewModel.paymentStatusModel.launchAndCollectIn(viewLifecycleOwner) { state ->
+            state.onValue {
+                if (it.isLoading) {
+                    binding.loading.isVisible(true)
+                } else {
+                    binding.loading.isVisible(false)
+                    val toPaymentStatus =
+                        CheckoutFragmentDirections.actionCheckoutFragmentToPaymentStatusFragment()
+                    toPaymentStatus.paymentStatusModel = it
+                    findNavController().navigate(toPaymentStatus)
+                }
+            }
+        }
     }
 
     override fun initListener() {
@@ -88,44 +107,7 @@ class CheckoutFragment :
             findNavController().navigate(CheckoutFragmentDirections.actionCheckoutFragmentToTopupFragment())
         }
         binding.btnRent.setOnClickListener {
-            val transactionId = viewModel.generateTransactionId()
-            viewModel.writeTransactionHistory(
-                TransactionDetail(
-                    transactionId = transactionId,
-                    cartMovieListEntities = viewModel.checkoutItemList.value,
-                    transactionDate = getCurrentDateTime(),
-                    amountToken = binding.tvTotalPrice.text.toString().toInt(),
-                )
-            )
-            viewModel.isWriteTransactionHistory.launchAndCollectIn(viewLifecycleOwner) { state ->
-                state.onCreated { }
-                    .onValue {
-                        val toPaymentStatus =
-                            CheckoutFragmentDirections.actionCheckoutFragmentToPaymentStatusFragment()
-                        if (it) {
-                            viewModel.tokenUser.launchAndCollectIn(viewLifecycleOwner) { token ->
-                                viewModel.updateTokenUser(
-                                    token = token - binding.tvTotalPrice.text.toString()
-                                        .toInt()
-                                )
-                            }
-                            toPaymentStatus.paymentStatusModel = PaymentStatusModel(
-                                isSuccess = true,
-                                transactionDetail = TransactionDetail(
-                                    transactionId = transactionId,
-                                    cartMovieListEntities = viewModel.checkoutItemList.value,
-                                    transactionDate = getCurrentDateTime(),
-                                    amountToken = binding.tvTotalPrice.text.toString().toInt(),
-                                )
-                            )
-                            findNavController().navigate(toPaymentStatus)
-                        } else {
-                            toPaymentStatus.paymentStatusModel =
-                                PaymentStatusModel(isSuccess = false)
-                            findNavController().navigate(toPaymentStatus)
-                        }
-                    }
-            }
+            viewModel.checkoutMovie()
         }
     }
 }

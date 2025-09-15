@@ -258,6 +258,7 @@
                         tools:listitem="@layout/card_casts_item" />
 
                     <TextView
+                        android:id="@+id/tv_title_recommendation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -271,6 +272,12 @@
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/card_movie_recommendation_item" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_recommendation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:constraint_referenced_ids="rv_recommendation, tv_title_recommendation" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 

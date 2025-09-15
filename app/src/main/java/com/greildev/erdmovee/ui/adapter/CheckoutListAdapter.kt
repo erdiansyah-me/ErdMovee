@@ -3,16 +3,16 @@ package com.greildev.erdmovee.ui.adapter
 import android.view.View
 import com.bumptech.glide.Glide
 import com.greildev.core.base.BaseListAdapter
-import com.greildev.core.data.source.local.entities.CartMovieListEntities
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.CheckoutListItemBinding
+import com.greildev.erdmovee.ui.model.CheckoutMovieUIModel
 import com.greildev.erdmovee.utils.imgUrlFormatter
 
 class CheckoutListAdapter(
-    private val onIncrement: (Int, Int, Int, CartMovieListEntities) -> Unit,
-    private val onDecrement: (Int, Int, Int, CartMovieListEntities) -> Unit
-): BaseListAdapter<CartMovieListEntities, CheckoutListItemBinding>(CheckoutListItemBinding::inflate) {
-    override fun onItemBind(): (CartMovieListEntities, CheckoutListItemBinding, View, Int) -> Unit {
+    private val onIncrement: (Int, Int, Int, CheckoutMovieUIModel) -> Unit,
+    private val onDecrement: (Int, Int, Int, CheckoutMovieUIModel) -> Unit
+): BaseListAdapter<CheckoutMovieUIModel, CheckoutListItemBinding>(CheckoutListItemBinding::inflate) {
+    override fun onItemBind(): (CheckoutMovieUIModel, CheckoutListItemBinding, View, Int) -> Unit {
         return { item, binding, view, position ->
             binding.tvTitle.text = item.title
             binding.tvPrice.text = view.context.getString(R.string.price_per_day, item.basePrice.toString())

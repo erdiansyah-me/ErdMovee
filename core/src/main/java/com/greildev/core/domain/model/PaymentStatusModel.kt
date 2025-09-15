@@ -9,5 +9,6 @@ import kotlinx.parcelize.Parcelize
 data class PaymentStatusModel(
     val isSuccess: Boolean,
     val transactionDetail: TransactionDetail? = null,
-    val transactionToken: TransactionToken? = null
+    val transactionToken: TransactionToken? = null,
+    val isLoading: Boolean
 ) : Parcelable

@@ -4,11 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.greildev.core.data.source.local.dao.CartMovieDao
+import com.greildev.core.data.source.local.dao.CheckoutMovieDao
 import com.greildev.core.data.source.local.dao.FavoriteMovieDao
 import com.greildev.core.data.source.local.dao.NowPlayingMovieDao
 import com.greildev.core.data.source.local.dao.NowPlayingMovieRemoteKeysDao
 import com.greildev.core.data.source.local.dao.UserDataDao
 import com.greildev.core.data.source.local.entities.CartMovieListEntities
+import com.greildev.core.data.source.local.entities.CheckoutMovieListEntities
 import com.greildev.core.data.source.local.entities.FavoriteMovieListEntities
 import com.greildev.core.data.source.local.entities.NowPlayingMovieListEntities
 import com.greildev.core.data.source.local.entities.NowPlayingRemoteKeys
@@ -21,9 +23,10 @@ import com.greildev.core.data.source.local.entities.UserDataEntity
         NowPlayingMovieListEntities::class,
         FavoriteMovieListEntities::class,
         CartMovieListEntities::class,
-        UserDataEntity::class
+        UserDataEntity::class,
+        CheckoutMovieListEntities::class
     ],
-    version = 11,
+    version = 1,
     exportSchema = false
 )
 internal abstract class ErdmoveeDatabase : RoomDatabase() {
@@ -32,4 +35,5 @@ internal abstract class ErdmoveeDatabase : RoomDatabase() {
     internal abstract val favoriteMovieDao: FavoriteMovieDao
     internal abstract val nowPlayingMovieDao: NowPlayingMovieDao
     internal abstract val userDataDao: UserDataDao
+    internal abstract val checkoutMovieDao: CheckoutMovieDao
 }

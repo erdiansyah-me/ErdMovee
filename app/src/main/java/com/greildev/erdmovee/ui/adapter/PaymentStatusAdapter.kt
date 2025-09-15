@@ -2,14 +2,14 @@ package com.greildev.erdmovee.ui.adapter
 
 import android.view.View
 import com.greildev.core.base.BaseListAdapter
-import com.greildev.core.data.source.local.entities.CartMovieListEntities
 import com.greildev.erdmovee.R
 import com.greildev.erdmovee.databinding.PaymentStatusItemBinding
+import com.greildev.erdmovee.ui.model.PaymentStatusItemUIModel
 
-class PaymentStatusAdapter: BaseListAdapter<CartMovieListEntities, PaymentStatusItemBinding>(
+class PaymentStatusAdapter: BaseListAdapter<PaymentStatusItemUIModel, PaymentStatusItemBinding>(
     PaymentStatusItemBinding::inflate
 ) {
-    override fun onItemBind(): (CartMovieListEntities, PaymentStatusItemBinding, View, Int) -> Unit {
+    override fun onItemBind(): (PaymentStatusItemUIModel, PaymentStatusItemBinding, View, Int) -> Unit {
         return { data, binding, view, _ ->
             binding.apply {
                 tvItemTitle.text = data.title

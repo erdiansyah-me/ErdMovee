@@ -2,6 +2,7 @@ package com.greildev.core.domain.repository
 
 import androidx.paging.PagingData
 import com.greildev.core.data.source.local.entities.CartMovieListEntities
+import com.greildev.core.data.source.local.entities.CheckoutMovieListEntities
 import com.greildev.core.data.source.local.entities.FavoriteMovieListEntities
 import com.greildev.core.data.source.local.entities.NowPlayingMovieListEntities
 import com.greildev.core.data.source.remote.response.MovieDetailResponse
@@ -9,13 +10,14 @@ import com.greildev.core.data.source.remote.response.ResultsItem
 import com.greildev.core.utils.SourceResult
 import kotlinx.coroutines.flow.Flow
 
+@Suppress("TooManyFunctions")
 interface MovieRepository {
     //Remote Movies
     suspend fun getPopularMovies(): Flow<PagingData<ResultsItem>>
     suspend fun getNowPlayingMovies(): Flow<PagingData<NowPlayingMovieListEntities>>
-    suspend fun searchMovies(query: String): Flow<PagingData<ResultsItem>>
+    fun searchMovies(query: String): Flow<PagingData<ResultsItem>>
     suspend fun getMovieDetail(id: Int): Flow<SourceResult<MovieDetailResponse>>
-    suspend fun getRecommendationMovies(movieId: Int): Flow<PagingData<ResultsItem>>
+    fun getRecommendationMovies(movieId: Int): Flow<PagingData<ResultsItem>>
 
     //Favorite
     fun getFavoriteMoviesByUid(uid: String): Flow<List<FavoriteMovieListEntities>>
@@ -33,4 +35,10 @@ interface MovieRepository {
     suspend fun deleteCheckedByUid(isChecked: Boolean, uid: String)
     fun getCheckedCartByUid(isChecked: Boolean, uid: String): Flow<List<CartMovieListEntities>>
     suspend fun replaceAllCart(cart: List<CartMovieListEntities>)
+    suspend fun deleteCartById(itemId: Int)
+
+    //Checkout
+    suspend fun getAllCheckoutItems(): Flow<List<CheckoutMovieListEntities>>
+    suspend fun deleteCheckoutItemsById(ids: List<Int>)
+    suspend fun insertListCheckoutItems(checkoutItems: List<CheckoutMovieListEntities>)
 }

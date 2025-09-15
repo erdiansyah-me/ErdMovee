@@ -7,9 +7,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -40,7 +42,6 @@ class HomePageFragment :
         if (navController != null) {
             binding.bottomNavbar.setupWithNavController(navController)
         }
-        context?.let { doubleBackToExit(it, activity, viewLifecycleOwner) }
     }
 
     override fun fetchData() {
@@ -54,13 +55,13 @@ class HomePageFragment :
             if (it != null) {
                 val photoUri = it.photoUri
                 binding.tvUsername.text = getString(R.string.hello_home, it.username ?: it.email)
-                if (photoUri != null && photoUri.toString().isNotEmpty()) {
-                    context?.let { it1 ->
-                        Glide.with(it1)
-                            .load(photoUri)
-                            .circleCrop()
-                            .into(binding.ivUserAvatar)
-                    }
+                context?.let { it1 ->
+                    Glide.with(it1)
+                        .load(photoUri)
+                        .placeholder(ResourcesCompat.getDrawable(resources, R.drawable.ic_account_circle_24, null))
+                        .error(ResourcesCompat.getDrawable(resources, R.drawable.ic_account_circle_24, null))
+                        .circleCrop()
+                        .into(binding.ivUserAvatar)
                 }
             } else {
                 context?.let { it1 ->
@@ -108,9 +109,15 @@ class HomePageFragment :
             }
         }
         binding.bottomNavbar.setOnItemSelectedListener {
+            val options = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setRestoreState(true) // optional
+                .setPopUpTo(R.id.mainFragment, false)
+                .build()
+
             when (it.itemId) {
                 R.id.mainFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.mainFragment)
+                    navHostFragment?.findNavController()?.navigate(R.id.mainFragment, null, options)
                     // Handle home icon press
                     val logBundle = Bundle()
                     logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "Main Fragment")
@@ -119,7 +126,7 @@ class HomePageFragment :
                 }
 
                 R.id.searchFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.searchFragment)
+                    navHostFragment?.findNavController()?.navigate(R.id.searchFragment, null, options)
                     // Handle search icon press
                     val logBundle = Bundle()
                     logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "Search Fragment")
@@ -128,7 +135,7 @@ class HomePageFragment :
                 }
 
                 R.id.favoriteFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.favoriteFragment)
+                    navHostFragment?.findNavController()?.navigate(R.id.favoriteFragment, null, options)
                     // Handle favorite icon press
                     val logBundle = Bundle()
                     logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "Favorite Fragment")
@@ -137,7 +144,7 @@ class HomePageFragment :
                 }
 
                 R.id.historyFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.historyFragment)
+                    navHostFragment?.findNavController()?.navigate(R.id.historyFragment, null, options)
                     // Handle history icon press
                     val logBundle = Bundle()
                     logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "History Fragment")

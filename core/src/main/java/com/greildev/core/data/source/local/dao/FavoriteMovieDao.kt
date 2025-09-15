@@ -15,10 +15,16 @@ interface FavoriteMovieDao {
     @Query("DELETE FROM favorite_movie_entities WHERE favorite_movie_entities.favoriteId = :favoriteId")
     suspend fun deleteNonFavoriteMovie(favoriteId: Int): Int
 
-    @Query("DELETE FROM favorite_movie_entities WHERE favorite_movie_entities.id = :id AND favorite_movie_entities.uid = :uid")
+    @Query(
+        "DELETE FROM favorite_movie_entities " +
+                "WHERE favorite_movie_entities.id = :id AND favorite_movie_entities.uid = :uid"
+    )
     suspend fun deleteNonFavoriteMovieByIdAndUid(uid: String, id: Int): Int
 
-    @Query("SELECT count(*) FROM favorite_movie_entities WHERE favorite_movie_entities.id = :id AND favorite_movie_entities.uid = :uid")
+    @Query(
+        "SELECT count(*) FROM favorite_movie_entities " +
+                "WHERE favorite_movie_entities.id = :id AND favorite_movie_entities.uid = :uid"
+    )
     suspend fun checkFavoriteMovieByIdAndUid(id: Int, uid: String): Int
 
     @Query("SELECT * FROM favorite_movie_entities WHERE favorite_movie_entities.uid = :uid")

@@ -41,7 +41,7 @@ class PaymentInteractor(
         paymentRepository.getTokenUser(userId)
     }
 
-    suspend fun getAllTransactionHistory(): Flow<UIState<List<TransactionDetail>>> =
+    fun getAllTransactionHistory(): Flow<UIState<List<TransactionDetail>>> =
         flow {
             emit(UIState.Loading())
             val userId = userRepository.currentUser()?.uid.orEmpty()

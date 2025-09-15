@@ -27,6 +27,6 @@ object Constant {
     const val TO_SCREEN_NAVIGATE_EVENT = "to_screen"
 
     // Views
-    const val DOUBLE_BACK_DELAY = 2000
+    const val DOUBLE_BACK_DELAY = 1000
     const val TEXT_SIZE_ADAPTER = 11F
 }

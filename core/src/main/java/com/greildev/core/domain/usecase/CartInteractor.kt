@@ -9,12 +9,13 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
+// TODO: Need to refactor to new usecase
 class CartInteractor(
     private val movieRepository: MovieRepository,
     private val userRepository: UserRepository
 ) {
 
-    suspend fun getCartMovies(): Flow<List<CartMovieListEntities>> = callbackFlow {
+    fun getCartMovies(): Flow<List<CartMovieListEntities>> = callbackFlow {
         val user = userRepository.currentUser()
         if (user != null) {
             movieRepository.getCartMoviesByUid(user.uid).collect {
@@ -33,10 +34,6 @@ class CartInteractor(
         }
     }
 
-    suspend fun saveCartMovie(cartMovie: CartMovieListEntities) {
-        movieRepository.saveCartMovie(cartMovie)
-    }
-
     suspend fun deleteCartMovie(cartId: Int) {
         movieRepository.deleteCartMovie(cartId)
     }
@@ -50,35 +47,12 @@ class CartInteractor(
         }
     }
 
-    suspend fun isCheckedByCartId(cartId: Int, newIsChecked: Boolean) {
-        movieRepository.isCheckedByCartId(cartId, newIsChecked)
-    }
-
     suspend fun deleteCheckedByUid(isChecked: Boolean) {
         val user = userRepository.currentUser()
         if (user != null) {
             movieRepository.deleteCheckedByUid(isChecked, user.uid)
         }
     }
-
-    suspend fun getCheckedCartByUid(
-        isChecked: Boolean,
-    ): Flow<List<CartMovieListEntities>> =
-        callbackFlow {
-            val user = userRepository.currentUser()
-            if (user != null) {
-                movieRepository.getCheckedCartByUid(isChecked, user.uid).collect {
-                    if (it.isNotEmpty()) {
-                        trySend(it)
-                    } else {
-                        trySend(it)
-                    }
-                }
-            } else {
-                trySend(emptyList())
-            }
-            awaitClose()
-        }
 
     suspend fun replaceAllCart(carts: List<CartMovieListEntities>) {
         movieRepository.replaceAllCart(carts)

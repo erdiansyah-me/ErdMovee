@@ -13,8 +13,8 @@ interface PaymentRepository {
     suspend fun getPaymentListUpdate(): Flow<PaymentResponse>
 
     suspend fun getTokenUser(userId: String): Flow<Int>
-    suspend fun getAllTransactionHistory(userId: String): Flow<SourceResult<List<TransactionDetail>>>
-    suspend fun writeTransactionHistory(
+    fun getAllTransactionHistory(userId: String): Flow<SourceResult<List<TransactionDetail>>>
+    fun writeTransactionHistory(
         userId: String,
         transactionDetail: TransactionDetail
     ): Flow<Boolean>
@@ -40,11 +40,11 @@ class PaymentRepositoryImpl @Inject constructor(
         return remoteDataSource.getTokenUser(userId)
     }
 
-    override suspend fun getAllTransactionHistory(userId: String): Flow<SourceResult<List<TransactionDetail>>> {
+    override fun getAllTransactionHistory(userId: String): Flow<SourceResult<List<TransactionDetail>>> {
         return remoteDataSource.getAllTransactionHistory(userId)
     }
 
-    override suspend fun writeTransactionHistory(
+    override fun writeTransactionHistory(
         userId: String,
         transactionDetail: TransactionDetail
     ): Flow<Boolean> {

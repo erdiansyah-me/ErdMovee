@@ -62,6 +62,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
     api("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.android.gms:play-services-time:16.0.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -93,6 +94,6 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //SQLCipher
-    implementation("net.zetetic:android-database-sqlcipher:4.4.0")
+    implementation("net.zetetic:sqlcipher-android:4.9.0")
     implementation("androidx.sqlite:sqlite-ktx:2.4.0")
 }

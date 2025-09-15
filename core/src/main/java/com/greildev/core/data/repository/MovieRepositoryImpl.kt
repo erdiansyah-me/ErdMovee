@@ -4,9 +4,10 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.greildev.core.data.source.local.LocalDataSource
+import androidx.room.withTransaction
 import com.greildev.core.data.source.local.database.ErdmoveeDatabase
 import com.greildev.core.data.source.local.entities.CartMovieListEntities
+import com.greildev.core.data.source.local.entities.CheckoutMovieListEntities
 import com.greildev.core.data.source.local.entities.FavoriteMovieListEntities
 import com.greildev.core.data.source.local.entities.NowPlayingMovieListEntities
 import com.greildev.core.data.source.paging.NowPlayingMovieRemoteMediator
@@ -17,17 +18,20 @@ import com.greildev.core.data.source.remote.RemoteDataSource
 import com.greildev.core.data.source.remote.response.MovieDetailResponse
 import com.greildev.core.data.source.remote.response.ResultsItem
 import com.greildev.core.domain.repository.MovieRepository
+import com.greildev.core.utils.DispatcherProvider
 import com.greildev.core.utils.SourceResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+@Suppress("TooManyFunctions")
 internal class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource,
-    private val database: ErdmoveeDatabase
+    private val database: ErdmoveeDatabase,
+    private val dispatcher: DispatcherProvider
 ) : MovieRepository {
 
     //Remote Movies
@@ -56,7 +60,7 @@ internal class MovieRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun searchMovies(query: String): Flow<PagingData<ResultsItem>> {
+    override fun searchMovies(query: String): Flow<PagingData<ResultsItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -77,7 +81,7 @@ internal class MovieRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun getRecommendationMovies(movieId: Int): Flow<PagingData<ResultsItem>> {
+    override fun getRecommendationMovies(movieId: Int): Flow<PagingData<ResultsItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -95,58 +99,84 @@ internal class MovieRepositoryImpl @Inject constructor(
     //Local Movies
     //Favorite
     override fun getFavoriteMoviesByUid(uid: String): Flow<List<FavoriteMovieListEntities>> {
-        return localDataSource.getFavoriteMoviesByUid(uid)
+        return database.favoriteMovieDao.getFavoriteMovieByUid(uid)
     }
 
     override suspend fun saveFavoriteMovie(favoriteMovieListEntities: FavoriteMovieListEntities) {
-        localDataSource.saveFavoriteMovie(favoriteMovieListEntities)
+        database.favoriteMovieDao.insertFavoriteMovie(favoriteMovieListEntities)
     }
 
     override suspend fun deleteFavoriteMovie(favoriteId: Int) {
-        localDataSource.deleteFavoriteMovie(favoriteId)
+        database.favoriteMovieDao.deleteNonFavoriteMovie(favoriteId)
     }
 
     override suspend fun deleteFavoriteMovieByIdAndUid(uid: String, id: Int) {
-        localDataSource.deleteFavoriteMovieByIdAndUid(uid, id)
+        database.favoriteMovieDao.deleteNonFavoriteMovieByIdAndUid(uid, id)
     }
 
     override suspend fun checkFavoriteMovie(id: Int, uid: String): Int {
-        return localDataSource.checkFavoriteMovie(id, uid)
+        return database.favoriteMovieDao.checkFavoriteMovieByIdAndUid(id, uid)
     }
 
     //Cart
     override fun getCartMoviesByUid(uid: String): Flow<List<CartMovieListEntities>> {
-        return localDataSource.getCartMoviesByUid(uid)
+        return database.cartMovieDao.getCartMovieByUid(uid)
     }
 
     override suspend fun saveCartMovie(cartMovieListEntities: CartMovieListEntities) {
-        localDataSource.saveCartMovie(cartMovieListEntities)
+        database.cartMovieDao.insertCart(cartMovieListEntities)
     }
 
     override suspend fun deleteCartMovie(cartId: Int) {
-        localDataSource.deleteCartMovie(cartId)
+        database.cartMovieDao.deleteNonCart(cartId)
     }
 
     override suspend fun checkCartMovieByUidAndId(uid: String, id: Int): Int {
-        return localDataSource.checkCartMovieByUidAndId(uid, id)
+        return database.cartMovieDao.checkCartByUidAndId(uid, id)
     }
 
     override suspend fun isCheckedByCartId(cartId: Int, newIsChecked: Boolean) {
-        localDataSource.isCheckedByCartId(cartId, newIsChecked)
+        database.cartMovieDao.isCheckedByCartId(cartId, newIsChecked)
     }
 
     override suspend fun deleteCheckedByUid(isChecked: Boolean, uid: String) {
-        localDataSource.deleteCheckedByUid(isChecked, uid)
+        database.cartMovieDao.deleteCheckedByUid(isChecked, uid)
     }
 
     override fun getCheckedCartByUid(
         isChecked: Boolean,
         uid: String
     ): Flow<List<CartMovieListEntities>> {
-        return localDataSource.getCheckedCartByUid(isChecked, uid)
+        return database.cartMovieDao.getCheckedCartByUid(isChecked, uid)
     }
 
     override suspend fun replaceAllCart(cart: List<CartMovieListEntities>) {
-        localDataSource.replaceAllCart(cart)
+        with(database){
+            withTransaction {
+                cartMovieDao.deleteAllCart()
+                cartMovieDao.insertAllCart(cart)
+            }
+        }
+    }
+
+    override suspend fun deleteCartById(itemId: Int)
+    = withContext(dispatcher.io) {
+        database.cartMovieDao.deleteCartByItemId(itemId)
+        println()
+    }
+
+    override suspend fun getAllCheckoutItems(): Flow<List<CheckoutMovieListEntities>>
+    = withContext(dispatcher.io) {
+        database.checkoutMovieDao.getAllItems()
+    }
+
+    override suspend fun deleteCheckoutItemsById(ids: List<Int>)
+    = withContext(dispatcher.io){
+        database.checkoutMovieDao.deleteById(ids)
+    }
+
+    override suspend fun insertListCheckoutItems(checkoutItems: List<CheckoutMovieListEntities>)
+    = withContext(dispatcher.io){
+        database.checkoutMovieDao.insertListCheckoutItem(checkoutItems)
     }
 }
