@@ -11,10 +11,9 @@ import com.greildev.core.domain.repository.UserRepository
 import com.greildev.core.utils.DispatcherProvider
 import com.greildev.core.utils.SourceResult
 import com.greildev.core.utils.orNullToString
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -35,38 +34,36 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun loginUser(authRequest: AuthRequest): Flow<Boolean> =
-        withContext(dispatcher.io) {
-            return@withContext callbackFlow {
-                val login = userService.loginUser(authRequest)
-                login.collectLatest {
-                    when (it) {
-                        is SourceResult.Success -> {
+    override suspend fun loginUser(authRequest: AuthRequest): Flow<Boolean> = // No longer suspend here
+        userService.loginUser(authRequest) // This likely returns Flow<SourceResult<User>>
+            .map { sourceResult -> // Transform the SourceResult to Boolean
+                when (sourceResult) {
+                    is SourceResult.Success -> {
+                        sourceResult.data?.let { user ->
                             val userDao = database.userDataDao
-                            it.data?.let { user ->
-                                val userData = UserDataEntity(
-                                    uid = user.uid,
-                                    displayName = user.displayName.orEmpty(),
-                                    photoUrl = user.photoUrl.orNullToString(),
-                                    email = user.email.orEmpty(),
-                                    phoneNumber = user.phoneNumber.orEmpty()
-                                )
-                                database.withTransaction {
-                                    userDao.deleteAllUserData()
-                                    userDao.insertUserData(userData)
-                                }
+                            val userData = UserDataEntity(
+                                uid = user.uid,
+                                displayName = user.displayName.orEmpty(),
+                                photoUrl = user.photoUrl.orNullToString(),
+                                email = user.email.orEmpty(),
+                                phoneNumber = user.phoneNumber.orEmpty()
+                            )
+                            // Important: Database operations should also be on an I/O dispatcher
+                            // If database.withTransaction is not already suspending and on IO, adjust this.
+                            // Assuming database.withTransaction is a suspending function:
+                            database.withTransaction {
+                                userDao.deleteAllUserData()
+                                userDao.insertUserData(userData)
                             }
-                            trySend(true)
-                        }
-
-                        is SourceResult.Error -> {
-                            trySend(false)
-                        }
+                        } ?: return@map false // Handle null user data case
+                        true
+                    }
+                    is SourceResult.Error -> {
+                        false
                     }
                 }
-                awaitClose()
-            }
-        }
+            }.flowOn(dispatcher.io) // Execute all upstream operations (userService.loginUser, map block) on IO dispatcher
+
 
 
     override suspend fun registerUser(authRequest: AuthRequest): Flow<SourceResult<Boolean>> =

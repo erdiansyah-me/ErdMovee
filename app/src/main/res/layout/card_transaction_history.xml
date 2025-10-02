@@ -22,8 +22,8 @@
 
             <ImageView
                 android:id="@+id/ic_transactionType"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 app:tint="?attr/colorOnBackground"
                 tools:src="@drawable/ic_movie_outline_24" />
 
@@ -62,7 +62,7 @@
                 android:paddingHorizontal="2dp"
                 android:textAppearance="@style/TextDetailHead"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="10sp"
+                android:textSize="16sp"
                 app:chipBackgroundColor="?attr/colorPrimaryContainer"
                 tools:text="Success" />
         </LinearLayout>
@@ -75,51 +75,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_item_name"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:textAppearance="@style/TextDetailCommon"
-                tools:text="Lenovo Legion 7 16 I7 11800 16GB 1TB SSD RTX3070 8GB Windows 11 QHD IPS" />
-
-            <TextView
-                android:id="@+id/tv_item_buy"
-                style="@style/TextDetailSmall"
+            android:layout_marginVertical="8dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="4dp"
-                tools:text="1 Barang" />
-        </LinearLayout>
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_item_buy"
+                    style="@style/TextDetailHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="4dp"
+                    tools:text="1 Barang" />
+            </LinearLayout>
 
-
-        <TextView
-            style="@style/TextDetailSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:paddingHorizontal="4dp"
-            android:text="@string/total_bayar" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_item_totalPrice"
+            <LinearLayout
+                android:layout_weight="1"
                 android:layout_width="0dp"
+                android:gravity="end"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:maxLines="1"
-                android:textAppearance="@style/TextDetailHead"
-                tools:text="Rp. 20.000.0000" />
+                android:orientation="vertical">
+                <TextView
+                    style="@style/TextDetailSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/total_bayar" />
+                <TextView
+                    android:id="@+id/tv_item_totalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextDetailHead"
+                    tools:text="Rp. 20.000.0000" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

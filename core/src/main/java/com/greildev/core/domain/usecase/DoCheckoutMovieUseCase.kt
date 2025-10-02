@@ -60,56 +60,59 @@ class DoCheckoutMovieUseCase @Inject constructor(
         flow {
             emit(UIState.Loading())
             try {
-                val user = userRepository.currentUser() ?: emit(UIState.Error(404, "User Not Found"))
-                val userId = user.orNullToString()
+                val user = userRepository.currentUser()
 
-                // Combine both flows and collect the latest values once
-                val result = combine(
-                    movieRepository.getAllCheckoutItems(),
-                    paymentRepository.getTokenUser(userId)
-                ) { checkoutItems, tokenUser ->
-                    if (checkoutItems.isEmpty()) return@combine false
+                if (user != null) {
+                    val userId = user.uid.orNullToString()
+                    // Combine both flows and collect the latest values once
+                    val result = combine(
+                        movieRepository.getAllCheckoutItems(),
+                        paymentRepository.getTokenUser(userId)
+                    ) { checkoutItems, tokenUser ->
+                        if (checkoutItems.isEmpty()) return@combine false
 
-                    val tokenUsed = checkoutItems.sumOf { it.quantityPrice }
-                    val newToken = tokenUser - tokenUsed
+                        val tokenUsed = checkoutItems.sumOf { it.quantityPrice }
+                        val newToken = tokenUser - tokenUsed
 
-                    // Launch side-effects concurrently in coroutineScope
-                    coroutineScope {
-                        val updateToken = async {
-                            paymentRepository.updateTokenUser(userId, newToken)
-                        }
-
-                        val writeHistory = async {
-                            paymentRepository.writeTransactionHistory(
-                                userId = userId,
-                                transactionDetail = TransactionDetail(
-                                    transactionId = transactionId,
-                                    itemList = checkoutItems,
-                                    transactionDate = getCurrentDateTime(),
-                                    amountToken = tokenUsed
-                                )
-                            )
-                        }
-
-                        val deleteCheckout = async {
-                            movieRepository.deleteCheckoutItemsById(checkoutItems.map { it.id })
-                        }
-
-                        val deleteCart = async {
-                            checkoutItems.forEach {
-                                movieRepository.deleteCartById(it.id)
+                        // Launch side-effects concurrently in coroutineScope
+                        coroutineScope {
+                            val updateToken = async {
+                                paymentRepository.updateTokenUser(userId, newToken)
                             }
+
+                            val writeHistory = async {
+                                paymentRepository.writeTransactionHistory(
+                                    userId = userId,
+                                    transactionDetail = TransactionDetail(
+                                        transactionId = transactionId,
+                                        itemList = checkoutItems,
+                                        transactionDate = getCurrentDateTime(),
+                                        amountToken = tokenUsed
+                                    )
+                                )
+                            }
+
+                            val deleteCheckout = async {
+                                movieRepository.deleteCheckoutItemsById(checkoutItems.map { it.id })
+                            }
+
+                            val deleteCart = async {
+                                checkoutItems.forEach {
+                                    movieRepository.deleteCartById(it.id)
+                                }
+                            }
+
+                            updateToken.await()
+                            deleteCheckout.await()
+                            deleteCart.await()
+
+                            writeHistory.await().lastOrNull() ?: false
                         }
-
-                        updateToken.await()
-                        deleteCheckout.await()
-                        deleteCart.await()
-
-                        writeHistory.await().lastOrNull() ?: false
-                    }
-                }.first() // collect one combined emission and return its result
-
-                emit(UIState.Success(result))
+                    }.first() // collect one combined emission and return its result
+                    emit(UIState.Success(result))
+                } else {
+                    emit(UIState.Error(404, "User Not Found"))
+                }
             } catch (e: Exception) {
                 Log.e(DoCheckoutMovieUseCase::class.simpleName, e.message.orNullToString())
                 emit(UIState.Error(500, "Error"))

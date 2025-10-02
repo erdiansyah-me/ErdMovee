@@ -11,6 +11,7 @@ data class TransactionDetail(
 
     val itemList: List<CheckoutMovieListEntities> = emptyList(),
     val transactionDate: String = "",
+    val transactionType: String = "",
     val transactionId: String = "",
     val amountToken: Int = 0,
 ) : Parcelable

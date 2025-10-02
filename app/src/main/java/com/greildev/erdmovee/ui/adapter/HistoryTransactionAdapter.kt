@@ -12,14 +12,19 @@ class HistoryTransactionAdapter(private val itemClickListener:(TransactionDetail
         return { item, binding, view, _ ->
             binding.apply {
                 tvTransactionDate.text = item.transactionDate
-                tvItemName.text = item.transactionId
-                tvTransactionType.text = view.context.getString(
-                    R.string.rent_movie
-                )
-                tvItemTotalPrice.text = item.amountToken.toString()
+                if (item.transactionType == "TOPUP") {
+                    tvTransactionType.text = "Coins Top Up"
+                    icTransactionType.setImageResource(R.drawable.ic_coins_24)
+                    tvItemTotalPrice.text = view.context.getString(R.string.price_rupiah, item.amountToken)
+                } else {
+//                    tvTransactionType.text = item.transactionType
+                    tvTransactionType.text = "Rent Movie"
+                    icTransactionType.setImageResource(R.drawable.ic_movie_outline_24)
+                    tvItemTotalPrice.text = view.context.getString(R.string.price_coins, item.amountToken)
+                }
                 tvItemBuy.text = view.context.getString(
                     R.string.transaction_movie_amount,
-                    item.itemList?.size.toString()
+                    item.itemList.size.toString()
                 )
                 chipTransactionStatus.text = view.context.getString(R.string.success)
                 view.setOnClickListener {

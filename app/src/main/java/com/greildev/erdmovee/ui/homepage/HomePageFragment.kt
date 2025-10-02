@@ -11,7 +11,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -86,16 +85,55 @@ class HomePageFragment :
     override fun initListener() {
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
+            object : OnBackPressedCallback(true) { // 'true' means it's enabled
                 override fun handleOnBackPressed() {
-                    if (binding.bottomNavbar.selectedItemId == R.id.mainFragment) {
-                        context?.let { doubleBackToExit(it, activity, viewLifecycleOwner) }
-                    } else {
+                    val childNavController = navHostFragment?.navController
+                    if (childNavController == null) {
+                        // Fallback or error, allow normal back press
+                        isEnabled = false // Disable this callback
+                        activity?.onBackPressedDispatcher?.onBackPressed() // Trigger normal back behavior
+                        isEnabled = true // Re-enable for next time (optional, depends on desired behavior)
+                        return
+                    }
+
+                    // If the child NavController can pop its own stack (e.g., user navigated deeper within a tab)
+                    if (childNavController.currentDestination?.id != childNavController.graph.startDestinationId &&
+                        childNavController.previousBackStackEntry != null) { // Check if there's something to pop
+                        childNavController.popBackStack()
+                    }
+                    // If the current tab is NOT the start destination tab of the BottomNavigationView
+                    else if (binding.bottomNavbar.selectedItemId != R.id.mainFragment) { // Assuming R.id.mainFragment IS your start tab
+                        // Navigate to the start tab
                         binding.bottomNavbar.selectedItemId = R.id.mainFragment
+                    }
+                    // If we are on the start tab (mainFragment) and its stack is empty
+                    else {
+                        // Now, implement the "double back to exit" for the HomePageFragment itself
+                        context?.let {
+                            // Your existing doubleBackToExit logic, ensure it's robust
+                            // It might need to check if this is the start destination of the PARENT graph too
+                            // For simplicity here, we assume if we reach this point in HomePageFragment,
+                            // double back is the intended behavior.
+                            doubleBackToExit(it, activity, viewLifecycleOwner)
+                        }
                     }
                 }
             }
         )
+        navHostFragment?.navController?.addOnDestinationChangedListener { _, destination, _ ->
+            val logBundle = Bundle()
+            val screenName = when (destination.id) {
+                R.id.mainFragment -> "Main Fragment"
+                R.id.searchFragment -> "Search Fragment"
+                R.id.favoriteFragment -> "Favorite Fragment"
+                R.id.historyFragment -> "History Fragment"
+                else -> null
+            }
+            screenName?.let {
+                logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, it)
+                Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
+            }
+        }
         binding.chipBalance.setOnClickListener {
             context?.let { it1 ->
                 MoveeSnackbar.showSnackbarCustom(
@@ -108,53 +146,37 @@ class HomePageFragment :
                 }
             }
         }
-        binding.bottomNavbar.setOnItemSelectedListener {
-            val options = NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setRestoreState(true) // optional
-                .setPopUpTo(R.id.mainFragment, false)
-                .build()
-
-            when (it.itemId) {
-                R.id.mainFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.mainFragment, null, options)
-                    // Handle home icon press
-                    val logBundle = Bundle()
-                    logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "Main Fragment")
-                    Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
-                    true
-                }
-
-                R.id.searchFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.searchFragment, null, options)
-                    // Handle search icon press
-                    val logBundle = Bundle()
-                    logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "Search Fragment")
-                    Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
-                    true
-                }
-
-                R.id.favoriteFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.favoriteFragment, null, options)
-                    // Handle favorite icon press
-                    val logBundle = Bundle()
-                    logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "Favorite Fragment")
-                    Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
-                    true
-                }
-
-                R.id.historyFragment -> {
-                    navHostFragment?.findNavController()?.navigate(R.id.historyFragment, null, options)
-                    // Handle history icon press
-                    val logBundle = Bundle()
-                    logBundle.putString(Constant.TO_SCREEN_NAVIGATE_EVENT, "History Fragment")
-                    Analytics.logEvent(Constant.TO_SCREEN_NAVIGATE_EVENT, logBundle)
-                    true
-                }
-
-                else -> false
-            }
-        }
+//        binding.bottomNavbar.setOnItemSelectedListener {
+//            val options = NavOptions.Builder()
+//                .setLaunchSingleTop(true)
+//                .setRestoreState(true) // optional
+//                .setPopUpTo(R.id.mainFragment, false)
+//                .build()
+//
+//            when (it.itemId) {
+//                R.id.mainFragment -> {
+//                    navHostFragment?.findNavController()?.navigate(R.id.mainFragment, null, options)
+//                    true
+//                }
+//
+//                R.id.searchFragment -> {
+//                    navHostFragment?.findNavController()?.navigate(R.id.searchFragment, null, options)
+//                    true
+//                }
+//
+//                R.id.favoriteFragment -> {
+//                    navHostFragment?.findNavController()?.navigate(R.id.favoriteFragment, null, options)
+//                    true
+//                }
+//
+//                R.id.historyFragment -> {
+//                    navHostFragment?.findNavController()?.navigate(R.id.historyFragment, null, options)
+//                    true
+//                }
+//
+//                else -> false
+//            }
+//        }
         binding.actionMenu.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.appbar_menu_main, menu)

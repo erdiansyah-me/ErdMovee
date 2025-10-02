@@ -3,6 +3,7 @@ package com.greildev.core.data.source.local.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.database.IgnoreExtraProperties
 import com.greildev.core.utils.CoreConstant
 import kotlinx.parcelize.Parcelize
 
@@ -52,6 +53,7 @@ data class FavoriteMovieListEntities(
     val uid: String,
 )
 
+@IgnoreExtraProperties
 @Parcelize
 @Entity(tableName = CoreConstant.CART_MOVIE_ENTITIES)
 data class CartMovieListEntities(
@@ -84,13 +86,13 @@ data class CheckoutMovieListEntities(
     @PrimaryKey(autoGenerate = true)
     val checkoutId: Int = 0,
     val uid: String = "",
-    val id: Int,
-    val originalTitle: String,
-    val title: String,
-    val posterPath: String,
-    val backdropPath: String,
-    val releaseDate: String,
-    val basePrice: Int,
-    val quantityItem: Int,
-    val quantityPrice: Int,
+    val id: Int = 0,
+    val originalTitle: String = "",
+    val title: String = "",
+    val posterPath: String = "",
+    val backdropPath: String = "",
+    val releaseDate: String = "",
+    val basePrice: Int = 0,
+    val quantityItem: Int = 0,
+    val quantityPrice: Int = 0,
 ) : Parcelable

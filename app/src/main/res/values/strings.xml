@@ -107,4 +107,6 @@
     <string name="nominal">Nominal</string>
     <string name="profile">Profile</string>
     <string name="rent_movie">Rent Movie</string>
+    <string name="price_rupiah" translatable="false">Rp. %1$d</string>
+    <string name="price_coins" translatable="false">%1$d Coin(s)</string>
 </resources>

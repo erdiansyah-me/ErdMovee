@@ -9,23 +9,51 @@
         android:id="@+id/mainFragment"
         android:name="com.greildev.erdmovee.ui.homepage.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_global_mainFragment"
+            app:destination="@id/mainFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.greildev.erdmovee.ui.search.SearchFragment"
         android:label="searchFragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_global_searchFragment"
+            app:destination="@id/searchFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.greildev.erdmovee.ui.favorite.FavoriteFragment"
         android:label="favoriteFragment"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_global_favoriteFragment"
+            app:destination="@id/favoriteFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.greildev.erdmovee.ui.history.HistoryFragment"
         android:label="historyFragment"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_global_historyFragment"
+            app:destination="@id/historyFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>
