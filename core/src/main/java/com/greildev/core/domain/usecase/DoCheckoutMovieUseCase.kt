@@ -9,14 +9,12 @@ import com.greildev.core.utils.DispatcherProvider
 import com.greildev.core.utils.UIState
 import com.greildev.core.utils.getCurrentDateTime
 import com.greildev.core.utils.orNullToString
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.lastOrNull
 import javax.inject.Inject
 
 class DoCheckoutMovieUseCase @Inject constructor(
@@ -70,52 +68,45 @@ class DoCheckoutMovieUseCase @Inject constructor(
                         paymentRepository.getTokenUser(userId)
                     ) { checkoutItems, tokenUser ->
                         if (checkoutItems.isEmpty()) return@combine false
-
-                        val tokenUsed = checkoutItems.sumOf { it.quantityPrice }
-                        val newToken = tokenUser - tokenUsed
-
-                        // Launch side-effects concurrently in coroutineScope
                         coroutineScope {
-                            val updateToken = async {
-                                paymentRepository.updateTokenUser(userId, newToken)
+                            val tokenUsed = checkoutItems.sumOf { it.quantityPrice }
+                            if (tokenUser < tokenUsed) {
+                                throw IllegalStateException("Insufficient balance. You have $tokenUser, but the total cost is $tokenUsed.")
                             }
-
-                            val writeHistory = async {
-                                paymentRepository.writeTransactionHistory(
-                                    userId = userId,
-                                    transactionDetail = TransactionDetail(
-                                        transactionId = transactionId,
-                                        itemList = checkoutItems,
-                                        transactionDate = getCurrentDateTime(),
-                                        amountToken = tokenUsed
-                                    )
+                            val newToken = tokenUser - tokenUsed
+                            val historyWritten = paymentRepository.writeTransactionHistory(
+                                userId = userId,
+                                transactionDetail = TransactionDetail(
+                                    transactionId = transactionId,
+                                    itemList = checkoutItems,
+                                    transactionDate = getCurrentDateTime(),
+                                    amountToken = tokenUsed
                                 )
+                            ).first()
+
+                            if (!historyWritten) {
+                                throw Exception("Failed to write transaction history.")
                             }
 
-                            val deleteCheckout = async {
-                                movieRepository.deleteCheckoutItemsById(checkoutItems.map { it.id })
+                            val tokenUpdated = paymentRepository.updateTokenUser(userId, newToken).first()
+                            if (!tokenUpdated) {
+                                throw Exception("Failed to update token user.")
+                            }
+                            movieRepository.deleteCheckoutItemsById(checkoutItems.map { it.id })
+                            checkoutItems.forEach {
+                                movieRepository.deleteCartById(it.id)
                             }
 
-                            val deleteCart = async {
-                                checkoutItems.forEach {
-                                    movieRepository.deleteCartById(it.id)
-                                }
-                            }
-
-                            updateToken.await()
-                            deleteCheckout.await()
-                            deleteCart.await()
-
-                            writeHistory.await().lastOrNull() ?: false
+                            true
                         }
-                    }.first() // collect one combined emission and return its result
+                    }.first()
                     emit(UIState.Success(result))
                 } else {
                     emit(UIState.Error(404, "User Not Found"))
                 }
             } catch (e: Exception) {
                 Log.e(DoCheckoutMovieUseCase::class.simpleName, e.message.orNullToString())
-                emit(UIState.Error(500, "Error"))
+                emit(UIState.Error(500, e.message.orNullToString()))
             }
         }.flowOn(dispatcherProvider.default)
 }

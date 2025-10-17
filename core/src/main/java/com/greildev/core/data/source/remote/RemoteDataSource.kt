@@ -32,16 +32,16 @@ class RemoteDataSource @Inject constructor(
     fun getPaymentListUpdate() = remoteConfig.getPaymentListUpdated()
 
     //payment
-    suspend fun writeTokenTransaction(userId: String, transactionToken: TransactionToken) =
+    fun writeTokenTransaction(userId: String, transactionToken: TransactionToken) =
         transactionService.writeTokenTransaction(userId, transactionToken)
 
-    suspend fun updateTokenUser(userId: String, token: Int) =
+    fun updateTokenUser(userId: String, token: Int) =
         transactionService.updateTokenUser(userId, token)
 
     fun writeTransactionHistory(userId: String, transactionDetail: TransactionDetail) =
         transactionService.writeTransactionHistory(userId, transactionDetail)
 
-    suspend fun getTokenUser(userId: String) = transactionService.getTokenUser(userId)
+    fun getTokenUser(userId: String) = transactionService.getTokenUser(userId)
     fun getAllTransactionHistory(userId: String) =
         transactionService.getAllTransactionHistory(userId)
 }

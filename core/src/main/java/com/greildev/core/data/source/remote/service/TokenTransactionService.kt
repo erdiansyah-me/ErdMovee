@@ -19,7 +19,7 @@ class TokenTransactionService @Inject constructor(
     private val getTransactionHistoryRef = firebaseDatabase.reference.child("transaction_history")
     private val getTokenUserRef = firebaseDatabase.reference.child("token_user")
 
-    suspend fun writeTokenTransaction(
+    fun writeTokenTransaction(
         userId: String,
         transactionToken: TransactionToken
     ): Flow<Boolean> = callbackFlow {
@@ -34,7 +34,7 @@ class TokenTransactionService @Inject constructor(
         awaitClose()
     }.flowOn(Dispatchers.IO)
 
-    suspend fun updateTokenUser(
+    fun updateTokenUser(
         userId: String,
         token: Int,
     ): Flow<Boolean> = callbackFlow {
@@ -74,9 +74,7 @@ class TokenTransactionService @Inject constructor(
             snapshot.addOnCompleteListener {
                 if (snapshot.isSuccessful) {
                     val list = snapshot.result.children.mapNotNull {
-                        println("HAIYAAA: it ${it}")
                         val items = it.getValue(TransactionDetail::class.java)
-                        println("HAIYAAA: items ${items}")
                         return@mapNotNull items
                     }
                     trySend(SourceResult.Success(list))
@@ -89,20 +87,10 @@ class TokenTransactionService @Inject constructor(
                     )
                 }
             }
-
-//                .addOnSuccessListener {
-//                    val transactionList = it.children.mapNotNull { snapshot ->
-//                        snapshot.getValue(TransactionDetail::class.java)
-//                    }
-//                    trySend(SourceResult.Success(transactionList))
-//                }
-//                .addOnFailureListener {
-//                    trySend(SourceResult.Error(555, it.message ?: "Something Went Wrong!"))
-//                }
             awaitClose()
         }.flowOn(Dispatchers.IO)
 
-    suspend fun getTokenUser(
+    fun getTokenUser(
         userId: String,
     ): Flow<Int> = callbackFlow {
         getTokenUserRef.child(userId).child("token").get()

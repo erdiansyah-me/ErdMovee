@@ -12,19 +12,19 @@ interface PaymentRepository {
     suspend fun getPaymentList(): Flow<PaymentResponse>
     suspend fun getPaymentListUpdate(): Flow<PaymentResponse>
 
-    suspend fun getTokenUser(userId: String): Flow<Int>
+    fun getTokenUser(userId: String): Flow<Int>
     fun getAllTransactionHistory(userId: String): Flow<SourceResult<List<TransactionDetail>>>
     fun writeTransactionHistory(
         userId: String,
         transactionDetail: TransactionDetail
     ): Flow<Boolean>
 
-    suspend fun writeTokenTransaction(
+    fun writeTokenTransaction(
         userId: String,
         transactionToken: TransactionToken
     ): Flow<Boolean>
 
-    suspend fun updateTokenUser(userId: String, token: Int): Flow<Boolean>
+    fun updateTokenUser(userId: String, token: Int): Flow<Boolean>
 }
 
 
@@ -36,7 +36,7 @@ class PaymentRepositoryImpl @Inject constructor(
     override suspend fun getPaymentListUpdate(): Flow<PaymentResponse> =
         remoteDataSource.getPaymentListUpdate()
 
-    override suspend fun getTokenUser(userId: String): Flow<Int> {
+    override fun getTokenUser(userId: String): Flow<Int> {
         return remoteDataSource.getTokenUser(userId)
     }
 
@@ -51,14 +51,14 @@ class PaymentRepositoryImpl @Inject constructor(
         return remoteDataSource.writeTransactionHistory(userId, transactionDetail)
     }
 
-    override suspend fun writeTokenTransaction(
+    override fun writeTokenTransaction(
         userId: String,
         transactionToken: TransactionToken
     ): Flow<Boolean> {
         return remoteDataSource.writeTokenTransaction(userId, transactionToken)
     }
 
-    override suspend fun updateTokenUser(userId: String, token: Int): Flow<Boolean> {
+    override fun updateTokenUser(userId: String, token: Int): Flow<Boolean> {
         return remoteDataSource.updateTokenUser(userId, token)
     }
 }

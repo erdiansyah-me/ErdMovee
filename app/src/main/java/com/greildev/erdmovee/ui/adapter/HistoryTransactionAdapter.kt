@@ -17,7 +17,6 @@ class HistoryTransactionAdapter(private val itemClickListener:(TransactionDetail
                     icTransactionType.setImageResource(R.drawable.ic_coins_24)
                     tvItemTotalPrice.text = view.context.getString(R.string.price_rupiah, item.amountToken)
                 } else {
-//                    tvTransactionType.text = item.transactionType
                     tvTransactionType.text = "Rent Movie"
                     icTransactionType.setImageResource(R.drawable.ic_movie_outline_24)
                     tvItemTotalPrice.text = view.context.getString(R.string.price_coins, item.amountToken)
